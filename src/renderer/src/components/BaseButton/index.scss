@@ -1,0 +1,109 @@
+@keyframes fadeEffect {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes waveEffect {
+  to {
+    box-shadow: 0 0 0 var(--base-color);
+    box-shadow: 0 0 0 6px var(--base-color);
+  }
+}
+.base-button {
+  --base-color: transparent;
+  border: 1px solid var(--base-color);
+  background-color: var(--base-color);
+  border-color: var(--base-color);
+  outline-color: var(--base-color);
+  cursor: pointer;
+  overflow: visible;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease opacity;
+  &:focus,
+  &:hover {
+    opacity: 1;
+  }
+  &:active::after {
+    position: absolute;
+    inset: 0;
+    display: block;
+    box-shadow: 0 0 0 0 var(--base-color);
+    border-radius: inherit;
+    opacity: 0.2;
+    animation-fill-mode: forwards;
+    content: ' ';
+    pointer-events: none;
+    animation: fadeEffect 2s cubic-bezier(0.08, 0.82, 0.17, 1),
+      waveEffect 0.4s cubic-bezier(0.08, 0.82, 0.17, 1);
+  }
+  &:active {
+    transform: translate(0.5px, 0.5px);
+    background-color: var(--base-color);
+  }
+}
+
+.base-button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+  &:active::after {
+    animation: none;
+  }
+  &:active {
+    transform: none;
+  }
+}
+
+.base-button__primary {
+  --base-color: var(--primary-color);
+  color: white;
+  opacity: 0.9;
+}
+.base-button__danger {
+  --base-color: var(--danger-color);
+  color: white;
+  opacity: 0.9;
+}
+.base-button__normal {
+  --base-color: var(--button-inactive);
+  opacity: 0.7;
+}
+.base-button__transparent {
+  --base-color: var(--button-inactive);
+  background-color: transparent;
+  opacity: 0.7;
+  &:active {
+    background-color: transparent;
+  }
+}
+
+.base-button__round {
+  border-radius: 20px;
+}
+
+.base-button__square {
+  border-radius: 4px;
+}
+
+.base-button__circle {
+  border-radius: 50%;
+}
+
+.base-button__small {
+  padding: 4px 16px;
+}
+
+.base-button__middle {
+  padding: 8px 24px;
+  font-size: 14px;
+}
+
+.base-button__large {
+  padding: 12px 32px;
+  font-size: 16px;
+  line-height: 20px;
+}

@@ -1,0 +1,7 @@
+export { default as Main } from './Main'
+export { default as SelfHelp } from './SelfHelp'
+export { default as TopBar } from './TopBar'
+export { default as Login } from './Login'
+export { default as Setting } from './Setting'
+export { default as AboutUS } from './AboutUS'
+export { default as MessagePage } from './MessagePage'

@@ -1,0 +1,19 @@
+.search-box {
+  -webkit-app-region: no-drag;
+  min-width: 200px;
+  input {
+    box-sizing: border-box;
+    background-color: var(--search-bg);
+    font-family: var(--body-font);
+    padding: 0 20px 0 40px;
+    box-shadow: 0 0 0 2px rgb(134 140 160 / 2%);
+    background-image: url('./images/search.svg');
+    background-size: 14px;
+    background-repeat: no-repeat;
+    background-position: 16px 48%;
+    color: var(--theme-color);
+    &:focus {
+      box-shadow: 0 0 0 1px var(--border-color);
+    }
+  }
+}

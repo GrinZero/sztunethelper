@@ -1,0 +1,41 @@
+.main__background-card {
+  background: url('./images/cubes.png'),
+    linear-gradient(
+      to right top,
+      #cf4af3,
+      #e73bd7,
+      #f631bc,
+      #fd31a2,
+      #ff3a8b,
+      #ff4b78,
+      #ff5e68,
+      #ff705c,
+      #ff8c51,
+      #ffaa49,
+      #ffc848,
+      #ffe652
+    );
+  transition: filter 0.36s ease;
+}
+
+.main__background-card__offline {
+  filter: grayscale(1);
+  cursor: pointer;
+}
+
+@keyframes logging {
+  0% {
+    filter: grayscale(0.5);
+  }
+  50% {
+    filter: grayscale(1);
+  }
+  100% {
+    filter: grayscale(0.5);
+  }
+}
+.main__background-card__logging,
+.main__background-card__connect {
+  cursor: not-allowed;
+  animation: logging 3.6s ease infinite;
+}

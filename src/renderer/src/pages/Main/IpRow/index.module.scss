@@ -1,0 +1,20 @@
+.ip-row-status {
+  position: relative;
+  &::before {
+    content: ' ';
+    border-radius: 100%;
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    position: relative;
+    transform: translateY(-50%);
+    top: 50%;
+    margin-right: 6px;
+  }
+  &[data-status='true']::before {
+    background-color: var(--lives-green);
+  }
+  &[data-status='false']::before {
+    background-color: var(--lives-red);
+  }
+}

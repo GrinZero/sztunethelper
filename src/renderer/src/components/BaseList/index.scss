@@ -1,0 +1,34 @@
+.base-list {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--theme-bg-color);
+  & .base-list__item {
+    border-bottom: 1px solid var(--border-color);
+  }
+  & .base-list__item:last-child {
+    border-bottom: none;
+  }
+}
+
+.base-list__item {
+  background-color: transparent;
+  transition: 0.3s;
+}
+
+.base-list__normal {
+  background-color: var(--content-bg);
+  .base-list__item {
+    &:hover {
+      background-color: var(--theme-bg-color);
+    }
+  }
+}
+
+.base-list__primary {
+  background: var(--dropdown-bg);
+  .base-list__item {
+    &:hover {
+      background-color: var(--dropdown-hover);
+    }
+  }
+}

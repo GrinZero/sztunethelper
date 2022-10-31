@@ -1,0 +1,36 @@
+.core-input {
+  width: 100%;
+  position: relative;
+  &::before {
+    content: ' ';
+    border-bottom: 1px solid var(--button-inactive);
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    pointer-events: none;
+    transition: border-bottom-color 0.36s cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    opacity: 0.8;
+  }
+  &:hover::before {
+    border-bottom: 1px solid var(--theme-color);
+  }
+  &::after {
+    content: ' ';
+    border-bottom: 2px solid var(--primary-color);
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    transform: scaleX(0);
+    transition: transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+.core-input__focus {
+  &::after {
+    transform: scaleX(1) translateX(0px);
+  }
+}

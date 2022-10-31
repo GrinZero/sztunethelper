@@ -1,0 +1,9 @@
+.base-input {
+  outline: none;
+  border: 1px solid;
+  border-color: transparent;
+  background-color: transparent;
+  &::placeholder {
+    color: var(--placeholder-color);
+  }
+}

@@ -1,0 +1,12 @@
+.container {
+  background-color: transparent;
+  -webkit-app-region: drag;
+  height: 60px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.headerRightBox {
+  :global(.mg-theme-switch__container) {
+    -webkit-app-region: no-drag;
+  }
+}

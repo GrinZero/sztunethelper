@@ -1,0 +1,8 @@
+.platform-list:global(.base-list) {
+  :global(.base-list__item:last-child) {
+    border-bottom: 1px solid var(--border-color);
+  }
+  :global(.base-list__item:nth-child(3)) {
+    border-bottom: none;
+  }
+}

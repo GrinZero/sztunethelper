@@ -1,0 +1,23 @@
+.more-infor {
+  cursor: pointer;
+  background-color: transparent;
+  transition: 0.2s background-color ease;
+  &:hover {
+    background-color: var(--theme-bg-color);
+  }
+}
+
+.more-info__popover {
+  border: none;
+  & > :global(.arco-popover-content) {
+    color: inherit;
+    background-color: inherit;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+  }
+}
+
+.more-info__current {
+  background-color: var(--theme-main-color);
+}

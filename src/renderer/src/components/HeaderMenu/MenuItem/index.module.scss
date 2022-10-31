@@ -1,0 +1,23 @@
+.menu-item {
+  color: var(--inactive-color);
+  border-bottom: 2px solid;
+  border-color: transparent;
+  cursor: pointer;
+  padding: 18px 30px;
+  transition: border-color 0.36s ease, color 0.36s ease, opacity 0.36s ease;
+  -webkit-app-region: no-drag;
+  &:hover {
+    color: var(--theme-color);
+    border-color: var(--theme-color);
+    opacity: 0.51;
+    -webkit-app-region: no-drag;
+  }
+}
+
+.menu-item__active {
+  color: var(--theme-color);
+  border-color: var(--theme-color);
+  &:hover {
+    opacity: 1;
+  }
+}

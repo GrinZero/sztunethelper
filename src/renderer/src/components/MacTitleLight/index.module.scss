@@ -1,0 +1,43 @@
+.mac-button {
+  div {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 8px;
+    border: 1px solid #bbbdbe;
+    background: #c7c4cc;
+    cursor: pointer;
+    user-select: none;
+    -webkit-app-region: no-drag;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    svg {
+      color: black;
+      font-size: 8px;
+      user-select: none;
+      -webkit-app-region: no-drag;
+    }
+  }
+
+  div:active {
+    filter: brightness(0.7);
+  }
+}
+
+.mac-button__active {
+  .mac-button__close {
+    background: #f96057;
+    border-color: #d22a3a;
+  }
+
+  .mac-button__showify {
+    background: #f8ce52;
+    border-color: #d29414;
+  }
+
+  .mac-button__sizeify {
+    background: #5fcf65;
+    border-color: #25a50b;
+  }
+}
