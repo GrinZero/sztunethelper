@@ -10,10 +10,10 @@ jobs:
     name: build and release electron app
     runs-on: ${{ matrix.os }}
 
-  strategy:
-    fail-fast: false
-    matrix:
-      os: [windows-latest, macos-latest, ubuntu-latest]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
       - name: Checkout
