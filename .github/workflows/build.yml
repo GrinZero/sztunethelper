@@ -1,15 +1,13 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - master
+  push
 
 jobs:
   release:
     name: build and release electron app
     runs-on: ${{ matrix.os }}
-    if: startsWith(github.ref, 'refs/tags/')
+    if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')
     strategy:
       fail-fast: false
       matrix:
