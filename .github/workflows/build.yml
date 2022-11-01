@@ -16,26 +16,30 @@ jobs:
       os: [windows-latest, macos-latest, ubuntu-latest]
 
   steps:
-    - name: Check out git repository
+    - name: Checkout
       uses: actions/checkout@v3.0.0
 
     - name: Install Node.js
       uses: actions/setup-node@v3.0.0
       with:
-        node-version: '16'
+        node-version: 16
 
     - name: Install Dependencies
-      run: npm install
+      run: |
+        npm install -g pnpm
+        pnpm install
+        pnpm config set strict-peer-dependencies false
+        pnpm config set auto-install-peers true
 
     - name: Build Electron App for Windows
       if: matrix.os == 'windows-latest'
-      run: npm run build:win
+      run: pnpm run build:win
       env:
         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
     - name: Build Electron App for MacOS
       if: matrix.os == 'macos-latest'
-      run: npm run build:mac
+      run: pnpm run build:mac
       env:
         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
