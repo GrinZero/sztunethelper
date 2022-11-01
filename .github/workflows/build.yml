@@ -16,28 +16,28 @@ jobs:
         os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
-      - name: Checkout
+      - name: Check out git repository
         uses: actions/checkout@v3.0.0
 
       - name: Install Node.js
-      uses: actions/setup-node@v3.0.0
-      with:
-        node-version: 16
+        uses: actions/setup-node@v3.0.0
+        with:
+          node-version: 16
 
       - name: Install Dependencies
-      run: |
-        npm install -g pnpm
-        pnpm install
-        pnpm config set strict-peer-dependencies false
-        pnpm config set auto-install-peers true
+        run: |
+          npm install -g pnpm
+          pnpm install
+          pnpm config set strict-peer-dependencies false
+          pnpm config set auto-install-peers true
 
-      - name: Build Electron App for Windows
-      if: matrix.os == 'windows-latest'
-      run: pnpm run build:win
-      env:
-        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      - name: Build Electron App for windows
+        if: matrix.os == 'windows-latest'
+        run: pnpm run build:win
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
-      - name: Build Electron App for MacOS
+      - name: Build Electron App for macos
         if: matrix.os == 'macos-latest'
         run: pnpm run build:mac
         env:
@@ -53,6 +53,11 @@ jobs:
         run: |
           npx rimraf "dist/!(*.dmg)"
 
+      - name: Cleanup Artifacts for Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          npx rimraf "dist/!(*.AppImage)"
+
       - name: upload artifacts
         uses: actions/upload-artifact@v3.0.0
         with:
@@ -63,6 +68,6 @@ jobs:
         uses: softprops/action-gh-release@v0.1.14
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: 'dist/**'
+          files: "dist/**"
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
