@@ -234,7 +234,7 @@ const Main = () => {
   return (
     <div className={`main ${hidden ? 'main-hidden' : ''}`}>
       <div className="flex flex-grow-0 flex-shrink-0 w-full h-full">
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full max-w-[220px]">
           <BaseCard title="网络信息" className="min-w-[220px] min-h-[180px]">
             <NetCardRow name="IP" value={netInfo.ip.value} type={netInfo.ip.type} />
             <NetCardRow name="DNS" value={netInfo.dns.value[0] ?? ''} type={netInfo.dns.type} />
@@ -249,8 +249,16 @@ const Main = () => {
               type={netInfo.randomMac.type}
             />
           </BaseCard>
-          <BaseCard className="mt-4 h-full" title="知心客服">
-            <div className="h-full">轮播图</div>
+          <BaseCard
+            className="mt-4 h-full"
+            title="知心客服"
+            itemClassName="w-full h-full"
+            listClassName="w-full h-full"
+          >
+            <img
+              className="w-full h-full object-cover rounded-[9px]"
+              src="https://grinzero.github.io/code-shared-awesome/_next/static/media/rili_bg.15455e2d.png"
+            />
           </BaseCard>
         </div>
         <div className="flex flex-col ml-6 w-full h-full">
