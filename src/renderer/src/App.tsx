@@ -6,6 +6,8 @@ import '@arco-design/web-react/dist/css/arco.css'
 import './global.scss'
 import './App.css'
 
+import './extension'
+
 import { useEffect } from 'react'
 import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom'
 import { useSelector } from 'react-redux'

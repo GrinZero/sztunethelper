@@ -46,7 +46,7 @@ const Login = () => {
       if (error?.code === 502 && error?.data?.code === -1 && error?.data?.cookies === null) {
         Message.error('登录失败，请检查账号密码是否正确')
       } else {
-        Message.error(String(error))
+        Message.error(String(error?.data?.message ?? error?.code ?? error))
       }
     } finally {
       setFormStatus('normal')
