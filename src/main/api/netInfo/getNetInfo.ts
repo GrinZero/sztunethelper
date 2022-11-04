@@ -3,7 +3,7 @@ import apiStore, { RequestResult } from '../apiStore'
 import { getCurrentNetInfo } from '../../utils'
 
 type NetInfoStatusType = 'success' | 'fail' | 'normal'
-interface NetInfoModal {
+export interface NetInfoModal {
   ip: {
     value: null | string
     type: NetInfoStatusType
@@ -12,20 +12,28 @@ interface NetInfoModal {
     value: string[]
     type: NetInfoStatusType
   }
-  randomMac: {
+  dhcp: {
     value: string | null
     type: NetInfoStatusType
   }
+  wifiName: {
+    value: string | null
+    type: NetInfoStatusType
+  } | null
   mac: {
     value: string | null
+  }
+  speed: {
+    value: number | null
   }
 }
 
 apiStore.add('getNetInfo', async (): RequestResult<NetInfoModal> => {
-  const netInfo = getCurrentNetInfo()
+  const netInfo = await getCurrentNetInfo()
   const ip = (() => {
     const value = netInfo?.ipv4.address ?? ''
-    const type: NetInfoStatusType = value.startsWith('10.161') ? 'success' : 'fail'
+    const type: NetInfoStatusType =
+      value.startsWith('10.161') || value.startsWith('10.118') ? 'success' : 'fail'
     return { value, type }
   })()
 
@@ -38,9 +46,16 @@ apiStore.add('getNetInfo', async (): RequestResult<NetInfoModal> => {
     return { value, type }
   })()
 
-  const randomMac = (() => {
-    const value = 'OK'
-    const type: NetInfoStatusType = 'success'
+  const dhcp = (() => {
+    const value = netInfo?.dhcp ? '开启' : '关闭'
+    const type: NetInfoStatusType = netInfo?.dhcp ? 'success' : 'fail'
+    return { value, type }
+  })()
+
+  const wifiName = (() => {
+    if (!netInfo?.wifiName) return null
+    const value = netInfo.wifiName
+    const type: NetInfoStatusType = value === 'SZTU-student' ? 'success' : 'fail'
     return { value, type }
   })()
 
@@ -49,9 +64,13 @@ apiStore.add('getNetInfo', async (): RequestResult<NetInfoModal> => {
     data: {
       ip,
       dns,
-      randomMac,
+      dhcp,
+      wifiName,
       mac: {
         value: netInfo?.mac ?? null
+      },
+      speed: {
+        value: netInfo?.speed ?? null
       }
     }
   }

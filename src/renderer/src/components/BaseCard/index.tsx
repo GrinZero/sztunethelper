@@ -37,13 +37,15 @@ const BaseCard: React.FC<BaseCardProps> = ({
           {title}
         </Title>
         <div className={`flex flex-col ${listClassName}`}>
-          {childList.map((child, index) => {
-            return (
-              <div key={child.key ?? `default${index}`} className={`${itemClassName} mt-1`}>
-                {child}
-              </div>
-            )
-          })}
+          {childList
+            .filter((item) => item !== null && item !== void 0)
+            .map((child, index) => {
+              return (
+                <div key={child.key ?? `default${index}`} className={`${itemClassName} mt-1`}>
+                  {child}
+                </div>
+              )
+            })}
         </div>
       </div>
     </div>

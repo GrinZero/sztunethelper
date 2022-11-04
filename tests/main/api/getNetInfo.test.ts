@@ -11,7 +11,9 @@ it('getNetInfo', async () => {
   expect(data).toMatchObject({
     ip: {},
     dns: {},
-    randomMac: {},
-    mac: {}
+    dhcp: {},
+    mac: {},
+    speed: {},
+    wifiName: {}
   })
 })

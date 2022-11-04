@@ -2,7 +2,6 @@
   transition: 0.36s ease background-color, transform 0.36s ease;
   background-color: transparent;
   border-radius: 14px;
-  overflow: hidden;
   &:hover {
     background-color: var(--theme-bg-color);
     transform: scale(1.02);

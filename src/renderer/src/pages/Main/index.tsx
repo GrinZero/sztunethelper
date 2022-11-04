@@ -1,17 +1,18 @@
 import { useCallback, useMemo, useState, useEffect } from 'react'
 import { useRouteMatch, useHistory, useLocation } from 'react-router-dom'
-
+import { useSelector, useDispatch } from 'react-redux'
 import { Modal, Message } from '@arco-design/web-react'
 
 import { AccountInStore } from '../Login/AccountStore'
 import styles from './index.module.scss'
-
-import NetCardRow from './NetCardRow'
 import PlatformList from './PlatformList'
+import NetInfoCard from './NetInfoCard'
+
 import { login, getNetInfo, fetchPlatformList, offlinePlatform, connect } from '@renderer/api'
 import type { NetInfoModal, Platform } from '@renderer/api'
 import { BaseCard } from '@renderer/components'
 import { Account } from '@renderer/types'
+import { setNetInfo } from '@renderer/store'
 
 const initNetInfo: NetInfoModal = {
   ip: {
@@ -22,12 +23,19 @@ const initNetInfo: NetInfoModal = {
     value: ['-', '-'],
     type: 'fail'
   },
-  randomMac: {
+  dhcp: {
     value: '-',
     type: 'fail'
   },
   mac: {
     value: null
+  },
+  speed: {
+    value: null
+  },
+  wifiName: {
+    value: '-',
+    type: 'fail'
   }
 }
 
@@ -37,6 +45,8 @@ const offlinePlatfromLine = async (link: string, account: Account) => {
 }
 
 const Main = () => {
+  const dispatch = useDispatch()
+
   const history = useHistory()
   const match = useRouteMatch(['/index'])
   const location = useLocation()
@@ -45,7 +55,7 @@ const Main = () => {
   const [platformList, setPlatformList] = useState<Platform[] | null>([])
 
   const [status, setStatus] = useState('offline')
-  const [netInfo, setNetInfo] = useState<NetInfoModal>(initNetInfo)
+  const netInfo = useSelector((store: any) => store.netInfo)
 
   const init = async (type?: 'normal' | 'refresh') => {
     const username = localStorage.getItem('username')
@@ -75,7 +85,7 @@ const Main = () => {
       try {
         const res = await getNetInfo()
         if (res.code === 200) {
-          setNetInfo(res.data)
+          dispatch(setNetInfo(res.data))
           return res.data
         }
       } catch (error) {
@@ -228,27 +238,13 @@ const Main = () => {
     if (location.search === '?refresh') {
       init('refresh')
     }
-    // history.replace('/index');
   }, [location])
 
   return (
     <div className={`main ${hidden ? 'main-hidden' : ''}`}>
       <div className="flex flex-grow-0 flex-shrink-0 w-full h-full">
         <div className="flex flex-col h-full max-w-[220px]">
-          <BaseCard title="网络信息" className="min-w-[220px] min-h-[180px]">
-            <NetCardRow name="IP" value={netInfo.ip.value} type={netInfo.ip.type} />
-            <NetCardRow name="DNS" value={netInfo.dns.value[0] ?? ''} type={netInfo.dns.type} />
-            {netInfo.dns.value[1] ? (
-              <NetCardRow name="" value={netInfo.dns.value[1] ?? ''} type="normal" />
-            ) : (
-              <></>
-            )}
-            <NetCardRow
-              name="随机MAC"
-              value={netInfo.randomMac.value}
-              type={netInfo.randomMac.type}
-            />
-          </BaseCard>
+          <NetInfoCard className="min-w-[220px]" netInfo={netInfo} />
           <BaseCard
             className="mt-4 h-full"
             title="知心客服"

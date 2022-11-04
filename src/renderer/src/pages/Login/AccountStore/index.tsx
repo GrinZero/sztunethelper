@@ -27,9 +27,9 @@ const AccountStore: React.FC<AccountStoreProps> = ({
       {data.map((item) => {
         return (
           <BaseCard
-            className={`cursor-pointer mr-3 min-w-[160px] flex-shrink-0 ${styles.base} ${
-              current === item.username ? styles.current : ''
-            }`}
+            className={`cursor-pointer mr-3 min-w-[160px] flex-shrink-0 overflow-hidden ${
+              styles.base
+            } ${current === item.username ? styles.current : ''}`}
             title={item.username}
             key={item.username}
             itemClassName={`flex-grow`}

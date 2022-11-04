@@ -11,7 +11,6 @@ export interface AccountReducer {
   pushAccount: (state: AccountState, action: { payload: AccountInStore }) => void
   deleteAccount: (state: AccountState, action: { payload: Account }) => void
   setCurrentAccount: (state: AccountState, action: { payload: Account }) => void
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
 }
 

@@ -4,7 +4,8 @@ export default defineConfig({
     alias: {
       '@renderer': 'src/renderer/src',
       '@api': 'src/main/api',
-      '@sdk': 'src/main/sdk'
+      '@sdk': 'src/main/sdk',
+      '@utils': 'src/main/utils'
     }
   }
 })

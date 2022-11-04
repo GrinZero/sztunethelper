@@ -10,15 +10,21 @@ export interface NetInfoModal {
     value: string[]
     type: NetInfoStatusType
   }
-  randomMac: {
+  dhcp: {
+    value: string | null
+    type: NetInfoStatusType
+  }
+  wifiName?: {
     value: string | null
     type: NetInfoStatusType
   }
   mac: {
     value: string | null
   }
+  speed: {
+    value: number | null
+  }
 }
-
 async function getNetInfo() {
   return apiClient.send<NetInfoModal>('getNetInfo')
 }

@@ -1,11 +1,11 @@
 import os from 'os'
-
+import getWifiName from 'wifi-name'
+import si from 'systeminformation'
 import getDnsServer from './getDnsServer'
 
 export interface IpInfo {
   address: string | null
   netmask: string | null
-  cidr: string | null
 }
 
 export interface NetInfoType {
@@ -13,44 +13,46 @@ export interface NetInfoType {
   ipv4: IpInfo
   ipv6: IpInfo
   dnsServer: string[]
+  dhcp: boolean
+  speed: number | null
+  wifiName: string | null
 }
 
-const getCurrentNetInfo = (): NetInfoType | null => {
-  const osType = os.type()
-  const netInfo = os.networkInterfaces()
-
-  const dnsServer = getDnsServer()
-
-  const baseInfo = (() => {
-    switch (osType) {
-      case 'Darwin':
-        return netInfo.en1
-      case 'Windows_NT':
-        return netInfo.WLAN || netInfo['以太网'] || netInfo['本地连接']
-      default:
-        return null
-    }
+const getCurrentNetInfo = async (): Promise<NetInfoType | null> => {
+  const netInfos = await si.networkInterfaces()
+  const [wifiInfo] = await si.wifiInterfaces()
+  const netInfo = (() => {
+    const info = netInfos.find((item) => item.mac === wifiInfo.mac)
+    if (info?.ip4 !== '') return info
+    return netInfos.find((item) => item.ip4 !== '' && item.mac !== '')
   })()
 
-  if (!baseInfo) {
+  let wifiName = null
+  try {
+    wifiName = await getWifiName()
+  } catch (error) {
+    console.error('Error: Could not get SSID')
+  }
+  if (!netInfo) {
     return null
   }
 
-  const [ipv6Info, ipv4Info] = baseInfo
+  const dnsServer = getDnsServer()
 
   const result = {
-    mac: ipv6Info.mac,
+    mac: wifiInfo.mac,
     ipv4: {
-      address: ipv4Info.address,
-      netmask: ipv4Info.netmask,
-      cidr: ipv4Info.cidr
+      address: netInfo.ip4,
+      netmask: netInfo.ip4subnet
     },
     ipv6: {
-      address: ipv6Info.address,
-      netmask: ipv6Info.netmask,
-      cidr: ipv6Info.cidr
+      address: netInfo.ip6,
+      netmask: netInfo.ip6subnet
     },
-    dnsServer
+    dnsServer,
+    dhcp: netInfo.dhcp,
+    speed: netInfo.speed,
+    wifiName
   }
 
   return result
