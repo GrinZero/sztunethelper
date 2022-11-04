@@ -8,7 +8,8 @@
     "src/main/**/*",
     "tests/main/sdk/*",
     "tests/main/api/*",
-    "tests/**/*"
+    "tests/**/*",
+    ".test.env.ts"
   ],
   "compilerOptions": {
     "composite": true,

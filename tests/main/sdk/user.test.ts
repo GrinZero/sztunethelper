@@ -1,8 +1,7 @@
 import { login, getPlatformList, connect } from '@sdk/index'
 import { it, expect } from 'vitest'
 
-const username = '201906010227'
-const password = 'xxxxxx'
+import { username, password } from '../../../.test.env'
 
 let cookies = ''
 it('login', async () => {
