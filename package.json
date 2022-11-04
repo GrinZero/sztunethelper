@@ -19,7 +19,8 @@
     "build:mac-x86": "electron-vite build && electron-builder --mac --config",
     "build:mac-arm64": "electron-vite build && electron-builder --arm64 --mac --config",
     "build:linux": "electron-vite build && electron-builder --linux --config",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "vitest"
   },
   "dependencies": {
     "@arco-design/web-react": "^2.41.0",
@@ -66,7 +67,8 @@
     "rollup-plugin-postcss": "^4.0.2",
     "sass": "^1.55.0",
     "typescript": "^4.8.4",
-    "vite": "^3.1.8"
+    "vite": "^3.1.8",
+    "vitest": "^0.24.5"
   },
   "husky": {
     "hooks": {
