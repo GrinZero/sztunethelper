@@ -1,24 +1,25 @@
-import { login, getPlatformList, connect } from '#service/sdk';
+import { login, getPlatformList, connect } from '@sdk/index'
+import { it, expect } from 'vitest'
 
-const username = '201906010227';
-const password = 'xxxxxx';
+const username = '201906010227'
+const password = 'xxxxxx'
 
-let cookies: string = '';
+let cookies = ''
 it('login', async () => {
-  const result = await login({ username, password });
+  const result = await login({ username, password })
 
-  expect(result.code).toBe(1);
-  expect(result.cookies).not.toBeNull();
-  expect(result.data).not.toBeNull();
-  cookies = result.cookies as string;
-});
+  expect(result.code).toBe(1)
+  expect(result.cookies).not.toBeNull()
+  expect(result.data).not.toBeNull()
+  cookies = result.cookies as string
+})
 
 it('getPlatformList', async () => {
-  const res = await getPlatformList(cookies);
-  expect(res.length).not.toBeUndefined();
-});
+  const res = await getPlatformList(cookies)
+  expect(res.length).not.toBeUndefined()
+})
 
 it('connect', async () => {
-  const result = await connect({ username, password });
-  expect(result).not.toBeNull();
-});
+  const result = await connect({ username, password })
+  expect(result).not.toBeNull()
+})
