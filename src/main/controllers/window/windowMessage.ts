@@ -1,6 +1,6 @@
 import { ipcMain, BrowserWindow } from 'electron'
 
-import { apiStore } from '../api'
+import { apiStore } from '../../api'
 
 const titleBarOnMessage = () => {
   ipcMain.on('titleBar', (_, { type, data }) => {

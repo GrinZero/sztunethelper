@@ -5,7 +5,7 @@ export default defineConfig({
       '@renderer': 'src/renderer/src',
       '@api': 'src/main/api',
       '@sdk': 'src/main/sdk',
-      '@utils': 'src/main/utils'
+      '@controllers': 'src/main/controllers'
     }
   }
 })

@@ -31,7 +31,7 @@ const getCurrentNetInfo = async (): Promise<NetInfoType | null> => {
   try {
     wifiName = await getWifiName()
   } catch (error) {
-    console.error('Error: Could not get SSID')
+    console.warn('Warn: Could not get SSID')
   }
   if (!netInfo) {
     return null

@@ -27,6 +27,7 @@ specifiers:
   eslint-plugin-prettier: ^4.2.1
   eslint-plugin-react: ^7.31.10
   got: ^11.8.3
+  hosts-so-easy: ^1.2.9
   husky: ^8.0.1
   iconv-lite: ^0.6.3
   lint-staged: ^13.0.3
@@ -56,6 +57,7 @@ dependencies:
   autoprefixer: 10.4.13_postcss@8.4.18
   electron-updater: 4.6.5
   got: 11.8.5
+  hosts-so-easy: 1.2.9
   iconv-lite: 0.6.3
   magic-design-react: 0.0.20_ap2qg6xfyrixqmthp7bz2kzimm
   postcss: 8.4.18
@@ -1808,6 +1810,10 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
     dev: true
+
+  /atomic-write/0.1.1:
+    resolution: {integrity: sha512-OhBw6WWwwtzbsStKEqu/kUIvmSFDlxJSE/69cMx4vTGcUqWIdIvfNWvhPb8DPiCSmji2LOw2n/O+dLTHiwHCWA==}
+    dev: false
 
   /autoprefixer/10.4.13_postcss@8.4.18:
     resolution: {integrity: sha512-49vKpMqcZYsJjwotvt4+h/BCjJVnhGwcLpDt5xkcaOG3eLrG/HUYLagrihYsQ+qrIBgIzX1Rw7a6L8I/ZA1Atg==}
@@ -3576,7 +3582,6 @@ packages:
 
   /eventemitter3/4.0.7:
     resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
-    dev: true
 
   /execa/0.7.0:
     resolution: {integrity: sha512-RztN09XglpYI7aBBrJCPW95jEH7YF1UEPOoX9yDhUTPdp7mK+CQvnLTuD10BNXZ3byLTu2uehZ8EcKT/4CGiFw==}
@@ -4074,6 +4079,13 @@ packages:
     dependencies:
       lru-cache: 6.0.0
     dev: true
+
+  /hosts-so-easy/1.2.9:
+    resolution: {integrity: sha512-hwbLn1kjYKEHXh31bk7Q6RvWfwQghUhH1DEpYRerdRNgAroQswaroe8eOSMJB5CRcVfp/SwVuwI/xRFpOrF1+w==}
+    dependencies:
+      atomic-write: 0.1.1
+      eventemitter3: 4.0.7
+    dev: false
 
   /hsl-regex/1.0.0:
     resolution: {integrity: sha512-M5ezZw4LzXbBKMruP+BNANf0k+19hDQMgpzBIYnya//Al+fjNct9Wf3b1WedLqdEs2hKBvxq/jh+DsHJLj0F9A==}

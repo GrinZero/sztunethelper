@@ -21,8 +21,8 @@
       "@sdk/*": [
         "src/main/sdk/*"
       ],
-      "@utils/*": [
-        "src/main/utils/*"
+      "@controllers/*": [
+        "src/main/controllers/*"
       ],
     }
   },

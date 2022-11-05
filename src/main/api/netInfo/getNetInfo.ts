@@ -1,6 +1,6 @@
 import apiStore, { RequestResult } from '../apiStore'
 
-import { getCurrentNetInfo } from '../../utils'
+import { getCurrentNetInfo } from '../../controllers'
 
 type NetInfoStatusType = 'success' | 'fail' | 'normal'
 export interface NetInfoModal {
