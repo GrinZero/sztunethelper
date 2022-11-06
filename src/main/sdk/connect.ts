@@ -5,17 +5,30 @@ import iconv from 'iconv-lite'
 import type { Account } from './type'
 
 const connect = async ({ username, password }: Account) => {
-  const fetchQQHome = await got.get(`http://www.qq.com/?time=${Date.now()}`)
-  const content = iconv.decode(fetchQQHome.rawBody, 'gbk')
-  if (!content.includes('47.98.217.39')) {
-    return {
-      msg: 'had login',
-      code: 200
+  let fetchQQHome
+  try {
+    fetchQQHome = await got.get(`http://www.qq.com/?time=${Date.now()}`, {
+      hooks: {
+        beforeRedirect: [
+          (options) => {
+            if (options.url.href.startsWith('https://www.qq.com/')) {
+              throw '200'
+            }
+          }
+        ]
+      }
+    })
+  } catch (error: any) {
+    if (error?.code === 'ERR_GOT_REQUEST_ERROR') {
+      return {
+        msg: 'had login',
+        code: 200
+      }
     }
   }
+  const content = iconv.decode(fetchQQHome.rawBody, 'gbk')
 
   const re = /(?=form id="_wifi_login")[\s\S]*?(?=<\/form>)/gs
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const store: any = {}
   content.replace(re, (match) => {
     match.replace(/<input[\s\S]*?">/gs, (item) => {
