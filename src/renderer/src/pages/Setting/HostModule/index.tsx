@@ -9,7 +9,12 @@ import styles from './index.module.scss'
 import { fetchHosts } from '@renderer/api'
 import { ComponentProps } from '@renderer/types'
 
-const HostModule: React.FC<ComponentProps> = ({ className = '' }) => {
+interface HostModuleProps extends ComponentProps {
+  onChange?: (host: HostItem | undefined) => void
+  current: string | null
+}
+
+const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChange }) => {
   const [visible, setVisible] = useState(false)
   const [hosts, setHosts] = useState<HostItem[]>([])
   const [host, setHost] = useState<HostItem>()
@@ -25,7 +30,6 @@ const HostModule: React.FC<ComponentProps> = ({ className = '' }) => {
   }
   const handleHostEdit = (host: HostItem) => {
     setHost(host)
-    console.log(host)
     setVisible(true)
   }
 
@@ -33,8 +37,8 @@ const HostModule: React.FC<ComponentProps> = ({ className = '' }) => {
     async function init() {
       const result = await fetchHosts()
       if (result.code === 200) {
-        console.log(result.data)
         setHosts(result.data)
+        onChange?.(result.data[0])
       }
     }
     init()
@@ -46,6 +50,8 @@ const HostModule: React.FC<ComponentProps> = ({ className = '' }) => {
         data={hosts}
         onSwitch={handleHostSwitch}
         onEdit={handleHostEdit}
+        onClick={(item) => onChange?.(item)}
+        current={current}
       />
       <Drawer
         title={'编辑Hosts'}

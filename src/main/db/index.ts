@@ -21,7 +21,7 @@ const db = low(adapter)
   db.defaults({
     hosts: [
       {
-        type: 'local',
+        type: 'system',
         mode: 'readonly',
         name: '系统',
         content: sysHosts,

@@ -9,35 +9,10 @@ import PlatformList from './PlatformList'
 import NetInfoCard from './NetInfoCard'
 
 import { login, getNetInfo, fetchPlatformList, offlinePlatform, connect } from '@renderer/api'
-import type { NetInfoModal, Platform } from '@renderer/api'
+import type { Platform } from '@renderer/api'
 import { BaseCard } from '@renderer/components'
 import { Account } from '@renderer/types'
 import { setNetInfo } from '@renderer/store'
-
-const initNetInfo: NetInfoModal = {
-  ip: {
-    value: '-',
-    type: 'fail'
-  },
-  dns: {
-    value: ['-', '-'],
-    type: 'fail'
-  },
-  dhcp: {
-    value: '-',
-    type: 'fail'
-  },
-  mac: {
-    value: null
-  },
-  speed: {
-    value: null
-  },
-  wifiName: {
-    value: '-',
-    type: 'fail'
-  }
-}
 
 const offlinePlatfromLine = async (link: string, account: Account) => {
   const res = await login(account)

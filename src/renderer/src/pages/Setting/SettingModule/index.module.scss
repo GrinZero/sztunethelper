@@ -1,0 +1,15 @@
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 240px;
+}
+
+.name {
+  padding-right: 6px;
+  width: 78%;
+}
+
+.line{
+  border-bottom: 1px solid var(--border-color);
+}

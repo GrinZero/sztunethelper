@@ -7,10 +7,12 @@ export { default as BaseElement } from './BaseElement'
 
 export { default as BaseCard } from './BaseCard'
 export { default as BaseList } from './BaseList'
+export { default as BaseLine } from './BaseLine'
 export { default as BaseInput } from './BaseInput'
 export { default as CoreInput } from './CoreInput'
 export { default as BaseButton } from './BaseButton'
 export { default as BasePopover } from './BasePopover'
+export { default as CodeEditor } from './CodeEditor'
 
 export * from './MoreInfo'
 export * from './StatusIcon'

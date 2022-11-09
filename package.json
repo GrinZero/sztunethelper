@@ -26,6 +26,7 @@
     "@arco-design/web-react": "^2.41.0",
     "@electron-toolkit/preload": "^1.0.2",
     "@electron-toolkit/utils": "^1.0.2",
+    "@monaco-editor/react": "^4.4.6",
     "@reduxjs/toolkit": "^1.8.6",
     "autoprefixer": "^10.4.13",
     "electron-updater": "^4.6.5",

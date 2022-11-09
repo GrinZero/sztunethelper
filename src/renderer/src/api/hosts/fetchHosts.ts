@@ -2,7 +2,7 @@ import apiClient from '../apiClient'
 
 export interface Host {
   name: string
-  type: 'local' | 'remote'
+  type: 'local' | 'remote' | 'system'
   mode: 'edit' | 'readonly'
   open: boolean
   content: string

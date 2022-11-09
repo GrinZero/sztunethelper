@@ -12,12 +12,20 @@ export type HostItem = Host
 
 export interface HostListProps extends ComponentProps {
   data: HostItem[] | null
+  current?: string | null
   onClick?: (host: HostItem) => void
   onSwitch?: (host: HostItem, val: boolean) => void
   onEdit?: (host: HostItem) => void
 }
 
-const HostList: React.FC<HostListProps> = ({ className = '', data, onClick, onSwitch, onEdit }) => {
+const HostList: React.FC<HostListProps> = ({
+  className = '',
+  data,
+  current,
+  onClick,
+  onSwitch,
+  onEdit
+}) => {
   return (
     <div className={`${styles.container} ${className}`}>
       <Title className="flex flex-row items-center">
@@ -32,15 +40,17 @@ const HostList: React.FC<HostListProps> = ({ className = '', data, onClick, onSw
         <span>魔法HOSTS</span>
       </Title>
       <BaseList>
-        {data?.map(({ autoUpdate, ...item }) => (
+        {data?.map((item) => (
           <HostRow
-            className={'cursor-pointer'}
+            className={`cursor-pointer ${current === item.name ? styles['row-current'] : ''}`}
             key={item.name}
-            onClick={() => onClick?.({ autoUpdate, ...item })}
-            onSwitch={(val) => onSwitch?.({ autoUpdate, ...item }, Boolean(val))}
-            onEdit={() => onEdit?.({ autoUpdate, ...item })}
+            onClick={() => onClick?.(item)}
+            onSwitch={(val) => onSwitch?.(item, Boolean(val))}
+            onEdit={() => onEdit?.(item)}
             defaultValue={item.open}
-            {...item}
+            type={item.type}
+            name={item.name}
+            mode={item.mode}
           />
         ))}
       </BaseList>
