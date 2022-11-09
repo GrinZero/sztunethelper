@@ -1,7 +1,33 @@
-.container{
+.container {
   flex-direction: row;
 }
 
-.left{
+.left {
   box-sizing: content-box;
+}
+.not-allow-edit {
+  :global {
+    .overflow-guard {
+      &::after {
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        filter: opacity(0.5);
+        content: 'readonly';
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 36px;
+        background-color: var(--content-bg);
+        transition: backdrop-filter .2s ease;
+        cursor: not-allowed;
+        backdrop-filter: blur(36px);
+      }
+      &:hover::after {
+        filter: opacity(0);
+        backdrop-filter: blur(0px);
+      }
+    }
+  }
 }

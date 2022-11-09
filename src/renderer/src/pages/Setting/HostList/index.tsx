@@ -52,7 +52,7 @@ const HostList: React.FC<HostListProps> = ({
             name={item.name}
             mode={item.mode}
           />
-        ))}
+        )) ?? 'empty'}
       </BaseList>
     </div>
   )

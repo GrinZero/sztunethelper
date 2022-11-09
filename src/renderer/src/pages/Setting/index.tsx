@@ -24,7 +24,11 @@ const Setting = () => {
         <BaseLine className={'mb-4 mt-2'} />
         <SettingModule className={'w-[240px]'} />
       </div>
-      <div className="flex flex-col flex-grow rounded-lg overflow-hidden">
+      <div
+        className={`relative flex flex-col flex-grow rounded-lg overflow-hidden ${
+          host?.mode === 'edit' ? '' : styles['not-allow-edit']
+        }`}
+      >
         <CodeEditor
           height={'100%'}
           theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}

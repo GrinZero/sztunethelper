@@ -16,21 +16,25 @@ interface HostModuleProps extends ComponentProps {
 
 const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChange }) => {
   const [visible, setVisible] = useState(false)
-  const [hosts, setHosts] = useState<HostItem[]>([])
+  const [hosts, setHosts] = useState<HostItem[] | null>(null)
   const [host, setHost] = useState<HostItem>()
 
   const handleHostSwitch = (host: HostItem, val: boolean) => {
-    const newHosts = hosts.map((item) => {
-      if (item.name === host.name) {
-        return { ...item, open: val }
-      }
-      return item
-    })
+    const newHosts =
+      hosts?.map((item) => {
+        if (item.name === host.name) {
+          return { ...item, open: val }
+        }
+        return item
+      }) ?? []
     setHosts(newHosts)
   }
   const handleHostEdit = (host: HostItem) => {
     setHost(host)
     setVisible(true)
+  }
+  const handleUpdateRemote = async (host: HostItem) => {
+    console.log(host)
   }
 
   useEffect(() => {
@@ -90,6 +94,22 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
                   <Option value="1d">1天</Option>
                   <Option value="7d">7天</Option>
                 </Select>
+                <div className={styles.info}>
+                  <span>
+                    最后更新：
+                    {host?.updateTime
+                      ? new Date(host.updateTime).format('yyyy-MM-dd hh:mm:ss')
+                      : '从未'}
+                  </span>
+                  <span
+                    className="ml-2 font-bold cursor-pointer"
+                    onClick={() => {
+                      handleUpdateRemote(host)
+                    }}
+                  >
+                    手动更新
+                  </span>
+                </div>
               </Form.Item>
             </>
           )}

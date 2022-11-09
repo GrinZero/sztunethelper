@@ -27,13 +27,16 @@ const HostRow: React.FC<HostRowProps> = (props) => {
         <span>{name}</span>
         {mode === 'readonly' && <span className={styles.readonly}>只读</span>}
       </div>
-      <IconEdit
-        onClick={(e) => {
-          e.stopPropagation()
-          onEdit?.(name)
-        }}
-        className={`mr-2 cursor-pointer invisible ${mode === 'edit' ? 'group-hover:visible' : ''}`}
-      />
+      <div
+        className={`px-2 cursor-pointer invisible ${mode === 'edit' ? 'group-hover:visible' : ''}`}
+      >
+        <IconEdit
+          onClick={(e) => {
+            e.stopPropagation()
+            onEdit?.(name)
+          }}
+        />
+      </div>
       <Switch
         checked={checked}
         onChange={(val, e) => {
