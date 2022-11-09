@@ -11,7 +11,7 @@
       &::after {
         position: absolute;
         z-index: 1;
-        width: 100%;
+        width: calc(100% - 14px);
         height: 100%;
         filter: opacity(0.5);
         content: 'readonly';
@@ -20,7 +20,7 @@
         align-items: center;
         font-size: 36px;
         background-color: var(--content-bg);
-        transition: backdrop-filter .2s ease;
+        transition: backdrop-filter .36s ease;
         cursor: not-allowed;
         backdrop-filter: blur(36px);
       }
