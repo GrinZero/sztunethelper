@@ -3,4 +3,8 @@
   padding: 6px 0;
   font-weight: 700;
   font-size: 16px;
+  transition: color .2s ease;
+  &:hover {
+    color: var(--theme-color);
+  }
 }

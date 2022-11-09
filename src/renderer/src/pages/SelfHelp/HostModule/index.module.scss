@@ -1,0 +1,26 @@
+.form{
+  :global(.arco-form-layout-vertical > .arco-form-label-item){
+    line-height: 32px;
+  }
+  & label{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  & strong{
+    margin-right: 4px;
+  }
+  :global(.arco-checkbox-mask){
+    margin-top: 2px;
+  }
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.textArea{
+  min-height: 500px;
+}

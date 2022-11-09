@@ -1,6 +1,6 @@
 {
   "name": "sztunethelper",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
   "author": "example.com",
@@ -32,6 +32,7 @@
     "got": "^11.8.3",
     "hosts-so-easy": "^1.2.9",
     "iconv-lite": "^0.6.3",
+    "lowdb": "1.0.0",
     "magic-design-react": "^0.0.20",
     "postcss": "^8.4.18",
     "react-redux": "^8.0.4",
@@ -45,6 +46,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^17.2.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
+    "@types/lowdb": "^1.0.9",
     "@types/node": "16.11.22",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",

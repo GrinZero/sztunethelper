@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "17105248",
+      "name": "ghost-smile-line",
+      "font_class": "m-hosts",
+      "unicode": "e883",
+      "unicode_decimal": 59523
+    },
+    {
       "icon_id": "23191226",
       "name": "项目",
       "font_class": "xiangmu",
