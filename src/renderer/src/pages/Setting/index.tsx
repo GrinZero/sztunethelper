@@ -10,7 +10,7 @@ import { Host } from '@renderer/api'
 import { HostState, setHost, setHosts } from '@renderer/store'
 import { submitSave } from './helpers'
 
-import { debounce } from '@renderer/utils'
+import { debounce, getHostContent } from '@renderer/utils'
 import { Message } from '@arco-design/web-react'
 
 const Setting = () => {
@@ -44,8 +44,13 @@ const Setting = () => {
       firstRef.current = false
       return
     }
+    if (host?.type === 'system') {
+      return
+    }
     onEditorChange(val)
   }
+
+  const content = host?.type === 'system' ? getHostContent(hosts) : host?.content ?? ''
 
   return (
     <div className={`main ${styles.container}`}>
@@ -62,7 +67,7 @@ const Setting = () => {
         <CodeEditor
           height={'100%'}
           theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
-          value={String(host?.content ?? '')}
+          value={String(content)}
           onChange={handleEditorSave}
         />
       </div>
