@@ -1,32 +1,43 @@
-.form{
-  :global(.arco-form-layout-vertical > .arco-form-label-item){
+.form {
+  :global(.arco-form-layout-vertical > .arco-form-label-item) {
     line-height: 32px;
   }
-  & label{
+  & label {
     display: flex;
     flex-direction: row;
     align-items: center;
   }
-  & strong{
+  & strong {
     margin-right: 4px;
   }
-  :global(.arco-checkbox-mask){
+  :global(.arco-checkbox-mask) {
     margin-top: 2px;
   }
 }
 
-.row{
+.row {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.textArea{
+.textArea {
   min-height: 500px;
 }
 
-.info{
+.info {
   margin-top: -10px;
   font-size: 12px;
-  opacity: .5;
+  opacity: 0.5;
+}
+
+.drawer {
+  :global{
+    .arco-drawer-header{
+      -webkit-app-region: drag;
+    }
+    .arco-drawer-close-icon{
+      -webkit-app-region: no-drag;
+    }
+  }
 }

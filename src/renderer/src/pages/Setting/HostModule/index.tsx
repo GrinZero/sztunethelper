@@ -104,6 +104,7 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
         current={current}
       />
       <Drawer
+        className={styles.drawer}
         title={'编辑Hosts'}
         width={'calc(100vw - 240px - 2rem)'}
         visible={visible}
