@@ -5,3 +5,5 @@ export * from './store'
 
 export * from './apiStore'
 export { default as apiStore } from './apiStore'
+
+export * from './type'

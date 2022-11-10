@@ -28,7 +28,7 @@ export class ApiStore implements ApiStoreInstance {
     return this
   }
 
-  async use<TResult, PPayload>(name: string, payload?: PPayload): RequestResult<TResult> {
+  async use<TResult, PPayload = unknown>(name: string, payload?: PPayload): RequestResult<TResult> {
     const ruler = this.store[name]
     if (!ruler) {
       throw new Error(`without rules ${name}`)
