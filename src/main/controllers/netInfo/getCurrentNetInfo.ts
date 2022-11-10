@@ -1,4 +1,3 @@
-import os from 'os'
 import getWifiName from 'wifi-name'
 import si from 'systeminformation'
 import getDnsServer from './getDnsServer'

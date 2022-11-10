@@ -4,7 +4,7 @@ import type { OptionsOfTextResponseBody } from 'got'
 export const getRemoteHosts = async (url: string, options?: OptionsOfTextResponseBody) => {
   return (
     await got.get(url, {
-      timeout: 20000,
+      timeout: 30000,
       ...options
     })
   ).body

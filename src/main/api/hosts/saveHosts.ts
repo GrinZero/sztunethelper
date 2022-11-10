@@ -3,7 +3,7 @@ import db from '../../db'
 import store from '../../db/store'
 import type { Host } from '../../db'
 
-import { checkAccess, getHostsContent, setSysHosts } from '../../controllers'
+import { checkAccess, getHostsContent, setSysHosts, updateRemote } from '../../controllers'
 
 apiStore.add('saveHosts', async (list: Host[]): RequestResult => {
   const access = await checkAccess()
@@ -19,6 +19,7 @@ apiStore.add('saveHosts', async (list: Host[]): RequestResult => {
   try {
     await setSysHosts(content, sudo as string)
     db.set('hosts', list).write()
+    updateRemote()
   } catch (error) {
     return {
       code: 403,

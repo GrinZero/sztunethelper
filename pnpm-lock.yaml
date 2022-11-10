@@ -10,6 +10,7 @@ specifiers:
   '@reduxjs/toolkit': ^1.8.6
   '@types/lowdb': ^1.0.9
   '@types/node': 16.11.22
+  '@types/node-schedule': ^2.1.0
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
   '@types/react-router': ^5.0.0
@@ -36,6 +37,7 @@ specifiers:
   lint-staged: ^13.0.3
   lowdb: 1.0.0
   magic-design-react: ^0.0.20
+  node-schedule: ^2.1.0
   postcss: ^8.4.18
   prettier: ^2.7.1
   process: ^0.11.10
@@ -68,6 +70,7 @@ dependencies:
   iconv-lite: 0.6.3
   lowdb: 1.0.0
   magic-design-react: 0.0.20_gy76r2sdahkhwn6zcsfywz63by
+  node-schedule: 2.1.0
   postcss: 8.4.18
   process: 0.11.10
   react-redux: 8.0.5_yfr4m6wk75wdra335rld4tkrbu
@@ -83,6 +86,7 @@ devDependencies:
   '@electron-toolkit/tsconfig': 1.0.1_@types+node@16.11.22
   '@types/lowdb': 1.0.11
   '@types/node': 16.11.22
+  '@types/node-schedule': 2.1.0
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
   '@types/react-router': 5.1.19
@@ -1319,6 +1323,12 @@ packages:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
     dev: true
 
+  /@types/node-schedule/2.1.0:
+    resolution: {integrity: sha512-NiTwl8YN3v/1YCKrDFSmCTkVxFDylueEqsOFdgF+vPsm+AlyJKGAo5yzX1FiOxPsZiN6/r8gJitYx2EaSuBmmg==}
+    dependencies:
+      '@types/node': 16.18.3
+    dev: true
+
   /@types/node/14.18.33:
     resolution: {integrity: sha512-qelS/Ra6sacc4loe/3MSjXNL1dNQ/GjxNHVzuChwMfmk7HuycRLVQN2qNY3XahK+fZc5E2szqQSKUyAF0E+2bg==}
     dev: true
@@ -2097,7 +2107,6 @@ packages:
     dependencies:
       function-bind: 1.1.1
       get-intrinsic: 1.1.3
-    dev: true
 
   /callsites/3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
@@ -2466,6 +2475,14 @@ packages:
 
   /create-require/1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
+
+  /cron-parser/3.5.0:
+    resolution: {integrity: sha512-wyVZtbRs6qDfFd8ap457w3XVntdvqcwBGxBoTvJQH9KGVKL/fB+h2k3C8AqiVxvUQKN1Ps/Ns46CNViOpVDhfQ==}
+    engines: {node: '>=0.8'}
+    dependencies:
+      is-nan: 1.3.2
+      luxon: 1.28.0
+    dev: false
 
   /cross-spawn/5.1.0:
     resolution: {integrity: sha512-pTgQJ5KC0d2hcY8eyL1IzlBPYjTkyH72XRZPnLyKus2mBfNjQs3klqbJU2VILqZryAZUt9JOb3h/mWMy23/f5A==}
@@ -4238,6 +4255,14 @@ packages:
     resolution: {integrity: sha512-FeXIBgG/CPGd/WUxuEyvgGTEfwiG9Z4EKGxjNMRqviiIIfsmgrpnHLffEDdwUHqNva1VEW91o3xBT/m8Elgl9g==}
     dev: false
 
+  /is-nan/1.3.2:
+    resolution: {integrity: sha512-E+zBKpQ2t6MEo1VsonYmluk9NxGrbzpeeLC2xIViuO2EjU2xsXsBPwTr3Ykv9l08UYEVEdWeRZNouaZqF6RN0w==}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      call-bind: 1.0.2
+      define-properties: 1.1.4
+    dev: false
+
   /is-negative-zero/2.0.2:
     resolution: {integrity: sha512-dqJvarLawXsFbNDeJW7zAz8ItJ9cd28YufuuFzh0G8pNHjJMnY08Dv7sYX2uF5UpQOwieAeOExEYAWWfu7ZZUA==}
     engines: {node: '>= 0.4'}
@@ -4674,6 +4699,10 @@ packages:
       wrap-ansi: 6.2.0
     dev: true
 
+  /long-timeout/0.1.1:
+    resolution: {integrity: sha512-BFRuQUqc7x2NWxfJBCyUrN8iYUYznzL9JROmRz1gZ6KlOIgmoD+njPVbb+VNn2nGMKggMsK79iUNErillsrx7w==}
+    dev: false
+
   /loose-envify/1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
@@ -4717,6 +4746,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
+
+  /luxon/1.28.0:
+    resolution: {integrity: sha512-TfTiyvZhwBYM/7QdAVDh+7dBTBA29v4ik0Ce9zda3Mnf8on1S5KJI8P2jKFZ8+5C0jhmr0KwJEO/Wdpm0VeWJQ==}
+    dev: false
 
   /magic-design-react/0.0.20_gy76r2sdahkhwn6zcsfywz63by:
     resolution: {integrity: sha512-jXd6mvcOTmFeOJxAgfLzysI9SDDMdTNLUos9CvklrC94WT6BWP7zrYaoZBcolgS6zrHpXFpEEhMPSkgSe+yypQ==}
@@ -4942,6 +4975,15 @@ packages:
 
   /node-releases/2.0.6:
     resolution: {integrity: sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==}
+
+  /node-schedule/2.1.0:
+    resolution: {integrity: sha512-nl4JTiZ7ZQDc97MmpTq9BQjYhq7gOtoh7SiPH069gBFBj0PzD8HI7zyFs6rzqL8Y5tTiEEYLxgtbx034YPrbyQ==}
+    engines: {node: '>=6'}
+    dependencies:
+      cron-parser: 3.5.0
+      long-timeout: 0.1.1
+      sorted-array-functions: 1.3.0
+    dev: false
 
   /normalize-package-data/2.5.0:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}
@@ -6466,6 +6508,10 @@ packages:
     engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
     dev: true
     optional: true
+
+  /sorted-array-functions/1.3.0:
+    resolution: {integrity: sha512-2sqgzeFlid6N4Z2fUQ1cvFmTOLRi/sEDzSQ0OKYchqgoPmQBVyM3959qYx3fpS6Esef80KjmpgPeEr028dP3OA==}
+    dev: false
 
   /source-map-js/1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}

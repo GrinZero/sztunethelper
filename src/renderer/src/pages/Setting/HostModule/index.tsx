@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Drawer, Form, Input, Checkbox, Select, Message } from '@arco-design/web-react'
 const { Option } = Select
 
-import { fetchHosts, Host } from '@renderer/api'
+import { fetchHosts, Host, updateRemoteHost } from '@renderer/api'
 import type { ComponentProps } from '@renderer/types'
 
 import HostList from '../HostList'
@@ -21,6 +21,9 @@ interface HostModuleProps extends ComponentProps {
 const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChange }) => {
   const dispatch = useDispatch()
   const [visible, setVisible] = useState(false)
+  const [remoteLoading, setRemoteLoading] = useState(false)
+
+  const [form] = Form.useForm()
   const { hosts, host } = useSelector<any, HostState>((store: any) => store.host)
 
   const handleHostSwitch = async (host: Host, val: boolean) => {
@@ -41,7 +44,43 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
     setVisible(true)
   }
   const handleUpdateRemote = async (host: Host) => {
-    console.log(host)
+    setRemoteLoading(true)
+    try {
+      const { data } = await updateRemoteHost(host)
+      const result = await submitSave(data, () => Message.success('操作成功'))
+      if (result) {
+        dispatch(setHosts(result))
+        const newHost = result.find((item) => item.name === host.name)
+        if (newHost) {
+          dispatch(setHost(newHost))
+        }
+      }
+    } catch (error: any) {
+      console.error('handleUpdateRemote', error)
+      if (error === 'request timeout') {
+        Message.error('请求超时')
+      } else {
+        Message.error(error?.message)
+      }
+    }
+    setRemoteLoading(false)
+  }
+  const handleOnOk = async () => {
+    form.validate().then(async (val) => {
+      setVisible(false)
+      const newHost = { ...host, ...val }
+      const newHosts = hosts?.map((item) => {
+        if (item.name === host?.name) {
+          return newHost
+        }
+        return item
+      })
+      const result = await submitSave(newHosts, () => Message.success('操作成功'))
+      if (result) {
+        dispatch(setHost(newHost))
+        dispatch(setHosts(result))
+      }
+    })
   }
 
   useEffect(() => {
@@ -69,10 +108,21 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
         width={'calc(100vw - 240px - 2rem)'}
         visible={visible}
         onCancel={() => setVisible(false)}
+        onOk={handleOnOk}
         key={host?.name}
       >
-        <Form layout="vertical" className={`${styles.form}`}>
-          <Form.Item label="Host类型">
+        <Form
+          layout="vertical"
+          className={`${styles.form}`}
+          form={form}
+          initialValues={host ?? {}}
+          validateMessages={{
+            string: {
+              match: '请输入正确的链接'
+            }
+          }}
+        >
+          <Form.Item label="Host类型" field="type">
             <div className="flex flex-row">
               <Checkbox checked={host?.type === 'local'} disabled>
                 本地
@@ -82,16 +132,30 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
               </Checkbox>
             </div>
           </Form.Item>
-          <Form.Item label="名称">
+          <Form.Item
+            label="名称"
+            field="name"
+            defaultValue={host?.name ?? ''}
+            rules={[{ required: true }, { maxLength: 10 }]}
+          >
             <Input defaultValue={host?.name ?? ''} />
           </Form.Item>
           {host?.type === 'remote' && (
             <>
-              <Form.Item label="URL">
-                <Input defaultValue={host?.url ?? ''} />
+              <Form.Item
+                label="URL"
+                field="url"
+                required
+                rules={[
+                  {
+                    match: /[a-zA-z]+:\/\/[^\s]*/
+                  }
+                ]}
+              >
+                <Input />
               </Form.Item>
-              <Form.Item label="自动更新">
-                <Select defaultValue={host?.autoUpdate}>
+              <Form.Item label="自动更新" field="autoUpdate" required>
+                <Select>
                   <Option value="never">从不</Option>
                   <Option value="1m">1分钟</Option>
                   <Option value="5m">5分钟</Option>
@@ -101,23 +165,25 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
                   <Option value="1d">1天</Option>
                   <Option value="7d">7天</Option>
                 </Select>
-                <div className={styles.info}>
-                  <span>
-                    最后更新：
-                    {host?.updateTime
-                      ? new Date(host.updateTime).format('yyyy-MM-dd hh:mm:ss')
-                      : '从未'}
-                  </span>
-                  <span
-                    className="ml-2 font-bold cursor-pointer"
-                    onClick={() => {
-                      handleUpdateRemote(host)
-                    }}
-                  >
-                    手动更新
-                  </span>
-                </div>
               </Form.Item>
+              <div className={styles.info}>
+                <span>
+                  最后更新：
+                  {host?.updateTime
+                    ? new Date(host.updateTime).format('yyyy-MM-dd hh:mm:ss')
+                    : '从未'}
+                </span>
+                <span
+                  className={`ml-2 font-bold ${
+                    remoteLoading ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
+                  }`}
+                  onClick={() => {
+                    handleUpdateRemote(host)
+                  }}
+                >
+                  手动更新
+                </span>
+              </div>
             </>
           )}
         </Form>
