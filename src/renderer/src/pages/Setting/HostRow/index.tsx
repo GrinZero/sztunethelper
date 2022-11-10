@@ -17,8 +17,8 @@ export interface HostRowProps extends Omit<HTMLDivProps, 'defaultValue'> {
 }
 
 const HostRow: React.FC<HostRowProps> = (props) => {
-  const { type, mode, name, className = '', onSwitch, onEdit, defaultValue, ...rest } = props
-  const [checked, setChecked] = useControlled(props, 'value', onSwitch, { defaultValue })
+  const { type, mode, name, className = '', onSwitch, onEdit, defaultValue, value, ...rest } = props
+  // const [checked, setChecked] = useControlled(props, 'value', onSwitch, { defaultValue })
 
   return (
     <div className={`flex flex-row items-center w-full p-4 group ${className}`} {...rest}>
@@ -38,9 +38,11 @@ const HostRow: React.FC<HostRowProps> = (props) => {
         />
       </div>
       <Switch
-        checked={checked}
+        className={`${type === 'system' ? 'invisible' : ''}`}
+        checked={value}
         onChange={(val, e) => {
-          setChecked?.(val)
+          // setChecked?.(val)
+          onSwitch?.(val)
           e.stopPropagation()
         }}
       />

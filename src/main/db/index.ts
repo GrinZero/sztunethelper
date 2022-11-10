@@ -25,7 +25,7 @@ const db = low(adapter)
 
 ;(async () => {
   const sysHosts = await getSysHosts()
-  db.defaults({
+  const defaultState: DBData = {
     hosts: [
       {
         type: 'system',
@@ -38,7 +38,7 @@ const db = low(adapter)
         type: 'local',
         mode: 'edit',
         name: '内网',
-        content: '',
+        content: `10.1.20.133 gym.sztu.edu.cn`,
         open: true
       },
       {
@@ -56,11 +56,11 @@ const db = low(adapter)
       foreverConnect: false,
       autoLaunch: false,
       autoTheme: true
-    },
-    user: {
-      sudo: null
     }
-  }).write()
+  }
+  db.defaults(defaultState).write()
+  // 打开下边这句话会重置数据库db
+  // db.setState(defaultState).write()
 })()
 
 export default db

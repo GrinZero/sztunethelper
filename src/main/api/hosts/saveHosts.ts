@@ -3,21 +3,30 @@ import db from '../../db'
 import store from '../../db/store'
 import type { Host } from '../../db'
 
-import { checkAccess } from '../../controllers'
+import { checkAccess, getHostsContent, setSysHosts } from '../../controllers'
 
 apiStore.add('saveHosts', async (list: Host[]): RequestResult => {
   const access = await checkAccess()
-  if (!access) {
-    const sudo = await store.get('sudo')
-    if (!sudo) {
-      return {
-        code: 403,
-        data: 'Permission denied'
-      }
+  const sudo = await store.get('sudo')
+  if (!access && !sudo) {
+    return {
+      code: 403,
+      data: 'Permission denied'
+    }
+  }
+  const content = getHostsContent(list)
+
+  try {
+    await setSysHosts(content, sudo as string)
+    db.set('hosts', list).write()
+  } catch (error) {
+    return {
+      code: 403,
+      data: 'Permission denied'
     }
   }
   return {
     code: 200,
-    data: []
+    data: list
   }
 })

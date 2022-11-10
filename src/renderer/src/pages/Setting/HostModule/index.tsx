@@ -1,25 +1,29 @@
 import React, { useState } from 'react'
-import HostList from '../HostList'
-import type { HostItem } from '../HostList'
 import { useEffect } from 'react'
-import { Drawer, Form, Input, Checkbox, Select } from '@arco-design/web-react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Drawer, Form, Input, Checkbox, Select, Message } from '@arco-design/web-react'
 const { Option } = Select
-import styles from './index.module.scss'
 
-import { fetchHosts } from '@renderer/api'
-import { ComponentProps } from '@renderer/types'
+import { fetchHosts, Host } from '@renderer/api'
+import type { ComponentProps } from '@renderer/types'
+
+import HostList from '../HostList'
+import styles from './index.module.scss'
+import { submitSave } from '../helpers'
+import { setHosts, setHost } from '@renderer/store'
+import type { HostState } from '@renderer/store'
 
 interface HostModuleProps extends ComponentProps {
-  onChange?: (host: HostItem | undefined) => void
+  onChange?: (host: Host | undefined) => void
   current: string | null
 }
 
 const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChange }) => {
+  const dispatch = useDispatch()
   const [visible, setVisible] = useState(false)
-  const [hosts, setHosts] = useState<HostItem[] | null>(null)
-  const [host, setHost] = useState<HostItem>()
+  const { hosts, host } = useSelector<any, HostState>((store: any) => store.host)
 
-  const handleHostSwitch = (host: HostItem, val: boolean) => {
+  const handleHostSwitch = async (host: Host, val: boolean) => {
     const newHosts =
       hosts?.map((item) => {
         if (item.name === host.name) {
@@ -27,13 +31,16 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
         }
         return item
       }) ?? []
-    setHosts(newHosts)
+    const result = await submitSave(newHosts, () => Message.success('操作成功'))
+    if (result) {
+      dispatch(setHosts(result))
+    }
   }
-  const handleHostEdit = (host: HostItem) => {
-    setHost(host)
+  const handleHostEdit = async (host: Host) => {
+    dispatch(setHost(host))
     setVisible(true)
   }
-  const handleUpdateRemote = async (host: HostItem) => {
+  const handleUpdateRemote = async (host: Host) => {
     console.log(host)
   }
 
@@ -41,7 +48,7 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
     async function init() {
       const result = await fetchHosts()
       if (result.code === 200) {
-        setHosts(result.data)
+        dispatch(setHosts(result.data))
         onChange?.(result.data[0])
       }
     }
@@ -54,7 +61,7 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
         data={hosts}
         onSwitch={handleHostSwitch}
         onEdit={handleHostEdit}
-        onClick={(item) => onChange?.(item)}
+        onClick={(_host) => onChange?.(_host)}
         current={current}
       />
       <Drawer

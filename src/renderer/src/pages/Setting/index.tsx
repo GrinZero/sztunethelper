@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { CodeEditor, BaseLine } from '@renderer/components'
 
 import HostModule from './HostModule'
@@ -7,14 +7,44 @@ import SettingModule from './SettingModule'
 
 import styles from './index.module.scss'
 import { Host } from '@renderer/api'
+import { HostState, setHost, setHosts } from '@renderer/store'
+import { submitSave } from './helpers'
+
+import { debounce } from '@renderer/utils'
+import { Message } from '@arco-design/web-react'
 
 const Setting = () => {
+  const dispatch = useDispatch()
   const { theme } = useSelector((store: any) => store.base)
+  const { hosts, host } = useSelector<any, HostState>((store: any) => store.host)
 
-  const [host, setHost] = useState<Host>()
-  const handleHostChange = (val?: Host) => setHost(val)
-  const handleEditorChange = (val?: string) => {
-    console.log(val)
+  const firstRef = useRef<boolean>()
+
+  const handleHostChange = (val?: Host) => {
+    dispatch(setHost(val ?? null))
+    firstRef.current = true
+  }
+  const onEditorChange = debounce(async (val?: string) => {
+    const newHosts = hosts.map((item) => {
+      if (item.name === host?.name) {
+        return { ...item, content: val ?? '' }
+      }
+      return item
+    })
+
+    const result = await submitSave(newHosts, () => Message.success('修改成功'))
+    if (result) {
+      dispatch(setHosts(result))
+      dispatch(setHost(!host ? null : { ...host, content: val ?? '' }))
+    }
+  }, 500)
+
+  const handleEditorSave = async (val?: string) => {
+    if (firstRef.current) {
+      firstRef.current = false
+      return
+    }
+    onEditorChange(val)
   }
 
   return (
@@ -32,8 +62,8 @@ const Setting = () => {
         <CodeEditor
           height={'100%'}
           theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
-          value={host?.content}
-          onChange={handleEditorChange}
+          value={String(host?.content ?? '')}
+          onChange={handleEditorSave}
         />
       </div>
     </div>

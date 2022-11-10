@@ -47,7 +47,7 @@ const HostList: React.FC<HostListProps> = ({
             onClick={() => onClick?.(item)}
             onSwitch={(val) => onSwitch?.(item, Boolean(val))}
             onEdit={() => onEdit?.(item)}
-            defaultValue={item.open}
+            value={item.open}
             type={item.type}
             name={item.name}
             mode={item.mode}
