@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Switch } from '@arco-design/web-react'
-import { useControlled } from '@renderer/hooks'
+// import { useControlled } from '@renderer/hooks'
 import { IconFile, IconCloud, IconEdit, IconDesktop } from '@arco-design/web-react/icon'
 import type { HTMLDivProps } from '@renderer/types'
 import styles from './index.module.scss'
