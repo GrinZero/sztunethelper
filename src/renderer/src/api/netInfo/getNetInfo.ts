@@ -1,4 +1,5 @@
 import apiClient from '../apiClient'
+import type { ApiResult } from '../type'
 
 type NetInfoStatusType = 'success' | 'fail' | 'normal'
 export interface NetInfoModal {
@@ -26,7 +27,7 @@ export interface NetInfoModal {
   }
 }
 async function getNetInfo() {
-  return apiClient.send<NetInfoModal>('getNetInfo')
+  return apiClient.send<ApiResult<NetInfoModal>>('getNetInfo')
 }
 
 export { getNetInfo }

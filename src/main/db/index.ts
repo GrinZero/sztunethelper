@@ -12,10 +12,17 @@ const USER_DATA_PATH = app?.getPath('userData') ?? '../../../tests/db/data/'
 
 type DBData = {
   hosts: Host[]
+  config: {
+    autoUpdate: boolean
+    foreverConnect: boolean
+    autoLaunch: boolean
+    autoTheme: boolean
+  }
 }
 
 const adapter = new FileSync<DBData>(path.join(USER_DATA_PATH, 'db.json'))
 const db = low(adapter)
+
 ;(async () => {
   const sysHosts = await getSysHosts()
   db.defaults({
@@ -43,8 +50,19 @@ const db = low(adapter)
         autoUpdate: 'never',
         url: 'https://gitlab.com/ineo6/hosts/-/raw/master/next-hosts'
       }
-    ]
+    ],
+    config: {
+      autoUpdate: true,
+      foreverConnect: false,
+      autoLaunch: false,
+      autoTheme: true
+    },
+    user: {
+      sudo: null
+    }
   }).write()
 })()
 
 export default db
+export * from './model'
+export { default as store } from './store'

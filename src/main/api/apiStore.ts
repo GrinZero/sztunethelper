@@ -1,9 +1,9 @@
-export type RequestResult<T = unknown> = Promise<{
-  code: number
-  data?: T
-}>
+export type RequestResult<T = unknown> = Promise<T>
 
-export type RulerService<T = unknown, P = unknown> = (payload: P) => RequestResult<T>
+export type RulerService<T = unknown, P = unknown> = (
+  payload: P,
+  ...rest: unknown[]
+) => RequestResult<T>
 
 export interface StoreInterface {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

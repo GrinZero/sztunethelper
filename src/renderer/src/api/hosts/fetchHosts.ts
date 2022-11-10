@@ -1,5 +1,5 @@
 import apiClient from '../apiClient'
-
+import type { ApiResult } from '../type'
 export interface Host {
   name: string
   type: 'local' | 'remote' | 'system'
@@ -12,7 +12,7 @@ export interface Host {
 }
 
 const fetchHosts = async () => {
-  const res = await apiClient.send<Host[]>('fetchHosts')
+  const res = await apiClient.send<ApiResult<Host[]>>('fetchHosts')
   return res
 }
 

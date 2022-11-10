@@ -1,6 +1,8 @@
-import apiStore, { RequestResult } from '../apiStore'
+import apiStore from '../apiStore'
 
 import { getCurrentNetInfo } from '../../controllers'
+
+import type { ApiResult } from '../type'
 
 type NetInfoStatusType = 'success' | 'fail' | 'normal'
 export interface NetInfoModal {
@@ -28,7 +30,7 @@ export interface NetInfoModal {
   }
 }
 
-apiStore.add('getNetInfo', async (): RequestResult<NetInfoModal> => {
+apiStore.add('getNetInfo', async (): ApiResult<NetInfoModal> => {
   const netInfo = await getCurrentNetInfo()
   const ip = (() => {
     const value = netInfo?.ipv4.address ?? ''

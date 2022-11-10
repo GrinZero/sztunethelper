@@ -37,7 +37,6 @@ export const netInfoSlice = createSlice<NetInfoState, NetInfoReducer, 'netInfo'>
   initialState,
   reducers: {
     setNetInfo: (state, action) => {
-      console.log('action', action)
       state.dhcp = action.payload.dhcp
       state.dns = action.payload.dns
       state.ip = action.payload.ip

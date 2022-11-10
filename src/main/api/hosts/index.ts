@@ -1,1 +1,2 @@
 import './fetchHosts'
+import './saveHosts'

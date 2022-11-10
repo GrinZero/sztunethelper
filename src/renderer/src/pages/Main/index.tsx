@@ -33,8 +33,8 @@ const Main = () => {
   const netInfo = useSelector((store: any) => store.netInfo)
 
   const init = async (type?: 'normal' | 'refresh') => {
-    const username = localStorage.getItem('username')
-    const password = localStorage.getItem('password')
+    const username = await window.storage.get<string>('username')
+    const password = await window.storage.get<string>('password')
     console.info('login:username', username)
     if (!username || !password) {
       history.push('/login')
@@ -54,6 +54,7 @@ const Main = () => {
       } else {
         setStatus('offline')
       }
+
       console.info('init#getCookie:end')
     }
     const getNetInfomation = async () => {
@@ -72,30 +73,26 @@ const Main = () => {
       if (cookie === null) {
         return
       }
-      try {
-        setPlatformList(null)
-        const res = await fetchPlatformList(cookie)
-        setPlatformList(res.data.list)
+      setPlatformList(null)
+      const res = await fetchPlatformList(cookie)
+      setPlatformList(res.data.list)
 
-        const currentPlatform = res.data.list.find((item) => item.ip === currentIP)
-        if (!currentPlatform) {
-          return
-        }
-        localStorage.setItem('currentPlatform', JSON.stringify(currentPlatform))
-      } catch (error) {
-        console.error(error)
+      const currentPlatform = res.data.list.find((item) => item.ip === currentIP)
+      if (!currentPlatform) {
+        return
       }
+      await window.storage.set('currentPlatform', currentPlatform)
     }
     const connectToNet = async (cookie: string, currentIP: string | null | undefined) => {
-      const currentPlatform = JSON.parse(localStorage.getItem('currentPlatform') || 'null')
+      const currentPlatform = await window.storage.get<Platform | null>('currentPlatform')
       if (currentPlatform && currentPlatform.user !== username) {
         // 必须使用原本的cookie
-        const accountStore = JSON.parse(localStorage.getItem('accountStore') ?? '[]')
+        const accountStore = (await window.storage.get<AccountInStore[]>('accountStore')) ?? []
         await offlinePlatfromLine(currentPlatform.link, {
           username: currentPlatform.user,
-          password: accountStore.find(
-            (item: AccountInStore) => item.username === currentPlatform.user
-          )?.password
+          password:
+            accountStore.find((item: AccountInStore) => item.username === currentPlatform.user)
+              ?.password ?? ''
         })
       }
 
@@ -114,6 +111,18 @@ const Main = () => {
       }
     }
 
+    const confirmRefresh = () => {
+      Modal.confirm({
+        title: '联网提示',
+        content: '别急！关掉系统弹出的上网认证窗口，点击确认即可！',
+        onOk: () => {
+          history.push('/index?refresh')
+        },
+        hideCancel: true
+      })
+      setStatus('offline')
+    }
+
     try {
       await getCookie()
       const cookie = sessionStorage.getItem('cookie')
@@ -127,6 +136,19 @@ const Main = () => {
         })
         history.push('/login')
         setStatus('offline')
+        return
+      }
+      if (
+        error?.code === -1 &&
+        error?.data?.message?.includes?.('connect ENETUNREACH 47.98.217.39')
+      ) {
+        confirmRefresh()
+        return
+      }
+
+      if (error?.code === 502 && error?.data?.code === -10056) {
+        confirmRefresh
+        return
       }
     }
   }
@@ -160,8 +182,8 @@ const Main = () => {
       }
     })
   }
-  const handleNameChange = ({ val, id, ip }: { val: string; id: string; ip: string }) => {
-    const nameStore = JSON.parse(localStorage.getItem('nameStore') || '{}')
+  const handleNameChange = async ({ val, id, ip }: { val: string; id: string; ip: string }) => {
+    const nameStore = (await window.storage.get<Record<string, string>>('nameStore')) ?? {}
     setPlatformList(
       platformList?.map((item) => {
         if (item.id === id) {
@@ -175,7 +197,7 @@ const Main = () => {
     )
     nameStore[id] = val
     nameStore[ip] = val
-    localStorage.setItem('nameStore', JSON.stringify(nameStore))
+    await window.storage.set('nameStore', nameStore)
   }
 
   const mainCard = useMemo(() => {

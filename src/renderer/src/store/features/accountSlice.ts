@@ -11,14 +11,15 @@ export interface AccountReducer {
   pushAccount: (state: AccountState, action: { payload: AccountInStore }) => void
   deleteAccount: (state: AccountState, action: { payload: Account }) => void
   setCurrentAccount: (state: AccountState, action: { payload: Account }) => void
+  init: (state: AccountState, action: { payload: any }) => void
   [key: string]: any
 }
 
 const initialState: AccountState = {
-  accountStore: JSON.parse(localStorage.getItem('accountStore') ?? '[]'),
+  accountStore: [],
   currentAccount: {
-    username: localStorage.getItem('username') ?? '',
-    password: localStorage.getItem('password') ?? ''
+    username: '',
+    password: ''
   }
 }
 
@@ -28,18 +29,25 @@ export const accountSlice = createSlice<AccountState, AccountReducer, 'account'>
   reducers: {
     pushAccount: (state, action) => {
       state.accountStore = [action.payload, ...state.accountStore]
-      localStorage.setItem('accountStore', JSON.stringify(state.accountStore))
+      window.storage.set('accountStore', state.accountStore)
     },
     deleteAccount: (state, action) => {
       state.accountStore = state.accountStore.filter(
         (item) => item.username !== action.payload.username
       )
-      localStorage.setItem('accountStore', JSON.stringify(state.accountStore))
+      window.storage.set('accountStore', state.accountStore)
     },
     setCurrentAccount: (state, action) => {
       state.currentAccount = { ...action.payload }
-      localStorage.setItem('username', action.payload.username)
-      localStorage.setItem('password', action.payload.password)
+      window.storage.set('username', action.payload.username)
+      window.storage.set('password', action.payload.password)
+    },
+    init: (state, { payload: { accountStore, username, password } }) => {
+      state.accountStore = accountStore
+      state.currentAccount = {
+        username,
+        password
+      }
     }
   }
 })

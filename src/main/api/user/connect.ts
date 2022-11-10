@@ -1,4 +1,4 @@
-import apiStore, { RequestResult } from '../apiStore'
+import apiStore from '../apiStore'
 
 import { connect } from '../../sdk'
 import type { Account } from '../../sdk'
@@ -8,7 +8,7 @@ apiStore.add(
   async ({
     username,
     password
-  }: Account): RequestResult<{
+  }: Account): Promise<{
     code: number
     msg: string
   }> => {

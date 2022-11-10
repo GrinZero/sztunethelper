@@ -1,4 +1,5 @@
 import apiClient from '../apiClient'
+import type { ApiResult } from '../type'
 
 import type { Account } from '@renderer/types'
 
@@ -10,6 +11,6 @@ export interface LoginResult {
 }
 
 const login = async ({ username, password }: Account) =>
-  apiClient.send<LoginResult>('login', { username, password })
+  apiClient.send<ApiResult<LoginResult>>('login', { username, password }, 3000)
 
 export { login }

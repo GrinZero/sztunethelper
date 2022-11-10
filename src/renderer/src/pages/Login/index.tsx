@@ -1,6 +1,6 @@
 // import styles from './index.module.scss';
 import { useHistory } from 'react-router-dom'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Message, Modal } from '@arco-design/web-react'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -18,7 +18,15 @@ const Login = () => {
   const history = useHistory()
   const formRef = useRef<LoginFormRef>(null)
 
-  const [username, setUserName] = useState(localStorage.getItem('username') || '')
+  const [username, setUserName] = useState('')
+
+  useEffect(() => {
+    const init = async () => {
+      const username = await window.storage.get<string>('username')
+      setUserName(username || '')
+    }
+    init()
+  }, [])
 
   const { accountStore, currentAccount } = useSelector((store: any) => store.account) as {
     accountStore: AccountInStore[]
