@@ -10,7 +10,7 @@ import { Host } from '@renderer/api'
 import { HostState, setHost, setHosts } from '@renderer/store'
 import { submitSave } from './helpers'
 
-import { debounce, getHostContent } from '@renderer/utils'
+import { debounce, getHostsContent } from '@renderer/utils'
 import { Message } from '@arco-design/web-react'
 
 const Setting = () => {
@@ -50,7 +50,7 @@ const Setting = () => {
     onEditorChange(val)
   }
 
-  const content = host?.type === 'system' ? getHostContent(hosts) : host?.content ?? ''
+  const content = host?.type === 'system' ? getHostsContent(hosts) : host?.content ?? ''
 
   return (
     <div className={`main ${styles.container}`}>
