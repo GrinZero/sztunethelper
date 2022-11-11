@@ -75,6 +75,10 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
         }
         return item
       })
+
+      if (JSON.stringify(hosts) === JSON.stringify(newHosts)) {
+        return
+      }
       const result = await submitSave(newHosts, () => Message.success('操作成功'))
       if (result) {
         dispatch(setHost(newHost))

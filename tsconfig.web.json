@@ -5,7 +5,10 @@
     "src/renderer/src/**/*",
     "src/renderer/src/**/*.tsx",
     "src/preload/*.d.ts",
-    "src/preload/index.d.ts"
+    "src/preload/index.d.ts",
+    "tests/renderer/**/*",
+    "tests/renderer/utils/*",
+    ".test.env.ts"
   ],
   "compilerOptions": {
     "composite": true,

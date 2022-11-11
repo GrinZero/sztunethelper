@@ -1,21 +1,7 @@
-import { getSysHosts, checkAccess, getHostsContent } from '@controllers/index'
+import { getHostsContent } from '@renderer/utils/index'
 import { it, expect } from 'vitest'
-import type { Host } from '@db/model'
 
-it('getSysHosts', async () => {
-  const result = await getSysHosts()
-  expect(result).not.toBe(null)
-})
-
-it('checkAccess: for hosts --fail', async () => {
-  if (process.platform === 'win32') {
-    // windows不测
-    expect(null).toBe(null)
-  } else {
-    const result = await checkAccess()
-    expect(result).toBe(false)
-  }
-})
+import type { Host } from '@renderer/api'
 
 it('getContent(getHostsContent)', () => {
   const hosts: Host[] = [

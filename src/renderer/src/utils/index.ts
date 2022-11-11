@@ -9,4 +9,4 @@ const debounce = function (fn, wait: number) {
 }
 
 export { debounce }
-export { default as getHostContent } from './getHostContent'
+export { default as getHostsContent } from './getHostsContent'

@@ -18,6 +18,9 @@ export const updateRemoteHost = async (host: Host) => {
 }
 
 const task = async (host: Host, quick = false) => {
+  if (quick) {
+    await updateRemoteHost(host)
+  }
   if (host.autoUpdate === 'never' || !host.autoUpdate) {
     return null
   }
@@ -37,10 +40,6 @@ const task = async (host: Host, quick = false) => {
       break
     default:
       break
-  }
-
-  if (quick) {
-    await updateRemoteHost(host)
   }
 
   return scheduleJob(rule, () => {

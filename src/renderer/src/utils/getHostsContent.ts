@@ -2,7 +2,7 @@ import { Host } from '@renderer/api'
 
 // TODO: 在electron和web共享代码
 export const CONTENT_START = '# --- NET_HELPER-START ---'
-const getHostContent = (list: Host[]) => {
+const getHostsContent = (list: Host[]) => {
   const content = list
     .filter((item) => item.open)
     .map((item) =>
@@ -15,4 +15,4 @@ const getHostContent = (list: Host[]) => {
   return content
 }
 
-export default getHostContent
+export default getHostsContent
