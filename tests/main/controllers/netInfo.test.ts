@@ -1,4 +1,11 @@
-import { getCurrentNetInfo, getPublicIP } from '@controllers/netInfo/index'
+import {
+  getCurrentNetInfo,
+  ping,
+  tracert,
+  ifconfig,
+  netstat,
+  arp
+} from '@controllers/netInfo/index'
 
 import { it, expect } from 'vitest'
 
@@ -12,6 +19,31 @@ it('getCurrentNetInfo', async () => {
   expect(result?.dnsServer).not.toHaveLength(0)
 })
 
-it('getPublicIP', async () => {
-  expect(await getPublicIP()).not.toBe(null)
+// it('getPublicIP', async () => {
+//   expect(await getPublicIP()).not.toBe(null)
+// })
+
+it('ping 114.114.114.114: 检测外网网络', async () => {
+  const result = await ping('114.114.114.114')
+  expect(result).toContain('PING 114.114.114.114 (114.114.114.114)')
+})
+
+it('tracert 47.98.217.39', async () => {
+  const result = await tracert('47.98.217.39')
+  expect(result).toContain('47.98.217.39')
+}, 7000)
+
+it('ifconfig', async () => {
+  const result = await ifconfig()
+  expect(result).not.toBe(null)
+})
+
+it('netstat -a', async () => {
+  const result = await netstat()
+  expect(result).not.toBe(null)
+})
+
+it('arp -a', async () => {
+  const result = await arp()
+  expect(result).not.toBe(null)
 })

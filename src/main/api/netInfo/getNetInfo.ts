@@ -34,8 +34,7 @@ apiStore.add('getNetInfo', async (): ApiResult<NetInfoModal> => {
   const netInfo = await getCurrentNetInfo()
   const ip = (() => {
     const value = netInfo?.ipv4.address ?? ''
-    const type: NetInfoStatusType =
-      value.startsWith('10.161') || value.startsWith('10.118') ? 'success' : 'fail'
+    const type: NetInfoStatusType = value.startsWith('10.') ? 'success' : 'fail'
     return { value, type }
   })()
 
