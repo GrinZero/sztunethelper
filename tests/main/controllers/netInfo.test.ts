@@ -7,7 +7,7 @@ import {
   arp
 } from '@controllers/netInfo/index'
 
-import { it, expect } from 'vitest'
+import { it, expect, describe } from 'vitest'
 
 it('getCurrentNetInfo', async () => {
   const result = await getCurrentNetInfo()
@@ -28,22 +28,28 @@ it('ping 114.114.114.114: 检测外网网络', async () => {
   expect(result).toContain('PING 114.114.114.114 (114.114.114.114)')
 })
 
-it('tracert 47.98.217.39', async () => {
-  const result = await tracert('47.98.217.39')
-  expect(result).toContain('47.98.217.39')
-}, 7000)
+describe('net command', () => {
+  it.concurrent(
+    'tracert 47.98.217.39',
+    async () => {
+      const result = await tracert('47.98.217.39')
+      expect(result).toContain('47.98.217.39')
+    },
+    7000
+  )
 
-it('ifconfig', async () => {
-  const result = await ifconfig()
-  expect(result).not.toBe(null)
-})
+  it.concurrent('ifconfig', async () => {
+    const result = await ifconfig()
+    expect(result).not.toBe(null)
+  })
 
-it('netstat -a', async () => {
-  const result = await netstat()
-  expect(result).not.toBe(null)
-})
+  it.concurrent('netstat -a', async () => {
+    const result = await netstat()
+    expect(result).not.toBe(null)
+  })
 
-it('arp -a', async () => {
-  const result = await arp()
-  expect(result).not.toBe(null)
+  it.concurrent('arp -a', async () => {
+    const result = await arp()
+    expect(result).not.toBe(null)
+  })
 })
