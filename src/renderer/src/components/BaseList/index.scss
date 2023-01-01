@@ -1,6 +1,6 @@
 .base-list {
   border-radius: 14px;
-  overflow: hidden;
+  overflow: auto;
   border: 1px solid var(--theme-bg-color);
   & .base-list__item {
     border-bottom: 1px solid var(--border-color);
