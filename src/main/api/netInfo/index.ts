@@ -1,1 +1,2 @@
 import './getNetInfo'
+import './netTask'

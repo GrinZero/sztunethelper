@@ -5,6 +5,7 @@ import type { ApiResult } from '../type'
 import { login, LoginResult, Account } from '../../sdk'
 
 type LoginModal = LoginResult
+
 apiStore.add('login', async ({ username, password }: Account): ApiResult<LoginModal> => {
   const res = await login({ username, password })
   if (res.code === 1) {
@@ -12,10 +13,9 @@ apiStore.add('login', async ({ username, password }: Account): ApiResult<LoginMo
       code: 200,
       data: res
     }
-  } else {
-    return {
-      code: 502,
-      data: res
-    }
+  }
+  return {
+    code: 502,
+    data: res
   }
 })

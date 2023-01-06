@@ -37,11 +37,10 @@ const App = () => {
       <Route path="/">
         <TopBar type="mac" />
         <Main />
+        <SelfHelp />
       </Route>
       <Switch>
-        <Route path="/self_help" exact={true}>
-          <SelfHelp />
-        </Route>
+        <Route path="/self_help" exact={true}></Route>
         <Route path="/login" exact={true}>
           <Login />
         </Route>

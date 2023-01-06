@@ -1,87 +1,103 @@
-// import { useSelector } from 'react-redux'
-import styles from './index.module.scss'
-import { BaseList } from '@renderer/components'
+import { useState, useEffect } from 'react'
+import { useRouteMatch } from 'react-router-dom'
+
+import { BaseList, BaseElement, BasePopover, BaseButton } from '@renderer/components'
+const { Title } = BaseElement
 import CheckRow from './CheckRow'
 
-import type { StatusIconProps } from '@renderer/components'
-interface CheckRowProps {
-  type: StatusIconProps['type']
-  command: 'ping' | 'traceroute' | 'ipconfig'
-  title: string
-  value: string
-}
+import { getNetTasks, runNetTask } from '@renderer/api'
+import type { NetTask } from '@renderer/api'
 
-const initList: CheckRowProps[] = [
-  {
-    type: 'init',
-    title: '检测内网网关',
-    value: '内网网关',
-    command: 'ping'
-  },
-  {
-    type: 'init',
-    title: '检测校园网网络服务器',
-    value: 'ping 10.99.99.99',
-    command: 'ping'
-  },
-  {
-    type: 'init',
-    title: '检测校园网宿舍认证服务器',
-    value: 'ping 47.98.217.39',
-    command: 'ping'
-  },
-  {
-    type: 'init',
-    title: '检测本地TCP/IP协议',
-    value: 'ping 127.0.0.1',
-    command: 'ping'
-  },
-  {
-    type: 'init',
-    title: '检测外网网络(114.114.114.114)',
-    value: 'ping 114.114.114.114',
-    command: 'ping'
-  },
-  {
-    type: 'init',
-    title: '检测DNS是否正常解析',
-    value: 'ping www.baidu.com',
-    command: 'ping'
-  },
-  {
-    type: 'init',
-    title: '检测本地hosts文件是否正常',
-    value: 'ping localhost',
-    command: 'ping'
-  },
-  {
-    type: 'init',
-    title: '获取网络报告',
-    value: '47.98.217.39',
-    command: 'ipconfig'
-  }
-]
+import styles from './index.module.scss'
+
+const initList: NetTask[] = []
 
 const SelfHelp = () => {
-  // const netInfo = useSelector((store: any) => store.netInfo)
+  const match = useRouteMatch(['/self_help'])
+  const hidden = match === null
+
+  const [netTaskList, setNetTaskList] = useState<NetTask[]>(initList)
+  useEffect(() => {
+    //TODO:该请求必定成功，所以最快写法，忽略了status，但是可以修补
+    getNetTasks().then((res) => {
+      setNetTaskList(res.data)
+    })
+  }, [])
+
+  //该函数被setTimeout调用，要注意陷阱
+  const handleClick = async (item: NetTask) => {
+    const setNetTaskStatus = (id: NetTask['id'], type: NetTask['type']) => {
+      setNetTaskList((prev) => {
+        return prev.map((task) => {
+          if (task.id === id) {
+            task.type = type
+          }
+          return task
+        })
+      })
+    }
+
+    setNetTaskStatus(item.id, 'loading')
+    const result = await runNetTask(item.id).catch((err) => {
+      setNetTaskStatus(item.id, 'fail')
+      console.error('runNetTask', err, item)
+    })
+    if (!result) return
+    console.log('runNetTask', item, result)
+    setNetTaskStatus(item.id, 'success')
+  }
 
   return (
-    <div className={`${styles.container} main`}>
-      <BaseList className={`w-[300px]`}>
-        {initList.map((item, index) => {
-          return (
-            <CheckRow
-              key={index}
-              type={item.type}
-              onClick={() => {
-                console.log('click')
-              }}
-            >
-              {item.title}
-            </CheckRow>
-          )
-        })}
-      </BaseList>
+    <div className={`${styles.container} flex flex-col main ${hidden ? 'main-hidden' : ''}`}>
+      <div className={`w-[300px] flex flex-col`}>
+        <Title className={`mb-2 ml-1 flex flex-row items-center justify-between`}>
+          <BasePopover
+            position="right"
+            content="自助服务为您提供了本机网络环境的检测，帮助您快速将网络诊断报告输出"
+          >
+            <div className={`flex flex-row items-center`}>
+              <svg className="icon mr-1 mt-0.5 cursor-help">
+                <use xlinkHref="#icon-project"></use>
+              </svg>
+              <span>自助服务</span>
+            </div>
+          </BasePopover>
+          <BaseButton
+            onClick={() => {
+              setNetTaskList(
+                netTaskList.map((task) => {
+                  return {
+                    ...task,
+                    type: 'loading'
+                  }
+                })
+              )
+              netTaskList.forEach((item, i) => {
+                setTimeout(() => {
+                  handleClick(item)
+                }, i * 100 + 1000)
+              })
+            }}
+          >
+            全部输出
+          </BaseButton>
+        </Title>
+        <BaseList>
+          {netTaskList.map((item, index) => {
+            return (
+              <CheckRow
+                key={index}
+                type={item.type}
+                onClick={() => {
+                  handleClick(item)
+                }}
+              >
+                {item.title}
+              </CheckRow>
+            )
+          })}
+        </BaseList>
+      </div>
     </div>
   )
 }

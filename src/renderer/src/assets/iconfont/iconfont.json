@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "23191217",
+      "name": "施工进度",
+      "font_class": "project",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
       "icon_id": "17105248",
       "name": "ghost-smile-line",
       "font_class": "m-hosts",

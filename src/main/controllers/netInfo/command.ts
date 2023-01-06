@@ -17,7 +17,7 @@ export const ifconfig = async () => {
 
 export const netstat = async () => {
   const cmd = 'netstat -a'
-  return spawn(cmd, 5000)
+  return spawn(cmd, 15000)
 }
 
 export const arp = async () => {
