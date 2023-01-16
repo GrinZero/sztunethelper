@@ -14,4 +14,5 @@
     "package.json": "tsconfig.json, *.config.js, *.config.ts, .stackblitzrc, pnpm*, .npm*",
     "README.md": ".git*, .eslint*, .prettier*, .stylelint*, commitlint*, .editorconfig, .lintstagedrc, .commit*"
   },
+  "editor.formatOnSave": true,
 }

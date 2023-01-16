@@ -23,11 +23,11 @@ const PlatformList: React.FC<PlatformListProps> = ({
 }) => {
   const platformListCard = useMemo(() => {
     if (platformList === null) {
-      return <div className="flex justify-center items-center w-full min-h-[144px]">loading...</div>
+      return <div className="flex justify-center items-center w-full h-[140px]">loading...</div>
     }
 
     if (platformList.length === 0) {
-      return <div className="flex justify-center items-center w-full min-h-[144px]">empty</div>
+      return <div className="flex justify-center items-center w-full h-[140px]">empty</div>
     }
 
     return platformList.map((platform) => (

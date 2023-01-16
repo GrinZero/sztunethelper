@@ -12,6 +12,7 @@ export interface BaseCardProps extends Omit<HTMLDivProps, 'title'> {
   itemClassName?: string
   listClassName?: string
   border?: boolean
+  scale?: string
 }
 
 const BaseCard: React.FC<BaseCardProps> = ({
@@ -19,6 +20,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
   titleClassName = '',
   itemClassName = '',
   listClassName = '',
+  scale = '1.02',
   border = true,
   title,
   children,
@@ -30,6 +32,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
       className={`flex ${styles.card} ${
         border ? styles.card__border : styles['card__border-none']
       } ${className}`}
+      style={{ '--scale': scale } as any}
       {...rest}
     >
       <div className={`flex flex-col w-full p-5 ${styles['base-card']}`}>

@@ -5,6 +5,8 @@ import taskStore, { updateRemoteHostTask } from '../../tasks'
 const updateRemote = async () => {
   const hosts = db.get('hosts').value()
 
+  if (!hosts) return
+
   const updateRemoteHosts = hosts.filter(
     (host) => host !== null && host.type === 'remote' && host.open && host.autoUpdate !== 'never'
   )
