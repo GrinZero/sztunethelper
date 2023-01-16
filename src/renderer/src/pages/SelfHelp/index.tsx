@@ -89,8 +89,8 @@ const SelfHelp = () => {
 
   return (
     <div className={`${styles.container} main ${hidden ? 'main-hidden' : ''}`}>
-      <div className="flex flex-row w-full">
-        <div className={`w-[270px] min-w-[270px] flex flex-col`}>
+      <div className="flex flex-row w-full flex-1">
+        <div className={`w-[270px] min-w-[270px] flex flex-col flex-none`}>
           <Title className={`mb-2 ml-1 flex flex-row items-center justify-between`}>
             <BasePopover
               position="right"
@@ -125,26 +125,23 @@ const SelfHelp = () => {
           </Title>
           <NetTaskList list={netTaskList} onClick={handleClick} onGo={handleGo} />
         </div>
-        <div className={`flex flex-col flex-grow ml-4`}>
-          <SmallScreen h={450} className={`flex flex-col items-center`}>
-            {netTaskResult &&
-              netTaskResult.map((result) => {
-                return (
-                  <BaseCard
-                    scale="1"
-                    title={result.title}
-                    className={`flex flex-col w-[97.5%] mb-3`}
-                    key={result.id}
-                    id={`netTaskResult-${result.id}`}
-                  >
-                    <div className={`flex flex-col opacity-80 whitespace-pre-wrap`}>
-                      <span>{result.content}</span>
-                    </div>
-                  </BaseCard>
-                )
-              })}
-          </SmallScreen>
-        </div>
+        <SmallScreen h={450} className={`flex flex-col items-center ml-4 w-full`}>
+          {netTaskResult &&
+            netTaskResult.map((result) => {
+              return (
+                <BaseCard
+                  scale="1"
+                  title={result.title}
+                  className={`w-[97.5%] mb-3`}
+                  key={result.id}
+                  id={`netTaskResult-${result.id}`}
+                  itemClassName={`overflow-hidden elipsis`}
+                >
+                  <span className="opacity-80 whitespace-pre-wrap">{result.content}</span>
+                </BaseCard>
+              )
+            })}
+        </SmallScreen>
       </div>
     </div>
   )
