@@ -35,8 +35,5 @@ export const sendMail = async ({ sender, receiver, pass, subject, text, html }: 
   })
 
   const info = await transporter.sendMail(form)
-
-  console.log('info', info)
-
   return info
 }
