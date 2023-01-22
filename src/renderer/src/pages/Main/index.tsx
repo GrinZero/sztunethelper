@@ -10,8 +10,7 @@ import NetInfoCard from './NetInfoCard'
 import DutyCard from './DutyCard'
 
 import { login, getNetInfo, fetchPlatformList, offlinePlatform, connect } from '@renderer/api'
-import type { Platform, Duty } from '@renderer/api'
-import { BaseCard } from '@renderer/components'
+import type { Platform } from '@renderer/api'
 import { Account } from '@renderer/types'
 import { setNetInfo } from '@renderer/store'
 
