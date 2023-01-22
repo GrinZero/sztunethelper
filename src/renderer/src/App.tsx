@@ -11,7 +11,7 @@ import './extension'
 import { useEffect } from 'react'
 import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { TopBar, Main, SelfHelp, Login, Setting, AboutUS, MessagePage } from './pages'
+import { TopBar, Main, SelfHelp, Login, Setting, AboutUS, MessagePage, MailConfig } from './pages'
 
 const { sendMessage } = window.bridge
 
@@ -41,7 +41,6 @@ const App = () => {
         <SelfHelp />
       </Route>
       <Switch>
-        <Route path="/self_help" exact={true}></Route>
         <Route path="/login" exact={true}>
           <Login />
         </Route>
@@ -53,6 +52,9 @@ const App = () => {
         </Route>
         <Route path="/message" exact={true}>
           <MessagePage />
+        </Route>
+        <Route path="/mail_config" exact={true}>
+          <MailConfig />
         </Route>
       </Switch>
     </Router>

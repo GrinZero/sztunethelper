@@ -33,7 +33,7 @@ const DutyCard = () => {
       >
         <div className="flex flex-col items-center justify-evenly max-h-full h-full">
           <p>{currentDuty?.desc}</p>
-          <Rate allowHalf readonly defaultValue={currentDuty?.rate ?? 0} />
+          <Rate allowHalf readonly value={currentDuty?.rate ?? 0} />
           <img
             className="object-cover rounded-[9px] mt-3 select-none"
             width={180}

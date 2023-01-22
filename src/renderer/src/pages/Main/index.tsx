@@ -37,6 +37,7 @@ const Main = () => {
     const password = await window.storage.get<string>('password')
     console.info('login:username', username)
     if (!username || !password) {
+      setStatus('offline')
       history.push('/login')
       return
     }
@@ -134,8 +135,8 @@ const Main = () => {
         Message.error({
           content: '登录失败，请检查账号密码是否正确'
         })
-        history.push('/login')
         setStatus('offline')
+        history.push('/login')
         return
       }
       if (
@@ -147,7 +148,7 @@ const Main = () => {
       }
 
       if (error?.code === 502 && error?.data?.code === -10056) {
-        confirmRefresh
+        confirmRefresh()
         return
       }
     }
@@ -229,7 +230,7 @@ const Main = () => {
   }, [status, handleMainCardClick])
 
   useEffect(() => {
-    // init()
+    init()
   }, [])
   useEffect(() => {
     if (location.search === '?refresh') {
