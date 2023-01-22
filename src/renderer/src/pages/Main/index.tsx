@@ -7,9 +7,10 @@ import { AccountInStore } from '../Login/AccountStore'
 import styles from './index.module.scss'
 import PlatformList from './PlatformList'
 import NetInfoCard from './NetInfoCard'
+import DutyCard from './DutyCard'
 
 import { login, getNetInfo, fetchPlatformList, offlinePlatform, connect } from '@renderer/api'
-import type { Platform } from '@renderer/api'
+import type { Platform, Duty } from '@renderer/api'
 import { BaseCard } from '@renderer/components'
 import { Account } from '@renderer/types'
 import { setNetInfo } from '@renderer/store'
@@ -229,7 +230,7 @@ const Main = () => {
   }, [status, handleMainCardClick])
 
   useEffect(() => {
-    init()
+    // init()
   }, [])
   useEffect(() => {
     if (location.search === '?refresh') {
@@ -242,17 +243,7 @@ const Main = () => {
       <div className="flex flex-grow-0 flex-shrink-0 w-full h-full">
         <div className="flex flex-col h-full max-w-[220px]">
           <NetInfoCard className="min-w-[220px]" netInfo={netInfo} />
-          <BaseCard
-            className="mt-4 h-full"
-            title="知心客服"
-            itemClassName="w-full h-full"
-            listClassName="w-full h-full"
-          >
-            <img
-              className="w-full h-full object-cover rounded-[9px]"
-              src="https://grinzero.github.io/code-shared-awesome/_next/static/media/rili_bg.15455e2d.png"
-            />
-          </BaseCard>
+          <DutyCard />
         </div>
         <div className="flex flex-col ml-6 w-full h-full">
           <PlatformList

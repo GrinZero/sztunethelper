@@ -6,7 +6,7 @@ import type { HTMLDivProps } from '@renderer/types'
 const { Title } = BaseElement
 
 export interface BaseCardProps extends Omit<HTMLDivProps, 'title'> {
-  title: string | React.ReactNode
+  title?: string | React.ReactNode
   children?: React.ReactNode
   titleClassName?: string
   itemClassName?: string
@@ -36,9 +36,13 @@ const BaseCard: React.FC<BaseCardProps> = ({
       {...rest}
     >
       <div className={`flex flex-col w-full p-5 ${styles['base-card']}`}>
-        <Title className={`text-[18px] mb-2 ${styles['base-card__title']} ${titleClassName}`}>
-          {title}
-        </Title>
+        {title ? (
+          <Title className={`text-[18px] mb-2 ${styles['base-card__title']} ${titleClassName}`}>
+            {title}
+          </Title>
+        ) : (
+          ''
+        )}
         <div className={`flex flex-col ${listClassName}`}>
           {childList
             .filter((item) => item !== null && item !== void 0)

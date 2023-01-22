@@ -29,6 +29,7 @@
     "@monaco-editor/react": "^4.4.6",
     "@reduxjs/toolkit": "^1.8.6",
     "autoprefixer": "^10.4.13",
+    "axios": "^1.2.3",
     "electron-store": "^8.1.0",
     "electron-updater": "^4.6.5",
     "execa": "npm:@esm2cjs/execa@6.1.1-cjs.1",

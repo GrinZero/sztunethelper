@@ -125,23 +125,26 @@ const SelfHelp = () => {
           </Title>
           <NetTaskList list={netTaskList} onClick={handleClick} onGo={handleGo} />
         </div>
-        <SmallScreen h={450} className={`flex flex-col items-center ml-4 w-full`}>
-          {netTaskResult &&
-            netTaskResult.map((result) => {
-              return (
-                <BaseCard
-                  scale="1"
-                  title={result.title}
-                  className={`w-[97.5%] mb-3`}
-                  key={result.id}
-                  id={`netTaskResult-${result.id}`}
-                  itemClassName={`overflow-hidden elipsis`}
-                >
-                  <span className="opacity-80 whitespace-pre-wrap">{result.content}</span>
-                </BaseCard>
-              )
-            })}
-        </SmallScreen>
+        <div className="flex flex-col w-full ml-4">
+          <SmallScreen h={450} className={`flex flex-col items-center w-full`}>
+            {netTaskResult &&
+              netTaskResult.map((result) => {
+                return (
+                  <BaseCard
+                    scale="1"
+                    title={result.title}
+                    className={`w-[97.5%] mb-3`}
+                    key={result.id}
+                    id={`netTaskResult-${result.id}`}
+                    itemClassName={`overflow-hidden elipsis`}
+                  >
+                    <span className="opacity-80 whitespace-pre-wrap">{result.content}</span>
+                  </BaseCard>
+                )
+              })}
+          </SmallScreen>
+          <div className="flex flex-row mt-4">1234</div>
+        </div>
       </div>
     </div>
   )

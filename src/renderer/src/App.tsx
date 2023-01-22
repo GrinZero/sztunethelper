@@ -31,6 +31,7 @@ const App = () => {
       document.documentElement.setAttribute('platform', 'windows')
     }
   })
+
   return (
     <Router>
       <Redirect to="/index" path="/" exact={true} />
