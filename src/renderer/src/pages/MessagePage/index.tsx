@@ -8,7 +8,7 @@ import styles from './index.module.scss'
 
 const useMailStorage = () => {
   const history = useHistory()
-  const [state, setState] = useState()
+  const [state] = useState()
   useEffect(() => {
     window.storage
       .get<string>('local-mail')
@@ -46,7 +46,7 @@ const useMailStorage = () => {
 }
 
 const MessagePage = () => {
-  const mail = useMailStorage()
+  useMailStorage()
   return <div className={`${styles.container} main`}>开发中敬请谅解期待</div>
 }
 
