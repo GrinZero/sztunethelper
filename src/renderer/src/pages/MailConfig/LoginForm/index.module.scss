@@ -1,3 +1,29 @@
 .title {
   font-size: 36px;
 }
+
+.tutorial-button {
+  right: 6px;
+  bottom: 6px;
+  opacity: 0.88;
+}
+
+.mail-select__container {
+  height: 100%;
+  .mail-select {
+    height: 100%;
+    width: 180px;
+  }
+  :global {
+    .arco-select .arco-select-view {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      background-color: transparent;
+      &::before {
+        content: '@';
+        margin-right: 3px;
+      }
+    }
+  }
+}

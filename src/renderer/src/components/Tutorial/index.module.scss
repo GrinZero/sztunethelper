@@ -1,0 +1,16 @@
+.button-absolute {
+  position: absolute;
+  z-index: 100;
+}
+.button-relative {
+  position: relative;
+  margin-left: calc(100% - 60px);
+}
+
+.modal {
+  :global {
+    .arco-modal-content {
+      padding: 0px;
+    }
+  }
+}
