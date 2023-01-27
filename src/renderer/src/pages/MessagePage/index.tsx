@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react'
+// import { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useMailStorage } from '@renderer/hooks'
 import { SmallScreen } from '@renderer/components'
 import MailCard from './MailCard'
 import styles from './index.module.scss'
 
-const useTicketList = () => {
-  const [list, setList] = useState([])
-  useEffect(() => {})
-}
+// const useTicketList = () => {
+//   const [list, setList] = useState([])
+//   useEffect(() => {})
+// }
 
 const MessagePage = () => {
   const history = useHistory()
