@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useRouteMatch } from 'react-router-dom'
 
-import { BaseElement, BasePopover, BaseButton, BaseCard } from '@renderer/components'
+import { BaseElement, BasePopover, BaseButton, BaseCard, SmallScreen } from '@renderer/components'
 const { Title } = BaseElement
 
 import NetTaskList from './NetTaskList'
-import SmallScreen from './SmallScreen'
 
 import { getNetTasks, runNetTask } from '@renderer/api'
 import type { NetTask } from '@renderer/api'

@@ -26,7 +26,9 @@ const BaseCard: React.FC<BaseCardProps> = ({
   children,
   ...rest
 }) => {
-  const childList = Array.isArray(children) ? children : [...(children ? [children] : [])]
+  const childList = (Array.isArray(children) ? children : [...(children ? [children] : [])]).filter(
+    (item) => item !== null && item !== void 0
+  )
   return (
     <div
       className={`flex ${styles.card} ${
@@ -44,15 +46,16 @@ const BaseCard: React.FC<BaseCardProps> = ({
           ''
         )}
         <div className={`flex flex-col ${listClassName}`}>
-          {childList
-            .filter((item) => item !== null && item !== void 0)
-            .map((child, index) => {
-              return (
-                <div key={child.key ?? `default${index}`} className={`${itemClassName} mt-1`}>
-                  {child}
-                </div>
-              )
-            })}
+          {childList.map((child, index) => {
+            return (
+              <div
+                key={child.key ?? `default${index}`}
+                className={`${itemClassName} ${childList.length === 1 ? '' : 'mt-1'}`}
+              >
+                {child}
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>

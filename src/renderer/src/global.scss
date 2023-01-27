@@ -6,6 +6,7 @@
     Microsoft YaHei, 微软雅黑, Arial, sans-serif;
   --blue: #7aa7ff;
   --lives-blue: #7fa1f7;
+  --lives-purple: #7f85f7;
   --lives-green: #7ff7a9;
   --lives-red: #f77f7f;
 
@@ -22,6 +23,7 @@
   --hover-menu-bg: rgba(12 15 25 / 30%);
   --content-title-color: #b7b7bb;
   --content-bg: rgb(146 151 179 / 13%);
+  --content-bg-2: rgb(146 151 179 / 20%);
   --button-inactive: rgb(249 250 251 / 55%);
   --dropdown-bg: #21242dee;
   --dropdown-hover: rgb(42 46 60);
@@ -35,6 +37,7 @@
 
 :root[theme-mode='light'] {
   --content-bg: rgb(146 151 179 / 13%);
+  --content-bg: rgb(146 151 179 / 20%);
   --theme-bg-color: rgb(255 255 255 / 31%);
   --theme-color: #3c3a3a;
   --inactive-color: #333333;

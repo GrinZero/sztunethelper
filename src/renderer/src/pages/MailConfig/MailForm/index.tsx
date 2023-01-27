@@ -1,5 +1,5 @@
 import React from 'react'
-import { useRef, useImperativeHandle, forwardRef } from 'react'
+import { useState, useRef, useImperativeHandle, forwardRef } from 'react'
 import { Message, Select } from '@arco-design/web-react'
 import { IconQuestionCircle } from '@arco-design/web-react/icon'
 import styles from './index.module.scss'
@@ -8,15 +8,15 @@ import { ComponentProps } from '@renderer/types'
 
 const { Title } = BaseElement
 
-export interface LoginFormProps extends ComponentProps {
-  onSubmit: (values: any) => void
+export interface MailFormProps extends ComponentProps {
+  onSubmit: (values: any) => void | Promise<void>
   status?: 'normal' | 'loading'
   defaultUserName?: string | null
   defaultPassword?: string | null
   defaultSelect?: string
 }
 
-export interface LoginFormRef {
+export interface MailFormRef {
   mail: HTMLInputElement | null
   pass: HTMLInputElement | null
 }
@@ -28,15 +28,8 @@ const imageSrc = [
   '//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/24e0dd27418d2291b65db1b21aa62254.png~tplv-uwbnlip3yd-webp.webp'
 ]
 
-const LoginForm: React.ForwardRefRenderFunction<LoginFormRef, LoginFormProps> = (
-  {
-    className = '',
-    onSubmit,
-    status = 'normal',
-    defaultUserName,
-    defaultPassword,
-    defaultSelect = 'qq.com'
-  },
+const MailForm: React.ForwardRefRenderFunction<MailFormRef, MailFormProps> = (
+  { className = '', onSubmit, status, defaultUserName, defaultPassword, defaultSelect = 'qq.com' },
   ref
 ) => {
   const [tutorial, setTutorialVisible] = useTutorial({
@@ -53,20 +46,28 @@ const LoginForm: React.ForwardRefRenderFunction<LoginFormRef, LoginFormProps> = 
   const passRef = useRef<HTMLInputElement>(null)
   const selectRef = useRef<{ value: string }>({ value: defaultSelect })
 
+  const [statusState, setStatus] = useState(status || 'normal')
+
   useImperativeHandle(ref, () => ({
     mail: mailRef.current,
     pass: passRef.current,
     select: selectRef.current
   }))
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     const mail = mailRef.current?.value
     const pass = passRef.current?.value
     const suffix = selectRef.current.value
     if (mail && pass) {
-      onSubmit({ mail: `${mail}@${suffix}`, pass })
+      const result = onSubmit({ mail: `${mail}@${suffix}`, pass })
+      if (result?.then) {
+        setStatus('loading')
+        result.finally(() => {
+          setStatus('normal')
+        })
+      }
     } else {
-      Message.warning('用户名或密码不能为空')
+      Message.warning('邮箱、授权码或者平台密码不能为空')
     }
   }
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -80,7 +81,7 @@ const LoginForm: React.ForwardRefRenderFunction<LoginFormRef, LoginFormProps> = 
     <div className={`flex-col flex justify-center items-center ${className}`}>
       <Title className={`font-bold text-[72px] ${styles.title}`}>邮箱设置</Title>
       <CoreInput
-        className="my-4"
+        className="mt-4"
         inputClassName={'py-4'}
         placeholder="邮箱"
         ref={mailRef}
@@ -105,6 +106,7 @@ const LoginForm: React.ForwardRefRenderFunction<LoginFormRef, LoginFormProps> = 
         }
       />
       <CoreInput
+        className={'mt-4'}
         inputClassName={'py-4'}
         placeholder="授权码"
         type="password"
@@ -126,7 +128,7 @@ const LoginForm: React.ForwardRefRenderFunction<LoginFormRef, LoginFormProps> = 
         size="large"
         className={'w-full mt-4'}
         onClick={handleConfirm}
-        status={status}
+        status={status || statusState}
       >
         提交
       </BaseButton>
@@ -135,4 +137,4 @@ const LoginForm: React.ForwardRefRenderFunction<LoginFormRef, LoginFormProps> = 
   )
 }
 
-export default forwardRef(LoginForm)
+export default forwardRef(MailForm)

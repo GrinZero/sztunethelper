@@ -5,11 +5,10 @@ import { sender, senderPass as pass } from '../../../.test.env'
 it('sendMail', async () => {
   const result = await sendMail({
     sender,
-    receiver: '774175136@qq.com',
+    receiver: sender,
     pass,
-    subject: 'test',
-    text: 'test',
-    html: 'test'
+    subject: 'SendMail-test',
+    text: '收到本邮箱代表测试通过'
   })
   expect(result).not.toBeNull()
 })

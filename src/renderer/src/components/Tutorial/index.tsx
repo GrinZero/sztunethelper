@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { Button, Carousel, Modal } from '@arco-design/web-react'
 import type { CarouselProps } from '@arco-design/web-react'
 import styles from './index.module.scss'
+import { useModal } from '@renderer/hooks'
 
 type UseTutorialHanlder = (props: {
   children: React.ReactElement | React.ReactElement[]
@@ -18,24 +19,12 @@ export const useTutorial: UseTutorialHanlder = ({
   className = '',
   carouselProps = {}
 }) => {
-  const [visible, setVisible] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  const hidden = () => {
-    setVisible(false)
-    setCurrentIndex(0)
-  }
-
-  const ele = useMemo(
-    () => (
-      <Modal
-        visible={visible}
-        closable={false}
-        onOk={hidden}
-        maskClosable={false}
-        footer={null}
-        className={`${styles['modal']} ${className}`}
-      >
+  const [ele, setVisible] = useModal({
+    className: `${className}`,
+    children: (
+      <>
         <Carousel
           indicatorType="slider"
           currentIndex={currentIndex}
@@ -51,14 +40,16 @@ export const useTutorial: UseTutorialHanlder = ({
               ? 'visible'
               : 'invisible'
           }`}
-          onClick={hidden}
+          onClick={() => {
+            setVisible(false)
+            setCurrentIndex(0)
+          }}
         >
           确定
         </Button>
-      </Modal>
-    ),
-    [visible, children, currentIndex]
-  )
+      </>
+    )
+  })
 
   return [ele, setVisible, setCurrentIndex]
 }

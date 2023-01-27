@@ -1,13 +1,13 @@
 import nodemailer from 'nodemailer'
 import { mailOptionsStore } from './constants'
 
-interface SendMailProps {
+export interface SendMailProps {
   sender: string
   receiver: string
   pass: string
   subject: string
   text: string
-  html: string
+  html?: string
 }
 
 export const sendMail = async ({ sender, receiver, pass, subject, text, html }: SendMailProps) => {
@@ -31,6 +31,9 @@ export const sendMail = async ({ sender, receiver, pass, subject, text, html }: 
     auth: {
       user: sender,
       pass
+    },
+    tls: {
+      rejectUnauthorized: false
     }
   })
 
