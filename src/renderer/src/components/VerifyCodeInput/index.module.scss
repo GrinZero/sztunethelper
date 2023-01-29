@@ -1,12 +1,13 @@
 .input-item {
-  width: 60px;
-  height: 75px;
-  text-align: center;
-  background-color: var(--content-bg-2);
+  width: 45px;
+  height: 54px;
   margin: 6px;
   border-radius: 18px;
-  flex-shrink: 0;
   font-size: 36px;
+
+  text-align: center;
+  background-color: var(--content-bg-2);
+  flex-shrink: 0;
   border: 1.5px solid;
   border-color: var(--border-color);
   transition: outline 0.32s ease, border 0.32s ease, backgound-color 0.32s ease;

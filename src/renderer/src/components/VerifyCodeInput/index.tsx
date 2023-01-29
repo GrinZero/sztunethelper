@@ -125,7 +125,9 @@ const VerifyCodeInput: React.ForwardRefRenderFunction<
     return new Array(count).fill(0).map((_, index) => {
       return (
         <input
-          className={`${styles['input-item']} ${inputClassName} ${styles['input-item__' + status]}`}
+          className={`${styles['input-item']} ${
+            styles['input-item__' + status]
+          } ${inputClassName} `}
           key={index}
           type="text"
           maxLength={1}
@@ -140,7 +142,7 @@ const VerifyCodeInput: React.ForwardRefRenderFunction<
   }, [count, handleChange, handleKeydown, inputClassName, status])
 
   return (
-    <div className={`whitespace-nowrap flex flex-row`} ref={parentRef}>
+    <div className={`whitespace-nowrap flex flex-row w-min`} ref={parentRef}>
       {ele}
     </div>
   )
