@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router'
-import { Modal } from '@arco-design/web-react'
+import { Modal, Message } from '@arco-design/web-react'
 import { HistoryCrumb, VerifyCodeInput, BaseCard } from '@renderer/components'
 import MailForm from './MailForm'
 import { verifyMail, auth, sendVeirfyCode } from '@renderer/api'
@@ -18,15 +18,15 @@ const MailConfig = () => {
       throw new Error("Why don' have mail?")
     }
     const result = await auth(mail, v)
-    console.log('auth', result)
-    window.storage
-      .set('local-mail', { mail, pass })
-      .then(() => {
-        history.push('/mail_config')
-      })
-      .catch((err) => {
-        console.error('local-mail: set error', err)
-      })
+    if (result.data?.error) {
+      Message.error(String(result.data.error))
+      throw new Error(result.data.error)
+    }
+    await window.storage.set('local-mail', { mail, pass }).catch((err) => {
+      console.error('local-mail: set error', err)
+    })
+
+    history.push('/message')
   }
   const [modalEle, setModalVisible] = useModal({
     children: (
@@ -54,7 +54,6 @@ const MailConfig = () => {
       content: `已向您的邮箱${mail}发送了一封验证邮件，请前往邮箱查看。如您确认收到，点击继续`,
       okText: '继续',
       onOk: async () => {
-        setModalVisible(true)
         formRef.current.mail = mail
         formRef.current.pass = pass
         instance.update({
@@ -62,9 +61,10 @@ const MailConfig = () => {
         })
         try {
           await sendVeirfyCode(mail)
-          Modal.success({
+          Message.success({
             content: '邮箱验证码发送成功，请接收！'
           })
+          setModalVisible(true)
         } catch (error) {
           Modal.error({
             content: '邮箱验证码发送失败：' + String(error)

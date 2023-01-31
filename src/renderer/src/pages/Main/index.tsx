@@ -125,12 +125,24 @@ const Main = () => {
     }
 
     try {
+      const netInfomation = await getNetInfomation()
+      if (netInfomation?.wifiName?.type === 'fail') {
+        throw new Error('未连接指定WIFI')
+      }
       await getCookie()
       const cookie = sessionStorage.getItem('cookie')
-      const netInfomation = await getNetInfomation()
       await getPlatformList(cookie, netInfomation?.ip?.value)
       connectToNet(cookie as string, netInfomation?.ip?.value)
     } catch (error: any) {
+      console.error('error:init', error)
+      if (error.message === '未连接指定WIFI') {
+        Message.error({
+          content: '未连接指定WIFI'
+        })
+        setStatus('offline')
+        return
+      }
+
       if (error?.code === 502 && error?.data?.code === -1 && error?.data?.cookies === null) {
         Message.error({
           content: '登录失败，请检查账号密码是否正确'

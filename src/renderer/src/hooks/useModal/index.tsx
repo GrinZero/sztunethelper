@@ -15,10 +15,10 @@ const useModal: UseModalHandler = ({ className = '', children, ...rest }) => {
     () => (
       <Modal
         visible={visible}
-        closable={false}
         maskClosable={false}
         footer={null}
         className={`${styles['modal']} ${className}`}
+        onCancel={() => setVisible(false)}
         {...rest}
       >
         {children}
