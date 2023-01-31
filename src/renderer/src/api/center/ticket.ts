@@ -1,5 +1,4 @@
 import axiosClient from '../axiosClient'
-import type { ApiResult } from '../type'
 
 export interface Ticket {
   id: number
