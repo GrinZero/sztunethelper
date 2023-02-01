@@ -4,6 +4,8 @@ export interface Ticket {
   id: number
   from: string
   to: string
+  title: string
+  type: '网络问题'
   status: 0 | 1 | 2
   rate: number
   createTime: number

@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useMailStorage, useSetState } from '@renderer/hooks'
-import { BaseCard, SmallScreen } from '@renderer/components'
+import { SmallScreen } from '@renderer/components'
 
 import { fetchTicketList, Ticket } from '@renderer/api'
+
+import TicketCard from './TicketCard'
 
 import MailCard from './MailCard'
 import styles from './index.module.scss'
@@ -43,11 +45,29 @@ function useTicketList(): [Ticket[][], () => Promise<void>, PageState] {
 const MessagePage = () => {
   const history = useHistory()
   const mailConfig = useMailStorage()
-  const [list] = useTicketList()
+  const [list, next] = useTicketList()
 
   const handleMailCardClick = () => {
     history.push('mail_config')
   }
+
+  const ele =
+    list.length === 0
+      ? null
+      : list.map((page, index) => (
+          <Fragment key={index}>
+            {page.map((ticket) => (
+              <TicketCard
+                key={ticket.id}
+                className="mb-3 whitespace-pre"
+                title={ticket.title}
+                to={ticket.to}
+                from={ticket.from}
+                type={ticket.type}
+              />
+            ))}
+          </Fragment>
+        ))
 
   return (
     <div className={`${styles.container} main`}>
@@ -59,16 +79,8 @@ const MessagePage = () => {
             onClick={handleMailCardClick}
           />
         </div>
-        <SmallScreen w={300}>
-          {list.map((page, index) => (
-            <div key={index} className="flex flex-col">
-              {page.map((ticket) => (
-                <BaseCard key={ticket.id} className="mb-3">
-                  {ticket.to}
-                </BaseCard>
-              ))}
-            </div>
-          ))}
+        <SmallScreen w={300} onBottom={next}>
+          {ele}
         </SmallScreen>
       </div>
     </div>
