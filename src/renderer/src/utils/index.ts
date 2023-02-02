@@ -10,3 +10,4 @@ const debounce = function (fn, wait: number) {
 
 export { debounce }
 export { default as getHostsContent } from './getHostsContent'
+export * from './time'

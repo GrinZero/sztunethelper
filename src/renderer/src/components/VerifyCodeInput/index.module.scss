@@ -31,3 +31,8 @@
   border-color: var(--lives-green);
   outline-color: var(--lives-green);
 }
+
+.input-item__loading {
+  filter: brightness(0.5);
+  caret-color: transparent;
+}

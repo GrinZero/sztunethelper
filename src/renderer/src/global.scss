@@ -32,11 +32,12 @@
   --overlay-bg: rgba(36, 39, 59, 0.3);
   --placeholder-color: #9599a7;
   --theme-main-color: var(--lives-blue);
-  --scrollbar-bg: rgb(255 253 253 / 57%);
+  --scrollbar-bg: rgb(255 253 253 / 27%);
+  --hover-scrollbar-bg: rgb(255 253 253 / 37%);
 }
 
 :root[theme-mode='light'] {
-  --content-bg: rgb(146 151 179 / 13%);
+  // --content-bg: rgb(146 151 179 / 13%);
   --content-bg: rgb(146 151 179 / 20%);
   --theme-bg-color: rgb(255 255 255 / 31%);
   --theme-color: #3c3a3a;
@@ -51,7 +52,8 @@
   --hover-menu-bg: rgba(255 255 255 / 35%);
   --placeholder-color: rgba(85, 85, 85, 0.615);
   --content-title-color: --theme-color;
-  --scrollbar-bg: rgb(1 2 3 / 40%);
+  --scrollbar-bg: rgb(1 2 3 / 20%);
+  --hover-scrollbar-bg: rgb(1 2 3 / 30%);
   --theme-main-color: var(--lives-red);
 }
 
@@ -68,15 +70,19 @@
   --global-bg-color: rgba(230, 230, 230, 0.95);
 }
 
-::-webkit-scrollbar {
+* ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
   border-radius: 10px;
 }
-::-webkit-scrollbar-thumb {
+* ::-webkit-scrollbar-thumb {
   background: var(--scrollbar-bg);
   border-radius: 10px;
 }
+*:hover::-webkit-scrollbar-thumb {
+  background: var(--hover-scrollbar-bg);
+}
+
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -12,6 +12,7 @@ const MailCard: React.FC<MailCardProps> = ({ mail, className = '', ...rest }) =>
     <BaseCard
       className={`${className} group cursor-pointer`}
       itemClassName="flex flex-row items-center"
+      border={false}
       {...rest}
     >
       <>

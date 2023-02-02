@@ -24,7 +24,7 @@ const VerifyCodeInput: React.ForwardRefRenderFunction<
     valueRef: valueRef.current
   }))
 
-  const [status, setStatus] = useState<'normal' | 'error' | 'success'>('normal')
+  const [status, setStatus] = useState<'normal' | 'error' | 'success' | 'loading'>('normal')
 
   const finish = async () => {
     const outputValue = valueRef.current.join('')
@@ -37,6 +37,7 @@ const VerifyCodeInput: React.ForwardRefRenderFunction<
       return
     }
 
+    setStatus('loading')
     result
       .then(() => {
         setStatus('success')
@@ -135,6 +136,7 @@ const VerifyCodeInput: React.ForwardRefRenderFunction<
           onChange={handleChange}
           onKeyDown={handleKeydown}
           onInput={handleInput}
+          disabled={status === 'loading'}
           required
         />
       )

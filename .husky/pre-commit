@@ -4,6 +4,6 @@
 ipath=".test.env.ts"
 git diff --cached --name-only | if grep -qE "^$ipath$";then
     git reset HEAD -- "$ipath"
-    echo "Warn: $ipath is removed from the index. It's not allowed to be committed."
+    echo "\033[33mWarn: $ipath is removed from the index. It's not allowed to be committed.\033[0m"
 fi
 npx lint-staged

@@ -5,7 +5,7 @@ export interface ComponentProps {
   children?: Array<React.ReactNode> | React.ReactNode
 }
 
-export type DataStatus = 'ok' | 'error' | 'loading' | 'update' | 'empty'
+export type DataStatus = 'ok' | 'error' | 'loading' | 'update' | 'empty' | 'done'
 
 export interface Account {
   username: string
