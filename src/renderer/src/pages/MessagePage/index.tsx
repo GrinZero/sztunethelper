@@ -1,58 +1,13 @@
-import { useState, useEffect, Fragment } from 'react'
+import { Fragment } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useMailStorage, useSetState } from '@renderer/hooks'
+import { useMailStorage } from '@renderer/hooks'
 import { SmallScreen } from '@renderer/components'
-import type { DataStatus } from '@renderer/types'
-
-import { fetchTicketList, Ticket } from '@renderer/api'
+import { useTicketList } from '@renderer/api'
 
 import TicketCard from './TicketCard'
 
 import MailCard from './MailCard'
 import styles from './index.module.scss'
-
-interface PageState {
-  page: number
-  status: DataStatus
-  pageSize: number
-}
-function useTicketList(): [Ticket[][], () => Promise<void>, PageState] {
-  const [list, setList] = useState<Ticket[][]>([])
-  const [state, setState] = useSetState<PageState>({
-    page: -1,
-    status: 'empty',
-    pageSize: 10
-  })
-
-  const next = async () => {
-    if (['loading', 'done', 'error'].includes(state.status)) {
-      return
-    }
-
-    const page = state.page + 1
-    setState({ page, status: 'loading' })
-    const result = await fetchTicketList(page).catch((err) => {
-      console.error('useTicketList', err)
-      setState({ status: 'error' })
-    })
-    if (!result) {
-      return
-    }
-
-    if (result.data.length < state.pageSize) {
-      setState({ status: 'done' })
-    } else {
-      setState({ status: 'ok' })
-    }
-
-    setList((prevList) => [...prevList, result.data])
-  }
-  useEffect(() => {
-    next()
-  }, [])
-
-  return [list, next, state]
-}
 
 const MessagePage = () => {
   const history = useHistory()

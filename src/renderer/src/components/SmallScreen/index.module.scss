@@ -1,4 +1,4 @@
-.empty {
+.base-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -7,6 +7,9 @@
   border-radius: 14px;
   background-color: var(--content-bg);
   border: 1px solid var(--theme-bg-color);
+}
+
+.empty {
   font-size: 24px;
   opacity: 0.8;
   color: var(--theme-font-color);

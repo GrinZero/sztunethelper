@@ -1,4 +1,5 @@
 import axiosClient from '../axiosClient'
+import { usePageRequest } from '@renderer/hooks'
 
 export enum TicketStatus {
   open,
@@ -23,4 +24,8 @@ export const fetchTicketList = async (page: number) => {
   const url = '/api/fetchTicketList'
   const result = await axiosClient.post<Ticket[]>(url, { page })
   return result
+}
+
+export function useTicketList() {
+  return usePageRequest<Ticket>(fetchTicketList)
 }
