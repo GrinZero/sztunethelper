@@ -2,7 +2,7 @@ import React from 'react'
 import type { ComponentProps } from '@renderer/types'
 import { Tag } from '@arco-design/web-react'
 import { TicketStatus, Ticket } from '@renderer/api'
-import { formatUsefulTime, getDuration } from '@renderer/utils'
+import { formatUsefulTime } from '@renderer/utils'
 
 import styles from './index.module.scss'
 
