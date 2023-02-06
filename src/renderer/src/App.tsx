@@ -8,29 +8,18 @@ import './App.css'
 
 import './extension'
 
-import { useEffect } from 'react'
 import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import { TopBar, Main, SelfHelp, Login, Setting, AboutUS, MessagePage, MailConfig } from './pages'
-
-const { sendMessage } = window.bridge
+// import { useEffect } from 'react'
+// import store, { initAccount } from './store'
+import { useConfig } from './hooks'
 
 const App = () => {
-  const { theme } = useSelector((store: any) => store.base)
-  useEffect(() => {
-    sendMessage('themeChange', theme)
-    document.documentElement.setAttribute('theme-mode', theme)
-    document.body.setAttribute('arco-theme', theme)
-  }, [theme])
+  useConfig()
 
-  useEffect(() => {
-    const { platform } = window.navigator
-    if (platform.includes('Mac') || platform.includes('mac')) {
-      document.documentElement.setAttribute('platform', 'mac')
-    } else {
-      document.documentElement.setAttribute('platform', 'windows')
-    }
-  })
+  // useEffect(() => {
+  //   store.dispatch(initAccount())
+  // }, [])
 
   return (
     <Router>

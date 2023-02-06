@@ -44,7 +44,7 @@ const TicketCard: React.FC<TicketCardProps> = ({
         </Tag>
         <div className="flex flex-row items-center">
           {!read && <span className={`${styles.new}`}>New</span>}
-          <span className="ml-2">{formatUsefulTime(createTime)}</span>
+          <span className="ml-2 opacity-70">{formatUsefulTime(createTime)}</span>
         </div>
       </div>
     </div>

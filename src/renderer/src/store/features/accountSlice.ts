@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import type { AccountInStore } from '../../pages/Login/AccountStore'
 import { Account } from '@renderer/types'
@@ -22,6 +22,14 @@ const initialState: AccountState = {
     password: ''
   }
 }
+
+const initAccount = createAsyncThunk('account/init', async () => {
+  console.log('initAccount')
+  const username = await window.storage.get<string>('username')
+  const password = await window.storage.get<string>('password')
+  const accountStore = (await window.storage.get<AccountInStore[]>('accountStore')) ?? []
+  return { accountStore, username, password }
+})
 
 export const accountSlice = createSlice<AccountState, AccountReducer, 'account'>({
   name: 'account',
@@ -49,9 +57,23 @@ export const accountSlice = createSlice<AccountState, AccountReducer, 'account'>
         password
       }
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(initAccount.fulfilled, (state, action) => {
+        state.accountStore = action.payload.accountStore
+        state.currentAccount = {
+          username: action.payload.username,
+          password: action.payload.password
+        }
+      })
+      .addCase(initAccount.rejected, () => {
+        console.error('initAccount rejected')
+      })
   }
 })
 export const { pushAccount, deleteAccount, setCurrentAccount } = accountSlice.actions
+export { initAccount }
 
 // 默认导出
 export default accountSlice.reducer

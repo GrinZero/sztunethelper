@@ -2,8 +2,8 @@ import apiStore from '../apiStore'
 
 import store from '../../db/store'
 
-apiStore.add('storage.get', async ({ key }: { key: string }) => {
-  return store.get(key, null)
+apiStore.add('storage.get', async ({ key, value = null }: { key: string; value: any }) => {
+  return store.get(key, value)
 })
 
 apiStore.add(

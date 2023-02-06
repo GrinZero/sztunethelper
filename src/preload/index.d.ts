@@ -7,7 +7,7 @@ declare global {
     bridge: typeof api
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: any
     storage: {
-      get<T = unknown>(key: string): Promise<T>
+      get<T = unknown>(key: string, defaultValue?: T): Promise<T>
       set: (key: string, value: unknown) => Promise<void>
       has: (key: string) => Promise<boolean>
       delete: (key: string) => Promise<void>

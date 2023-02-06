@@ -1,4 +1,5 @@
 import React from 'react'
+// import { useSelector } from 'react-redux'
 import { Switch } from '@arco-design/web-react'
 import type { ComponentProps } from '@renderer/types'
 
@@ -20,6 +21,8 @@ const options = [
 ]
 
 const SettingModule: React.FC<ComponentProps> = ({ className = '' }) => {
+  // const { config } = useSelector((store: any) => store.base)
+
   return (
     <div className={`${className}`}>
       {options.map((item, index) => (

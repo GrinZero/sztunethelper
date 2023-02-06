@@ -66,8 +66,8 @@ window.storage = {
   async set(key: string | Record<string, unknown>, value?: unknown) {
     return apiClient.send('storage.set', { key, value })
   },
-  async get<T>(key: string) {
-    return apiClient.send<T>('storage.get', { key })
+  async get<T>(key: string, defaultValue?: T) {
+    return apiClient.send<T>('storage.get', { key, value: defaultValue })
   },
   async has(key: string) {
     return apiClient.send('storage.has', { key })

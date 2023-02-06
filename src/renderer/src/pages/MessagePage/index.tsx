@@ -5,8 +5,9 @@ import { SmallScreen } from '@renderer/components'
 import { useTicketList } from '@renderer/api'
 
 import TicketCard from './TicketCard'
-
 import MailCard from './MailCard'
+import HeaderCard from './HeaderCard'
+
 import styles from './index.module.scss'
 
 const MessagePage = () => {
@@ -46,6 +47,9 @@ const MessagePage = () => {
         <SmallScreen w={300} onBottom={handleBottom} status={status}>
           {ele}
         </SmallScreen>
+      </div>
+      <div className={`w-full flex flex-col`}>
+        <HeaderCard />
       </div>
     </div>
   )
