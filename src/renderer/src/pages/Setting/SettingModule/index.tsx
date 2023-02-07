@@ -1,27 +1,51 @@
-import React from 'react'
-// import { useSelector } from 'react-redux'
+import React, { useMemo } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Switch } from '@arco-design/web-react'
 import type { ComponentProps } from '@renderer/types'
+import { BaseConfig, setConfig } from '@renderer/store'
 
 import styles from './index.module.scss'
 
-const options = [
+const defaultOptions: {
+  name: string
+  field: keyof BaseConfig
+}[] = [
   {
-    name: '自动更新'
+    name: '自动更新',
+    field: 'autoUpdate'
   },
   {
-    name: '永不断网'
+    name: '永不断网',
+    field: 'neverOffline'
   },
   {
-    name: '开机自启'
+    name: '开机自启',
+    field: 'autoStart'
   },
   {
-    name: '自动主题'
+    name: '自动主题',
+    field: 'autoTheme'
   }
 ]
 
 const SettingModule: React.FC<ComponentProps> = ({ className = '' }) => {
-  // const { config } = useSelector((store: any) => store.base)
+  const dispatch = useDispatch()
+  const { config } = useSelector((store: any) => store.base)
+
+  const options = useMemo(() => {
+    if (!config) {
+      return defaultOptions.map((item) => ({
+        ...item,
+        value: false
+      }))
+    }
+    return defaultOptions.map((item) => {
+      return {
+        ...item,
+        value: config[item.field]
+      }
+    })
+  }, [defaultOptions, config])
 
   return (
     <div className={`${className}`}>
@@ -31,7 +55,12 @@ const SettingModule: React.FC<ComponentProps> = ({ className = '' }) => {
           className={`flex flex-row items-center justify-between mb-1 px-4 py-2 ${styles.row}`}
         >
           <div className={`${styles.name}`}>{item.name}</div>
-          <Switch />
+          <Switch
+            checked={item.value}
+            onChange={(v) => {
+              dispatch(setConfig({ [item.field]: v }))
+            }}
+          />
         </label>
       ))}
     </div>

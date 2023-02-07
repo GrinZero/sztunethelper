@@ -15,5 +15,6 @@ const store = configureStore({
 })
 
 export default store
+window.store = store
 
 export * from './features'

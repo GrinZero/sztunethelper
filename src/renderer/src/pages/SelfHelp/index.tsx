@@ -124,8 +124,13 @@ const SelfHelp = () => {
           </Title>
           <NetTaskList list={netTaskList} onClick={handleClick} onGo={handleGo} />
         </div>
-        <div className="flex flex-col w-full ml-4">
-          <SmallScreen h={450} className={`flex flex-col items-center w-full`}>
+        <div className="flex flex-col w-full ml-4 overflow-hidden">
+          <SmallScreen
+            h={450}
+            className={`flex flex-col items-center w-full`}
+            status={'done'}
+            nomoreNode={null}
+          >
             {netTaskResult &&
               netTaskResult.map((result) => {
                 return (

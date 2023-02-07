@@ -10,16 +10,15 @@ import './extension'
 
 import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom'
 import { TopBar, Main, SelfHelp, Login, Setting, AboutUS, MessagePage, MailConfig } from './pages'
-// import { useEffect } from 'react'
-// import store, { initAccount } from './store'
+import { useEffect } from 'react'
+import store, { initAccount } from './store'
 import { useConfig } from './hooks'
 
 const App = () => {
+  useEffect(() => {
+    store.dispatch(initAccount())
+  }, [])
   useConfig()
-
-  // useEffect(() => {
-  //   store.dispatch(initAccount())
-  // }, [])
 
   return (
     <Router>

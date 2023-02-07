@@ -1,5 +1,18 @@
 const { sendMessage } = window.bridge
 
+function uuid() {
+  let d = new Date().getTime()
+  if (window.performance && typeof window.performance.now === 'function') {
+    d += performance.now() //use high-precision timer if available
+  }
+  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (d + Math.random() * 16) % 16 | 0 // d是随机种子
+    d = Math.floor(d / 16)
+    return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16)
+  })
+  return uuid
+}
+
 export interface StoreRequest<SResult> {
   value: Promise<SResult>
   resolve: (value: SResult) => void
@@ -35,7 +48,7 @@ export class ApiClient<SResult> {
   }
 
   send<T = SResult>(name: string, payload?: unknown, timeout = 30000) {
-    const id = `${name}${Date.now()}`
+    const id = `${name}-${uuid()}`
     let resolveOut = null as unknown as StoreRequest<SResult>['resolve']
     let rejectOut = null as unknown as StoreRequest<SResult>['reject']
     let timeID: NodeJS.Timeout

@@ -13,5 +13,6 @@ declare global {
       delete: (key: string) => Promise<void>
       store: () => Promise<Record<string, unknown>>
     }
+    store: any
   }
 }

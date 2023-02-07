@@ -40,11 +40,16 @@ const TopBar: React.FC<TopBarProps> = ({ type }) => {
 
   const dispatch = useDispatch()
   // 监听系统主题变化
-  const { theme } = useSelector((store: any) => store.base)
+  const { theme, config } = useSelector((store: any) => store.base)
   const [systemTheme] = useWindowTheme()
   useEffect(() => {
-    dispatch(setTheme(systemTheme))
-  }, [systemTheme])
+    if (!config) {
+      return
+    }
+    if (config.autoTheme) {
+      dispatch(setTheme(systemTheme))
+    }
+  }, [systemTheme, config])
   const handleThemeChange = (newTheme: string) => dispatch(setTheme(newTheme as 'light' | 'dark'))
 
   const [focus, setFocus] = useState(false)

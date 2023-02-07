@@ -24,7 +24,6 @@ const initialState: AccountState = {
 }
 
 const initAccount = createAsyncThunk('account/init', async () => {
-  console.log('initAccount')
   const username = await window.storage.get<string>('username')
   const password = await window.storage.get<string>('password')
   const accountStore = (await window.storage.get<AccountInStore[]>('accountStore')) ?? []

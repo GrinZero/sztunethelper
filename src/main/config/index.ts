@@ -5,6 +5,13 @@ export interface CheckNetTask {
   command: string
 }
 
+export interface BaseConfig {
+  autoUpdate: boolean
+  autoStart: boolean
+  autoTheme: boolean
+  neverOffline: boolean
+}
+
 export const CheckNetTaskList: CheckNetTask[] = [
   { id: 1, title: '检测内网网关', command: 'ping', args: ['内网网关'] },
   { id: 2, title: '检测校园网网络服务器', command: 'ping', args: ['10.99.99.99'] },

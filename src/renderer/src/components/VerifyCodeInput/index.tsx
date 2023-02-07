@@ -84,13 +84,22 @@ const VerifyCodeInput: React.ForwardRefRenderFunction<
   }
 
   const handleKeydown = (
-    e: React.KeyboardEvent<HTMLInputElement> & {
-      target: { value: string; blur: () => void }
-    }
+    e: React.KeyboardEvent<HTMLInputElement> & React.ChangeEvent<HTMLInputElement>
   ) => {
     const { value } = e.target
 
     if (!value) {
+      if (e.key === 'Backspace') {
+        const index = Number(e.target.dataset?.index)
+        if (index === 0) {
+          return
+        }
+        const parentNode = e.target.parentNode
+        const prevNode = parentNode!.children[index - 1] as HTMLInputElement
+        prevNode.focus()
+        prevNode.value = ''
+        valueRef.current[index - 1] = ''
+      }
       return
     }
 
