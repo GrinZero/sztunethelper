@@ -69,4 +69,15 @@
       background: var(--theme-bg-color);
     }
   }
+
+  .icon-close {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--content-bg);
+    transition: 0.2s ease opacity;
+    z-index: 1;
+    right: 12px;
+    top: 12px;
+  }
 }

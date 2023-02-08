@@ -10,12 +10,12 @@ const task = async () => {
   console.info('scheduleJob Running! It is neverOffline:rule【', rule, '】')
 
   return scheduleJob(rule, async () => {
-    const username = store.get<string>('username') as string
+    const username = store.get<string>('userna0me') as string
     const password = store.get<string>('password') as string
     if (!username || !password) {
       return
     }
-    // connect
+
     const connectResult = await connect({ username, password })
     if (connectResult.code === 200) {
       return

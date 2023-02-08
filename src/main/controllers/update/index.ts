@@ -1,12 +1,9 @@
 import { dialog } from 'electron'
 import { autoUpdater } from 'electron-updater'
+import path from 'path'
 
 export const checkUpdate = async () => {
-  autoUpdater.setFeedURL({
-    provider: 'generic',
-    url: 'https://update.electronjs.org/xxx/xxx'
-    //TODO：待完成
-  })
+  autoUpdater.updateConfigPath = path.resolve(__dirname, '../../../../dev-app-update.yml')
   autoUpdater.checkForUpdates()
   autoUpdater.autoDownload = false
   autoUpdater.on('error', (error) => {

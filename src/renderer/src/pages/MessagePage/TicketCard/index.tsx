@@ -1,13 +1,16 @@
 import React from 'react'
 import type { ComponentProps } from '@renderer/types'
-import { Tag } from '@arco-design/web-react'
+import { Tag, Popconfirm } from '@arco-design/web-react'
 import { TicketStatus, Ticket } from '@renderer/api'
 import { formatUsefulTime } from '@renderer/utils'
+import { IconClose } from '@arco-design/web-react/icon'
 
 import styles from './index.module.scss'
 
 export interface TicketCardProps extends ComponentProps {
   ticket: Ticket
+  onDelete?: (val: Ticket) => void
+  onClick?: (val: Ticket) => void
 }
 
 const tagStore = {
@@ -19,17 +22,20 @@ const statusStore = {
   [TicketStatus.delete]: styles['delete']
 }
 
-const TicketCard: React.FC<TicketCardProps> = ({
-  className = '',
-  ticket: { title, type, to, createTime, status, read, adminName }
-}) => {
+const TicketCard: React.FC<TicketCardProps> = ({ className = '', ticket, onDelete, onClick }) => {
+  const { title, type, to, createTime, status, read, adminName } = ticket
   const nameFirst = (adminName[0] ?? '-').toUpperCase()
   return (
-    <div className={`${styles['container']} ${statusStore[status]} cursor-pointer ${className}`}>
-      <div className="flex flex-row items-center mb-2">
-        <div className={`${styles['name']} mr-2`}>{nameFirst}</div>
+    <div
+      className={`${styles['container']} ${statusStore[status]} group cursor-pointer ${className}`}
+      onClick={() => {
+        onClick?.(ticket)
+      }}
+    >
+      <div className="flex flex-row items-center mb-2 overflow-hidden">
+        <div className={`${styles['name']} mr-2 flex-shrink-0`}>{nameFirst}</div>
         <div className={`flex flex-col ${styles['header']}`}>
-          <div>{title}</div>
+          <div className={`w-[78%] overflow-hidden text-ellipsis`}>{title}</div>
           <span>{to}</span>
         </div>
       </div>
@@ -47,6 +53,21 @@ const TicketCard: React.FC<TicketCardProps> = ({
           <span className="ml-2 opacity-70">{formatUsefulTime(createTime)}</span>
         </div>
       </div>
+      <Popconfirm
+        title="你确认要删除工单么？"
+        onOk={() => {
+          onDelete?.(ticket)
+        }}
+      >
+        <div
+          className={`absolute hidden opacity-70 hover:opacity-100 group-hover:flex items-center justify-center ${styles['icon-close']}`}
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
+        >
+          <IconClose />
+        </div>
+      </Popconfirm>
     </div>
   )
 }

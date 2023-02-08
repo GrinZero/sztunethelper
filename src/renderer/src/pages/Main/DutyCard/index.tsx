@@ -1,27 +1,10 @@
-import { useEffect, useState } from 'react'
-import { fetchCurrentDuty } from '@renderer/api'
-import type { Duty } from '@renderer/api'
+import { useCurrentDuty } from '@renderer/api'
 import { BaseCard, BaseElement } from '@renderer/components'
 const { Title } = BaseElement
 import { Rate } from '@arco-design/web-react'
 
-const useFetchDuty = () => {
-  const [currentDuty, setCurrentDuty] = useState<Duty>()
-  useEffect(() => {
-    const main = async () => {
-      const res = await fetchCurrentDuty()
-      const data = res.data?.data
-      if (data) {
-        setCurrentDuty(data)
-      }
-    }
-    main()
-  }, [])
-  return currentDuty
-}
-
 const DutyCard = () => {
-  const currentDuty = useFetchDuty()
+  const currentDuty = useCurrentDuty()
   return (
     <div className="flex flex-col mt-4">
       <Title className="ml-3">当前值班{currentDuty?.name ? `：${currentDuty?.name}` : ''}</Title>
