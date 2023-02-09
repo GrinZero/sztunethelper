@@ -40,7 +40,7 @@ const MessagePage = () => {
 
   return (
     <div className={`${styles.container} main`}>
-      <div className={`w-[300px] flex flex-col h-full`}>
+      <div className={`w-[300px] flex flex-col h-full flex-shrink-0`}>
         <div className="flex-row mb-3">
           <MailCard
             className={`w-[255px] max-w-[255px]`}
@@ -48,7 +48,12 @@ const MessagePage = () => {
             onClick={handleMailCardClick}
           />
         </div>
-        <SmallScreen w={300} onBottom={next} status={status}>
+        <SmallScreen
+          w={300}
+          onBottom={next}
+          status={status}
+          baseContainerClassName={styles['none-screen']}
+        >
           {ele}
         </SmallScreen>
       </div>

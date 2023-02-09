@@ -10,6 +10,7 @@ interface SmallScreenProps extends ComponentProps {
   h?: string | number
   status?: DataStatus
   onBottom?: () => void
+  baseContainerClassName?: string
   scrollBottomPx?: number
   emptyNode?: React.ReactNode | null
   loadNode?: React.ReactNode | null
@@ -25,6 +26,7 @@ const SmallScreen: React.FC<SmallScreenProps> = ({
   className = '',
   emptyNode = '暂无数据',
   scrollBottomPx = 50,
+  baseContainerClassName = '',
   loadNode = (
     <div className="w-full flex justify-center items-center h-[50px]">
       <BaseLoading size="large" />
@@ -46,14 +48,20 @@ const SmallScreen: React.FC<SmallScreenProps> = ({
 
   if (status === 'loading' && !children)
     return (
-      <div style={style} className={`${styles['base-container']} ${className}`}>
+      <div
+        style={style}
+        className={`${styles['base-container']} %{baseContainerClassName} ${className}`}
+      >
         {loadNode}
       </div>
     )
 
   if (status === 'empty' || !children) {
     return (
-      <div style={style} className={`${styles['base-container']} ${styles.empty} ${className}`}>
+      <div
+        style={style}
+        className={`${styles['base-container']} ${baseContainerClassName} ${styles.empty} ${className}`}
+      >
         {emptyNode}
       </div>
     )
