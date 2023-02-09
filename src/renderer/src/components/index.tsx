@@ -17,6 +17,7 @@ export { default as BaseButton } from './BaseButton'
 export { default as BasePopover } from './BasePopover'
 export { default as CodeEditor } from './CodeEditor'
 export { default as VerifyCodeInput } from './VerifyCodeInput'
+export { default as MessageEditor } from './MessageEditor'
 
 export * from './MoreInfo'
 export * from './StatusIcon'

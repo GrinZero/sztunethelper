@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11913437",
+      "name": "folder",
+      "font_class": "folder",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
+    },
+    {
+      "icon_id": "11913443",
+      "name": "filesimg",
+      "font_class": "filesimg",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    },
+    {
+      "icon_id": "11935688",
+      "name": "clock-1",
+      "font_class": "clock",
+      "unicode": "e6c3",
+      "unicode_decimal": 59075
+    },
+    {
       "icon_id": "23191217",
       "name": "施工进度",
       "font_class": "project",

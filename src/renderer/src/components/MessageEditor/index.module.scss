@@ -1,0 +1,34 @@
+.textarea {
+  border-radius: 14px;
+  height: 100% !important;
+}
+
+.tools {
+  svg {
+    width: 16px;
+    height: 16px;
+    padding-right: 8px;
+    box-sizing: content-box;
+    opacity: 0.8;
+    cursor: pointer;
+    transition: opacity 0.2s ease-in-out, filter 0.2s ease;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+:global {
+  :root[theme-mode='dark'] {
+    :local {
+      .tools {
+        svg {
+          filter: invert(85%) hue-rotate(180deg);
+          &:first-child {
+            margin-top: 1px;
+          }
+        }
+      }
+    }
+  }
+}
