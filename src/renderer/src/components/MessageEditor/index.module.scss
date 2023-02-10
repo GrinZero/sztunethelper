@@ -16,6 +16,11 @@
       opacity: 1;
     }
   }
+  .clock-svg {
+    margin-top: -0.3px;
+    cursor: not-allowed;
+    filter: grayscale(1) !important;
+  }
 }
 
 :global {
@@ -24,9 +29,9 @@
       .tools {
         svg {
           filter: invert(85%) hue-rotate(180deg);
-          &:first-child {
-            margin-top: 1px;
-          }
+        }
+        .clock-svg {
+          margin-top: 0px;
         }
       }
     }

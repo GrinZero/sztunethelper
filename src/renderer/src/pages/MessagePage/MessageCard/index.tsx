@@ -8,10 +8,14 @@ interface MessageCardProps extends ComponentProps {
 }
 
 const MessageCard: React.FC<MessageCardProps> = ({ className = '' }) => {
+  const handleSumbit = (content: string) => {
+    console.log(content)
+  }
+
   return (
     <div className={`${styles.container} h-full ${className}`}>
       <SmallScreen h={'70%'} />
-      <MessageEditor className={`mt-3 h-[27%]`} />
+      <MessageEditor className={`pt-3 h-[30%]`} onSubmit={handleSumbit} />
     </div>
   )
 }

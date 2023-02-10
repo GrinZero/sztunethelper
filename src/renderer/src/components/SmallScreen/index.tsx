@@ -10,12 +10,16 @@ interface SmallScreenProps extends ComponentProps {
   h?: string | number
   status?: DataStatus
   onBottom?: () => void
+  overflow?: 'auto' | 'scroll'
+
   baseContainerClassName?: string
   scrollBottomPx?: number
   emptyNode?: React.ReactNode | null
   loadNode?: React.ReactNode | null
   nomoreNode?: React.ReactNode | null
 }
+
+const SCROLL_BAR_WIDTH = 8
 
 const SmallScreen: React.FC<SmallScreenProps> = ({
   w,
@@ -36,9 +40,15 @@ const SmallScreen: React.FC<SmallScreenProps> = ({
     <div className="w-full flex justify-center items-center h-[24px]">
       <span className="text-[12px] text-gray-400">没有更多了</span>
     </div>
-  )
+  ),
+  overflow = 'auto'
 }) => {
   const style = { width: w, height: h }
+  if (overflow === 'scroll') {
+    style['overflowY'] = 'scroll'
+  } else {
+    style['overflow'] = 'auto'
+  }
   const handleScroll: React.UIEventHandler<HTMLDivElement> = debounce((e) => {
     const { clientHeight, scrollHeight, scrollTop } = e.target as HTMLElement
     if (clientHeight + scrollTop + scrollBottomPx >= scrollHeight) {
@@ -46,26 +56,22 @@ const SmallScreen: React.FC<SmallScreenProps> = ({
     }
   }, 200)
 
-  if (status === 'loading' && !children)
+  const renderBaseContaienr = (child: React.ReactNode, moreClassName = '') => {
+    if (overflow === 'scroll') {
+      style['width'] = `calc(${typeof w === 'number' ? w + 'px' : w} - ${SCROLL_BAR_WIDTH})`
+    }
     return (
       <div
         style={style}
-        className={`${styles['base-container']} %{baseContainerClassName} ${className}`}
+        className={`${styles['base-container']} ${baseContainerClassName} ${moreClassName} ${className}`}
       >
-        {loadNode}
-      </div>
-    )
-
-  if (status === 'empty' || !children) {
-    return (
-      <div
-        style={style}
-        className={`${styles['base-container']} ${baseContainerClassName} ${styles.empty} ${className}`}
-      >
-        {emptyNode}
+        {child}
       </div>
     )
   }
+
+  if (status === 'loading' && !children) return renderBaseContaienr(loadNode)
+  if (status === 'empty' || !children) return renderBaseContaienr(emptyNode, styles['empty'])
 
   return (
     <div style={style} className={`${styles.container} ${className}`} onScroll={handleScroll}>

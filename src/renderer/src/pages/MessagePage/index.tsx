@@ -48,12 +48,7 @@ const MessagePage = () => {
             onClick={handleMailCardClick}
           />
         </div>
-        <SmallScreen
-          w={300}
-          onBottom={next}
-          status={status}
-          baseContainerClassName={styles['none-screen']}
-        >
+        <SmallScreen w={300} onBottom={next} status={status} overflow="scroll">
           {ele}
         </SmallScreen>
       </div>
