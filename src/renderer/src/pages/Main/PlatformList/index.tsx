@@ -1,12 +1,18 @@
-import React from 'react'
-import { useMemo } from 'react'
-import IpRow from '../IpRow'
-import type { IpRowOnChangeValue } from '../IpRow'
-import styles from './index.module.scss'
-import { BaseList, BaseElement, BasePopover, BaseButton, MoreInfo } from '@renderer/components'
-import type { Platform } from '@renderer/api'
-
+import React, { useMemo } from 'react'
+import IpRow, { IpRowOnChangeValue } from '../IpRow'
+import {
+  BaseList,
+  BaseElement,
+  BasePopover,
+  BaseButton,
+  BaseEmpty,
+  MoreInfo
+} from '@renderer/components'
 const { Title } = BaseElement
+import { IconLoading } from '@arco-design/web-react/icon'
+
+import type { Platform } from '@renderer/api'
+import styles from './index.module.scss'
 
 interface PlatformListProps {
   platformList: Platform[] | null
@@ -23,11 +29,19 @@ const PlatformList: React.FC<PlatformListProps> = ({
 }) => {
   const platformListCard = useMemo(() => {
     if (platformList === null) {
-      return <div className="flex justify-center items-center w-full h-[140px]">loading...</div>
+      return (
+        <div className="flex justify-center items-center w-full h-[140px]">
+          <IconLoading spin />
+        </div>
+      )
     }
 
     if (platformList.length === 0) {
-      return <div className="flex justify-center items-center w-full h-[140px]">empty</div>
+      return (
+        <div className="flex justify-center items-center w-full h-[140px]">
+          <BaseEmpty />
+        </div>
+      )
     }
 
     return platformList.map((platform) => (
@@ -37,7 +51,7 @@ const PlatformList: React.FC<PlatformListProps> = ({
         afterNode={
           <>
             <BaseButton
-              className="ml-6"
+              className="ml-6 whitespace-nowrap"
               theme="danger"
               onClick={() => onOffline(platform)}
               disabled={platform.endTime !== null}
@@ -67,7 +81,7 @@ const PlatformList: React.FC<PlatformListProps> = ({
         </BasePopover>
         <span>设备列表</span>
       </Title>
-      <BaseList className={`min-h-[144px] ${styles['platform-list']}`} autoHeight={true}>
+      <BaseList className={`min-h-[145px] ${styles['platform-list']}`} autoHeight={true}>
         {platformListCard}
       </BaseList>
     </>

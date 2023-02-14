@@ -1,15 +1,34 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useMailStorage } from '@renderer/hooks'
 import { SmallScreen } from '@renderer/components'
-import { useTicketList, useCurrentDuty, Ticket } from '@renderer/api'
+import { useTicketList, useCurrentDuty, Ticket, Duty } from '@renderer/api'
+import { Drawer, DrawerProps } from '@arco-design/web-react'
 
 import TicketCard from './TicketCard'
 import MailCard from './MailCard'
 import HeaderCard from './HeaderCard'
 import MessageCard from './MessageCard'
+import ConsultForm from './ConsultForm'
 
 import styles from './index.module.scss'
+
+export const useDrawer = (
+  props: DrawerProps
+): [React.ReactElement, React.Dispatch<React.SetStateAction<boolean>>] => {
+  const [visible, setVisible] = useState(false)
+
+  const ele = (
+    <Drawer
+      visible={visible}
+      onOk={() => setVisible(false)}
+      onCancel={() => setVisible(false)}
+      {...props}
+    ></Drawer>
+  )
+
+  return [ele, setVisible]
+}
 
 const MessagePage = () => {
   const history = useHistory()
@@ -17,9 +36,25 @@ const MessagePage = () => {
   const mailConfig = useMailStorage()
   const [list, next, { status }] = useTicketList()
 
+  const [drawer, setDrawer] = useDrawer({
+    title: '发起咨询',
+    placement: 'bottom',
+    height: '75vh',
+    maskClosable: false,
+    children: (
+      // 包含标题、简要内容、咨询类型这三个表单
+      <ConsultForm />
+    )
+  })
+
   const handleMailCardClick = () => history.push('mail_config')
   const handleTicketCardClick = (ticket: Ticket) => {
     console.log(ticket)
+  }
+
+  const handleConsultClick = (duty?: Duty | null) => {
+    if (!duty) return
+    setDrawer(true)
   }
 
   const ele =
@@ -53,9 +88,10 @@ const MessagePage = () => {
         </SmallScreen>
       </div>
       <div className={`w-full flex flex-col ml-1`}>
-        <HeaderCard data={duty} />
+        <HeaderCard data={duty} onClick={handleConsultClick} />
         <MessageCard className={`mt-3`} type="mail" />
       </div>
+      {drawer}
     </div>
   )
 }

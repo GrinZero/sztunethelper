@@ -40,10 +40,9 @@ apiStore.add('getNetInfo', async (): ApiResult<NetInfoModal> => {
 
   const dns = (() => {
     const value = netInfo?.dnsServer ?? []
+    console.log('get dns: maybe value[1] should be 114.114.114.114', value)
     const type: NetInfoStatusType =
-      (value[0] === '10.1.20.30' && value[1] === '114.114.114.114') || value[0] === '172.17.127.2'
-        ? 'success'
-        : 'fail'
+      value[0] === '10.1.20.30' || value[0] === '172.17.127.2' ? 'success' : 'fail'
     return { value, type }
   })()
 

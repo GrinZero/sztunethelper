@@ -1,7 +1,7 @@
 import React from 'react'
 import type { ComponentProps, DataStatus } from '@renderer/types'
 import { debounce } from 'lodash-es'
-import { BaseLoading } from '@renderer/components'
+import { BaseLoading, BaseEmpty } from '@renderer/components'
 
 import styles from './index.module.scss'
 
@@ -19,7 +19,7 @@ interface SmallScreenProps extends ComponentProps {
   nomoreNode?: React.ReactNode | null
 }
 
-const SCROLL_BAR_WIDTH = 8
+const SCROLL_BAR_WIDTH = '8px'
 
 const SmallScreen: React.FC<SmallScreenProps> = ({
   w,
@@ -28,7 +28,7 @@ const SmallScreen: React.FC<SmallScreenProps> = ({
   onBottom,
   children,
   className = '',
-  emptyNode = '暂无数据',
+  emptyNode = <BaseEmpty />,
   scrollBottomPx = 50,
   baseContainerClassName = '',
   loadNode = (

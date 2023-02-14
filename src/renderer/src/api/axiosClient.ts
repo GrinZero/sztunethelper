@@ -2,7 +2,7 @@ import axios from 'axios'
 
 let token = localStorage.getItem('token')
 const axiosClient = axios.create({
-  baseURL: 'http://192.168.31.216:3000',
+  baseURL: 'http://10.161.102.14:3000',
   headers: {
     'Content-Type': 'application/json'
   },

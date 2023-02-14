@@ -18,6 +18,7 @@ export interface Ticket {
   read: boolean
   createTime: number
   updateTime: number
+  contactType: 'socket' | 'mail' | 'image' | 'other'
 }
 
 export const fetchTicketList = async (page: number) => {
