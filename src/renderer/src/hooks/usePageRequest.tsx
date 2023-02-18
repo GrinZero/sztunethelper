@@ -11,7 +11,7 @@ export interface PageState {
 export function usePageRequest<T>(
   fetch: (page: number) => Promise<{ data: T[] }>,
   pageSize = 10
-): [T[][], () => Promise<void>, PageState] {
+): [T[][], () => Promise<void>, PageState, React.Dispatch<React.SetStateAction<T[][]>>] {
   const [list, setList] = useState<T[][]>([])
   const [state, setState] = useSetState<PageState>({
     page: -1,
@@ -46,5 +46,5 @@ export function usePageRequest<T>(
     next()
   }, [])
 
-  return [list, next, state]
+  return [list, next, state, setList]
 }

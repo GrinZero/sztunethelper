@@ -27,6 +27,7 @@ const CoreInput: React.ForwardRefRenderFunction<HTMLInputElement | null, CoreInp
     setFocus('focus')
     onFocus?.(e)
   }
+
   return (
     <label className={`core-input w-full flex flex-row core-input__${focus} ${className}`}>
       {prefixNode}

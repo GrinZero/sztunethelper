@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { CenterState, fetchCurrentDutyThunk } from '@renderer/store'
 
 export interface Duty {
-  id: string
+  id: number
   name: string
   avatarUrl: string
   desc: string

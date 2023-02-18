@@ -6,7 +6,6 @@ export interface BaseInputProps extends HTMLInputProps {
   onFinished?: (val: string, from: 'blur') => unknown
   onBlur?: (val: React.FocusEvent) => unknown
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => unknown
-  textArea?
 }
 
 const BaseInput: React.ForwardRefRenderFunction<HTMLInputElement | null, BaseInputProps> = (
