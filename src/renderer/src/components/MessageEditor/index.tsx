@@ -4,18 +4,19 @@ const { TextArea } = Input
 
 import { BaseButton } from '@renderer/components'
 import type { ComponentProps } from '@renderer/types'
+import type { IMMessage } from '@renderer/api'
 
 import styles from './index.module.scss'
 
-interface MessageEditorProps extends ComponentProps {
-  onSubmit?: (content: string) => void | Promise<void>
+export interface MessageEditorProps extends ComponentProps {
   enterType?: 'ctrlEnter'
+  onSend?: (msg: IMMessage) => Promise<void> | void
   //TODO:'enter'下次再做
 }
 
 export const MessageEditor: React.FC<MessageEditorProps> = ({
   className = '',
-  onSubmit,
+  onSend,
   enterType = 'ctrlEnter'
 }) => {
   const valueRef = useRef('')
@@ -24,13 +25,13 @@ export const MessageEditor: React.FC<MessageEditorProps> = ({
     const content = e.target.value
     valueRef.current = content
     if (content && enterType === 'ctrlEnter' && e.ctrlKey) {
-      onSubmit?.(content)
+      onSend?.({ type: 'text', data: content })
     }
   }
   const handleButtonClick = () => {
     const content = valueRef.current
     if (content) {
-      onSubmit?.(content)
+      onSend?.({ type: 'text', data: content })
     }
   }
 

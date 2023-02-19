@@ -9,7 +9,9 @@ import {
   Duty,
   AddTicketParams,
   addTicket,
-  readTicket
+  readTicket,
+  useTicketSocket,
+  IMMessage
 } from '@renderer/api'
 import { Message } from '@arco-design/web-react'
 
@@ -26,6 +28,19 @@ const MessagePage = () => {
   const duty = useCurrentDuty()
   const mailConfig = useMailStorage()
   const [list, next, { status }, setTickList] = useTicketList()
+  const [initSocket, sendMsg, curID] = useTicketSocket({
+    onSend: ({ status }) => {
+      // console.log('data', data)
+      switch (status) {
+        case 'success':
+          Message.success('发送成功')
+          break
+        case 'error':
+          Message.error('发送成功')
+          break
+      }
+    }
+  })
 
   const addConsultFormRef = useRef<Partial<AddTicketParams>>({})
   const handleAddConsultSubmit = async () => {
@@ -94,6 +109,7 @@ const MessagePage = () => {
 
   const handleMailCardClick = () => history.push('mail_config')
   const handleTicketCardClick = (ticket: Ticket) => {
+    if (ticket.id === curID) return
     !ticket.read &&
       readTicket(ticket.id)
         .then((res) => {
@@ -118,10 +134,16 @@ const MessagePage = () => {
         .catch((err) => {
           console.error(err)
         })
+
+    initSocket(ticket.id)
   }
   const handleConsultClick = (duty?: Duty | null) => {
     if (!duty) return
     setDrawer(true)
+  }
+  const handleSend = (msg: IMMessage) => {
+    console.info('sendMsg', msg)
+    sendMsg(msg)
   }
 
   const ele =
@@ -156,7 +178,7 @@ const MessagePage = () => {
       </div>
       <div className={`w-full flex flex-col ml-1`}>
         <HeaderCard data={duty} onClick={handleConsultClick} />
-        <MessageCard className={`mt-3`} type="mail" />
+        <MessageCard className={`mt-3`} type="mail" onSend={handleSend} />
       </div>
       {drawer}
     </div>

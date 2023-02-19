@@ -1,4 +1,4 @@
-import axiosClient from '../axiosClient'
+import axiosClient from '../../axiosClient'
 import { usePageRequest } from '@renderer/hooks'
 
 export enum TicketStatus {
@@ -28,23 +28,4 @@ export const fetchTicketList = async (page: number) => {
 }
 export function useTicketList() {
   return usePageRequest<Ticket>(fetchTicketList)
-}
-
-export interface AddTicketParams {
-  title: string
-  type: string
-  content: string
-  contactType: Ticket['contactType']
-  toID: number
-}
-export const addTicket = async (form: AddTicketParams) => {
-  const url = '/api/addTicket'
-  const result = await axiosClient.post(url, form)
-  return result
-}
-
-export const readTicket = async (id: number) => {
-  const url = '/api/readTicket'
-  const result = await axiosClient.post(url, { id })
-  return result
 }

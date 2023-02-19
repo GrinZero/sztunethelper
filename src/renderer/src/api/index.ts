@@ -5,3 +5,6 @@ export * from './hosts'
 export * from './center'
 export * from './mail'
 export * from './base'
+
+export * from './socket'
+export * from './type'
