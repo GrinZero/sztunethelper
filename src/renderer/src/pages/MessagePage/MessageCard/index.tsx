@@ -1,22 +1,48 @@
 import React from 'react'
-import { SmallScreen, MessageEditor } from '@renderer/components'
-import type { IMMessage } from '@renderer/api'
-import type { ComponentProps } from '@renderer/types'
+import { SmallScreen, SmallScreenProps } from '@renderer/components'
+import { TicketContent } from '@renderer/api'
+
 import styles from './index.module.scss'
 
-interface MessageCardProps extends ComponentProps {
-  type: 'socket' | 'mail' | 'image'
-  onSend?: (msg: IMMessage) => Promise<void> | void
+export interface MessageCardProps {
+  screenProps?: SmallScreenProps
+  messageList?: null | Partial<TicketContent>[]
+  sender: string | null
+  onTop?: () => void
 }
 
-const MessageCard: React.FC<MessageCardProps> = ({ className = '', onSend }) => {
-  const handleSumbit = (content: IMMessage) => onSend?.(content)
+const MESSAGE_ID_PREFIX = 'message-'
+const MessageCard: React.FC<MessageCardProps> = ({
+  screenProps = {},
+  messageList,
+  sender,
+  onTop
+}) => {
+  const ele = !messageList
+    ? null
+    : messageList.map((item) => {
+        return (
+          <div
+            className={`w-full mt-2 flex ${
+              item.sender === sender ? styles.sender : styles.receiver
+            }`}
+            key={item.id}
+            id={`${MESSAGE_ID_PREFIX}${item.id}`}
+          >
+            <span className={`${styles.message}`}>{item.content}</span>
+          </div>
+        )
+      })
 
   return (
-    <div className={`${styles.container} h-full ${className}`}>
-      <SmallScreen h={'70%'} />
-      <MessageEditor className={`pt-3 h-[30%]`} onSend={handleSumbit} />
-    </div>
+    <SmallScreen
+      className={'flex flex-col-reverse'}
+      overflow="scroll"
+      onTop={onTop}
+      {...screenProps}
+    >
+      {ele}
+    </SmallScreen>
   )
 }
 

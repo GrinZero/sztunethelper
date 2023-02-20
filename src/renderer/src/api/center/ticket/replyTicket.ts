@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   createSocket,
   SocketClient,
@@ -19,7 +19,7 @@ export interface TicketState {
 export type TicketSocketHook = (
   props?: TicketSocketHookProps
 ) => [
-  (id: number | string) => void,
+  (id: TicketState['id']) => SocketClient | null,
   (message: TicketMessage) => void,
   TicketState['id'],
   SocketClient | null
@@ -28,34 +28,46 @@ export type TicketSocketHook = (
 export const useTicketSocket: TicketSocketHook = (props = {}) => {
   const { onError, onSend, onReceive } = props
   const socketRef = useRef<SocketClient | null>(null)
-  const dataRef = useRef<TicketState>({
+  const [state, setState] = useState<TicketState>({
     id: null
   })
 
-  const init = (id: number | string) => {
+  useEffect(() => {
+    if (socketRef.current) socketRef.current.disconnect()
     const socket = createSocket()
+    socket.connect()
     socketRef.current = socket
-    socket.emit('join', id, (res: string) => {
-      if (res !== 'ok') {
-        onError?.(res)
-      }
-      dataRef.current.id = id
-    })
     socket.on('send', (data: ServerTicket) => {
       onReceive?.({
         status: 'success',
         data
       })
     })
+    return () => {
+      socket.disconnect()
+      if (socketRef.current) socketRef.current.disconnect()
+    }
+  }, [])
+
+  const join = (id: number | string | null) => {
+    if (!id || !socketRef.current) return null
+    socketRef.current.emit('join', id, (res: string) => {
+      if (res !== 'ok') {
+        onError?.(res)
+      }
+      setState((state) => ({ ...state, id }))
+    })
+    return socketRef.current
   }
 
   const send = (message: TicketMessage) => {
-    if (!dataRef.current.id) throw new Error('socket is not init')
+    if (!state.id) throw new Error('socket is not init')
     if (!socketRef.current) throw new Error('socket is not init')
     onSend?.({
-      status: 'sending'
+      status: 'sending',
+      data: message
     })
-    socketRef.current.emit('send', dataRef.current.id, message, (msg: SocketMessage) => {
+    socketRef.current.emit('send', state.id, message, (msg: SocketMessage) => {
       if (msg.status !== 'ok') {
         onSend?.({
           status: 'error',
@@ -70,5 +82,5 @@ export const useTicketSocket: TicketSocketHook = (props = {}) => {
     })
   }
 
-  return [init, send, dataRef.current.id, socketRef.current]
+  return [join, send, state.id, socketRef.current]
 }

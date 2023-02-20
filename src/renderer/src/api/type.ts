@@ -8,6 +8,7 @@ export interface IMMessage {
   type: 'text' | 'image' | 'file'
   data: string
   time?: number
+  id?: string | number
 }
 export interface IMMessageCummunication<T = unknown> {
   status: 'sending' | 'success' | 'error'

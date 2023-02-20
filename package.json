@@ -23,7 +23,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@arco-design/web-react": "^2.43.1",
+    "@arco-design/web-react": "^2.45.0",
     "@electron-toolkit/preload": "^1.0.2",
     "@electron-toolkit/utils": "^1.0.2",
     "@monaco-editor/react": "^4.4.6",

@@ -5,18 +5,21 @@ import { BaseLoading, BaseEmpty } from '@renderer/components'
 
 import styles from './index.module.scss'
 
-interface SmallScreenProps extends ComponentProps {
+export interface SmallScreenProps extends ComponentProps {
   w?: string | number
   h?: string | number
   status?: DataStatus
   onBottom?: () => void
+  onTop?: () => void
   overflow?: 'auto' | 'scroll'
 
   baseContainerClassName?: string
   scrollBottomPx?: number
+  scrollTopPx?: number
   emptyNode?: React.ReactNode | null
   loadNode?: React.ReactNode | null
   nomoreNode?: React.ReactNode | null
+  topNode?: React.ReactNode | null
 }
 
 const SCROLL_BAR_WIDTH = '8px'
@@ -26,11 +29,14 @@ const SmallScreen: React.FC<SmallScreenProps> = ({
   h,
   status = 'ok',
   onBottom,
+  onTop,
   children,
   className = '',
   emptyNode = <BaseEmpty />,
+  scrollTopPx = 50,
   scrollBottomPx = 50,
   baseContainerClassName = '',
+  topNode = null,
   loadNode = (
     <div className="w-full flex justify-center items-center h-[50px]">
       <BaseLoading size="large" />
@@ -53,6 +59,10 @@ const SmallScreen: React.FC<SmallScreenProps> = ({
     const { clientHeight, scrollHeight, scrollTop } = e.target as HTMLElement
     if (clientHeight + scrollTop + scrollBottomPx >= scrollHeight) {
       onBottom?.()
+      return
+    }
+    if (scrollTop <= scrollTopPx) {
+      onTop?.()
     }
   }, 200)
 
@@ -75,6 +85,7 @@ const SmallScreen: React.FC<SmallScreenProps> = ({
 
   return (
     <div style={style} className={`${styles.container} ${className}`} onScroll={handleScroll}>
+      {topNode}
       {children}
       {status !== 'done' ? loadNode : nomoreNode}
     </div>

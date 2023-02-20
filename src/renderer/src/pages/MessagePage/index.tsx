@@ -1,4 +1,4 @@
-import { Fragment, useRef } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useMailStorage, useDrawer } from '@renderer/hooks'
 import { SmallScreen } from '@renderer/components'
@@ -8,17 +8,14 @@ import {
   Ticket,
   Duty,
   AddTicketParams,
-  addTicket,
-  readTicket,
-  useTicketSocket,
-  IMMessage
+  addTicket
 } from '@renderer/api'
 import { Message } from '@arco-design/web-react'
 
 import TicketCard from './TicketCard'
 import MailCard from './MailCard'
 import HeaderCard from './HeaderCard'
-import MessageCard from './MessageCard'
+import MessageModule from './MessageModule'
 import ConsultForm from './ConsultForm'
 
 import styles from './index.module.scss'
@@ -28,19 +25,8 @@ const MessagePage = () => {
   const duty = useCurrentDuty()
   const mailConfig = useMailStorage()
   const [list, next, { status }, setTickList] = useTicketList()
-  const [initSocket, sendMsg, curID] = useTicketSocket({
-    onSend: ({ status }) => {
-      // console.log('data', data)
-      switch (status) {
-        case 'success':
-          Message.success('发送成功')
-          break
-        case 'error':
-          Message.error('发送成功')
-          break
-      }
-    }
-  })
+
+  const [currentTicket, setCurrentTicket] = useState<Ticket | null>(null)
 
   const addConsultFormRef = useRef<Partial<AddTicketParams>>({})
   const handleAddConsultSubmit = async () => {
@@ -109,41 +95,38 @@ const MessagePage = () => {
 
   const handleMailCardClick = () => history.push('mail_config')
   const handleTicketCardClick = (ticket: Ticket) => {
-    if (ticket.id === curID) return
-    !ticket.read &&
-      readTicket(ticket.id)
-        .then((res) => {
-          const { data } = res
-          if (data.msg === 'ok') {
-            setTickList((prev) => {
-              const newList = prev.map((page) =>
-                page.map((item) => {
-                  if (item.id === ticket.id) {
-                    return {
-                      ...item,
-                      read: true
-                    }
-                  }
-                  return item
-                })
-              )
-              return newList
-            })
-          }
-        })
-        .catch((err) => {
-          console.error(err)
-        })
-
-    initSocket(ticket.id)
+    if (ticket.id === currentTicket?.id) return
+    setCurrentTicket(ticket)
+    // resetInfos()
+    // nextInfos()
+    // !ticket.read &&
+    //   readTicket(ticket.id)
+    //     .then((res) => {
+    //       const { data } = res
+    //       if (data.msg === 'ok') {
+    //         setTickList((prev) => {
+    //           const newList = prev.map((page) =>
+    //             page.map((item) => {
+    //               if (item.id === ticket.id) {
+    //                 return {
+    //                   ...item,
+    //                   read: true
+    //                 }
+    //               }
+    //               return item
+    //             })
+    //           )
+    //           return newList
+    //         })
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.error(err)
+    //     })
   }
   const handleConsultClick = (duty?: Duty | null) => {
     if (!duty) return
     setDrawer(true)
-  }
-  const handleSend = (msg: IMMessage) => {
-    console.info('sendMsg', msg)
-    sendMsg(msg)
   }
 
   const ele =
@@ -151,10 +134,12 @@ const MessagePage = () => {
       ? null
       : list.map((page, index) => (
           <Fragment key={index}>
-            {page.map((ticket) => (
+            {(page as Ticket[]).map((ticket) => (
               <TicketCard
                 key={ticket.id}
-                className="mb-3 whitespace-pre mr-1"
+                className={`mb-3 whitespace-pre mr-1 ${
+                  currentTicket?.id === ticket.id ? styles.active : ''
+                }`}
                 ticket={ticket}
                 onClick={handleTicketCardClick}
               />
@@ -176,9 +161,15 @@ const MessagePage = () => {
           {ele}
         </SmallScreen>
       </div>
-      <div className={`w-full flex flex-col ml-1`}>
+      <div className={`w-full flex flex-col ml-1 flex-1 ${styles['right-box']}`}>
         <HeaderCard data={duty} onClick={handleConsultClick} />
-        <MessageCard className={`mt-3`} type="mail" onSend={handleSend} />
+        <MessageModule
+          className={`mt-3`}
+          type="mail"
+          currentTicket={currentTicket}
+          // key={currentTicket?.id ?? 'null'}
+          sender={mailConfig?.mail ?? null}
+        />
       </div>
       {drawer}
     </div>

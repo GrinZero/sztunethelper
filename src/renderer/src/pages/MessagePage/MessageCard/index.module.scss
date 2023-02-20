@@ -1,0 +1,15 @@
+.message {
+  display: flex;
+  background-color: var(--lives-blue);
+  max-width: 60%;
+  padding: 3px 6px;
+  border-radius: 4px;
+  width: max-content;
+}
+
+.sender {
+  flex-direction: row-reverse;
+}
+.receiver {
+  flex-direction: row;
+}

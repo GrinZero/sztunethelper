@@ -12,16 +12,11 @@ export interface SocketMessage {
   status: 'ok' | 'error'
 }
 
-export enum ServerTicketType {
-  text = 0,
-  image = 1,
-  file = 2
-}
 export interface ServerTicket {
   id: number
   ticketID: string | number
   content: string
-  type: ServerTicketType
+  type: 'text' | 'image' | 'file'
   status: number
   createTime: number
   updateTime: number
@@ -53,7 +48,8 @@ export const createSocket = () => {
   const socket: SocketClient = io('ws://localhost:3001', {
     auth: {
       token: `Bearer ${token}`
-    }
+    },
+    autoConnect: false
   })
   return socket
 }

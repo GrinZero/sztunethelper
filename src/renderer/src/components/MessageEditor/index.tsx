@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import { Input, Upload } from '@arco-design/web-react'
+import type { RefInputType } from '@arco-design/web-react/es/Input/interface'
 const { TextArea } = Input
 
 import { BaseButton } from '@renderer/components'
@@ -20,18 +21,25 @@ export const MessageEditor: React.FC<MessageEditorProps> = ({
   enterType = 'ctrlEnter'
 }) => {
   const valueRef = useRef('')
+  const textAreaRef = useRef<RefInputType>(null)
 
   const handlePressEnter = (e) => {
     const content = e.target.value
     valueRef.current = content
     if (content && enterType === 'ctrlEnter' && e.ctrlKey) {
       onSend?.({ type: 'text', data: content })
+      valueRef.current = ''
+      textAreaRef.current!.dom.value = ''
+      textAreaRef.current!.focus()
     }
   }
   const handleButtonClick = () => {
     const content = valueRef.current
     if (content) {
       onSend?.({ type: 'text', data: content })
+      valueRef.current = ''
+      textAreaRef.current!.dom.value = ''
+      textAreaRef.current!.focus()
     }
   }
 
@@ -72,6 +80,7 @@ export const MessageEditor: React.FC<MessageEditorProps> = ({
         <TextArea
           className={`${styles.textarea}`}
           placeholder={enterType === 'ctrlEnter' ? '按Ctrl+Enter发送' : '按Enter发送'}
+          ref={textAreaRef}
           maxLength={1000}
           onPressEnter={handlePressEnter}
           onChange={(v) => (valueRef.current = v)}
