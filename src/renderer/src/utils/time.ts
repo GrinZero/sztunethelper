@@ -51,3 +51,32 @@ export const getDuration = (startTime: number, endTime = Date.now()) => {
       : `${minutes}m ${seconds}s`
   return seconds === 0 ? '<1s' : inline
 }
+
+export const formatSendTime = (time: number | Date) => {
+  const origin = time instanceof Date ? time.getTime() : time
+  const nowTimestamp = Date.now()
+
+  // 今天内的消息显示格式：hh:mm
+  // 昨天的消息显示格式：昨天 hh:mm
+  // 昨天之前的消息显示格式：MM-dd hh:mm
+  // 不是今年的消息显示格式：yyyy-MM-dd hh:mm
+
+  const today = new Date(nowTimestamp).format('yyyy-MM-dd')
+  const yesterday = new Date(nowTimestamp - 86400000).format('yyyy-MM-dd')
+  const thisYear = new Date(nowTimestamp).format('yyyy')
+  const originDate = new Date(origin).format('yyyy-MM-dd')
+  const originYear = new Date(origin).format('yyyy')
+
+  const showTime = (() => {
+    if (originDate === today) {
+      return new Date(origin).format('hh:mm')
+    } else if (originDate === yesterday) {
+      return `昨天 ${new Date(origin).format('hh:mm')}`
+    } else if (originYear === thisYear) {
+      return new Date(origin).format('MM-dd hh:mm')
+    } else {
+      return new Date(origin).format('yyyy-MM-dd hh:mm')
+    }
+  })()
+  return showTime
+}

@@ -20,7 +20,7 @@ export const usePageRequest = <T, P = 'double'>(
     pageSize?: number
     autoInit?: boolean
     listType?: 'single' | 'double'
-    onBeforeSetList?: (list: T[]) => T[]
+    onBeforeSetList?: (prev: (T | T[])[], data: T[]) => T[]
   } = {}
 ): PageRequestHookReturn<P extends 'double' ? T[] : T> => {
   const { pageSize = 10, autoInit = true, listType = 'double', onBeforeSetList } = options
@@ -65,7 +65,7 @@ export const usePageRequest = <T, P = 'double'>(
       _setList((prevList) => {
         const newList = [...prevList, result.data]
         if (onBeforeSetList) {
-          return onBeforeSetList(newList)
+          return onBeforeSetList(prevList, result.data)
         }
         return newList
       })
@@ -73,7 +73,7 @@ export const usePageRequest = <T, P = 'double'>(
       _setList((prevList) => {
         const newList = [...prevList, ...result.data]
         if (onBeforeSetList) {
-          return onBeforeSetList(newList)
+          return onBeforeSetList(prevList, result.data)
         }
         return newList
       })
