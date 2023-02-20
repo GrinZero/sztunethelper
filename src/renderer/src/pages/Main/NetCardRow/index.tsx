@@ -14,9 +14,9 @@ const NetCardRow: React.FC<NetCardRowProps> = ({ name, value, type }) => {
     <div className="flex flex-row items-center justify-between">
       <div className="flex flex-row items-center font-bold">
         <StatusIcon className="mr-1" type={type} />
-        <span className="mr-1 mt-[1px] text-xs">{name}</span>
+        <span className="mr-1 mt-[1px] text-xs select-text">{name}</span>
       </div>
-      <span className="opacity-80 hover:opacity-100 transition-opacity">{value}</span>
+      <span className="opacity-80 hover:opacity-100 transition-opacity select-text">{value}</span>
     </div>
   )
 }

@@ -72,7 +72,7 @@ const IpRow: React.FC<IpRowProps> = ({
         placeholder="输入设备名"
         onFinished={(val: string) => onChange?.({ val, id, ip })}
       />
-      <span className="w-[175px]">{startTime}</span>
+      <span className="w-[175px] select-text select-text">{startTime}</span>
       <span className={`w-[70px] ${styles['ip-row-status']}`} data-status={!endTime}>
         {endTime ? '离线' : '在线'}
       </span>

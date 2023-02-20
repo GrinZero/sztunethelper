@@ -1,4 +1,3 @@
-
 #root {
   color: var(--theme-color);
   /* 深一点更好看？ */
@@ -14,6 +13,9 @@
   border-radius: 8px;
 }
 
+* {
+  user-select: none;
+}
 .icon {
   width: 1em;
   height: 1em;

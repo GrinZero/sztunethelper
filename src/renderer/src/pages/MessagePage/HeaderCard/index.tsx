@@ -27,7 +27,7 @@ const HeaderCard: React.FC<HeaderCardProps> = ({ data, onClick }) => {
           </div>
           <div className={`mr-2`}>
             <div className={`font-bold flex flex-row items-center`}>
-              {data?.name}
+              <span className="select-text">{data?.name}</span>
               <Tag
                 className={'ml-1'}
                 bordered
@@ -37,7 +37,7 @@ const HeaderCard: React.FC<HeaderCardProps> = ({ data, onClick }) => {
                 {contactTypeStore[data?.contactType ?? 'other'][0]}
               </Tag>
             </div>
-            <div className={'opacity-60'}>{data?.contact ?? '-'}</div>
+            <div className={'opacity-60 select-text'}>{data?.contact ?? '-'}</div>
           </div>
         </div>
         <div className="flex flex-row items-center">

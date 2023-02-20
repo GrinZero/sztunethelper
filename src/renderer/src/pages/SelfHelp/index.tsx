@@ -141,8 +141,11 @@ const SelfHelp = () => {
                     key={result.id}
                     id={`netTaskResult-${result.id}`}
                     itemClassName={`overflow-hidden elipsis`}
+                    titleClassName={'select-text'}
                   >
-                    <span className="opacity-80 whitespace-pre-wrap">{result.content}</span>
+                    <span className="opacity-80 whitespace-pre-wrap select-text">
+                      {result.content}
+                    </span>
                   </BaseCard>
                 )
               })}

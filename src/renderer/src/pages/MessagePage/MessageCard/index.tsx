@@ -30,7 +30,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ data, sender, className = '',
         } ${className}`}
         {...rest}
       >
-        <span className={`${styles.message}`}>{content}</span>
+        <span className={`select-text ${styles.message}`}>{content}</span>
       </div>
     )
   }
@@ -76,7 +76,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
           <MessageItem
             data={{
               type: 'time',
-              createTime: messageList[messageList.length - 1].createTime
+              createTime: messageList[messageList.length - 1].createTime ?? Date.now()
             }}
             sender={sender}
           />
