@@ -11,6 +11,7 @@ export interface Duty {
   desc: string
   contact: string
   rate: number | null
+  mail: string
   contactType: 'socket' | 'mail' | 'image' | 'other'
 }
 export const fetchCurrentDuty = async () => {

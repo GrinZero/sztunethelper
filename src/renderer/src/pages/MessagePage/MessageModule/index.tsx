@@ -1,22 +1,40 @@
 import React, { useEffect, useRef } from 'react'
 import { Message } from '@arco-design/web-react'
 import { MessageEditor } from '@renderer/components'
-import { useTicketInfos, IMMessage, Ticket, useTicketSocket, TicketContent } from '@renderer/api'
+import { useSelector } from 'react-redux'
+import { CenterState } from '@renderer/store'
+import {
+  useTicketInfos,
+  IMMessage,
+  Ticket,
+  useTicketSocket,
+  TicketContent,
+  sendTicketAttachments,
+  Duty,
+  SocketMessage
+} from '@renderer/api'
 import type { ComponentProps } from '@renderer/types'
 import styles from './index.module.scss'
 
 import MessageCard from '../MessageCard'
+import { UploadItem } from '@arco-design/web-react/es/Upload'
 
 export interface MessageModuleProps extends ComponentProps {
   type: 'socket' | 'mail' | 'image'
   currentTicket?: null | Ticket
   sender: string | null
+  onStartChat?: (ticket: Ticket) => void
 }
 export interface SendingMessage extends IMMessage {
   index: number
 }
 
-const MessageModule: React.FC<MessageModuleProps> = ({ className = '', currentTicket, sender }) => {
+const MessageModule: React.FC<MessageModuleProps> = ({
+  className = '',
+  currentTicket,
+  sender,
+  onStartChat
+}) => {
   const [ticketInfos, nextInfos, { status: infoStatus }, setTicketInfos, resetInfos] =
     useTicketInfos()
 
@@ -86,21 +104,52 @@ const MessageModule: React.FC<MessageModuleProps> = ({ className = '', currentTi
   useEffect(() => {
     if (!currentTicket) return
     joinRoom(currentTicket.id)
+      .then((res) => {
+        const result = res as SocketMessage
+        const { uploadToken } = result.data
+        sessionStorage.setItem('uploadToken', uploadToken as string)
+        onStartChat?.(currentTicket)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }, [currentTicket])
 
-  const handleSumbit = (msg: IMMessage) => {
+  const { currentDuty } = useSelector((state: any) => state.center) as CenterState
+  const handleSumbit = async (msg: { type: IMMessage['type']; data: string | UploadItem[] }) => {
     const localID = Date.now() + Math.random()
-    sendMsg({
-      ...msg,
-      id: localID
+    if (msg.type === 'text') {
+      sendMsg({
+        ...msg,
+        id: localID
+      } as IMMessage)
+      return
+    }
+    const result = await sendTicketAttachments({
+      id: currentTicket!.id,
+      title: currentTicket!.title,
+      type: currentTicket!.type,
+      sender: sender!,
+      attachments: msg.data as UploadItem[],
+      toMail: (currentDuty as Duty)!.mail
     })
+
+    const sendMsgTasks = result.map((item) => {
+      const taskLocalID = Date.now() + Math.random()
+      return sendMsg({
+        ...msg,
+        data: JSON.stringify(item),
+        id: taskLocalID
+      })
+    })
+    await Promise.all(sendMsgTasks)
   }
 
   return (
     <div className={`${styles.container} h-full ${className}`}>
       <MessageCard
         screenProps={{
-          h: '53vh',
+          h: '51vh',
           w: '100%',
           status: infoStatus !== 'done' ? (currentTicket ? 'ok' : infoStatus) : infoStatus
         }}
@@ -108,7 +157,7 @@ const MessageModule: React.FC<MessageModuleProps> = ({ className = '', currentTi
         sender={sender}
         onTop={() => nextInfos(currentTicket?.id)}
       />
-      <MessageEditor className={`pt-3 h-[30%]`} onSend={handleSumbit} />
+      <MessageEditor className={`pt-3 h-[32%]`} onSend={handleSumbit} disable={!currentTicket} />
     </div>
   )
 }

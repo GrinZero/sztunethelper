@@ -8,14 +8,18 @@ export const useDrawer = (
   }
 ): [React.ReactElement, React.Dispatch<React.SetStateAction<boolean>>] => {
   const [visible, setVisible] = useState(false)
+  const [confirmLoading, setConfirmLoading] = useState(false)
 
   const { onOk, onCancel } = props
   props.onOk = () => {
     const result = onOk?.()
     if (typeof result === 'object' && result.then) {
-      result.then((res) => {
-        res !== false && setVisible(false)
-      })
+      setConfirmLoading(true)
+      result
+        .then((res) => {
+          res !== false && setVisible(false)
+        })
+        .finally(() => setConfirmLoading(false))
       return
     }
     result !== false && setVisible(false)
@@ -31,7 +35,7 @@ export const useDrawer = (
     result !== false && setVisible(false)
   }
 
-  const ele = <Drawer visible={visible} {...props}></Drawer>
+  const ele = <Drawer visible={visible} confirmLoading={confirmLoading} {...props}></Drawer>
 
   return [ele, setVisible]
 }

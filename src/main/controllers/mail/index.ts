@@ -1,22 +1,33 @@
 import nodemailer from 'nodemailer'
 import { mailOptionsStore } from './constants'
+import type { SendMailOptions } from 'nodemailer'
 
-export interface SendMailProps {
+export interface SendMailProps extends SendMailOptions {
   sender: string
   receiver: string
   pass: string
   subject: string
   text: string
   html?: string
+  extension?: 'ArrayBuffer'
 }
 
-export const sendMail = async ({ sender, receiver, pass, subject, text, html }: SendMailProps) => {
+export const sendMail = async ({
+  sender,
+  receiver,
+  pass,
+  subject,
+  text,
+  html,
+  ...rest
+}: SendMailProps) => {
   const form = {
     from: sender,
     to: receiver,
     subject,
     text,
-    html
+    html,
+    ...rest
   }
   const url = sender.split('@')[1]
   const smtp = mailOptionsStore[url].smtp

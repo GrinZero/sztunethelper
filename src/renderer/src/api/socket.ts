@@ -25,12 +25,12 @@ export interface ServerTicket {
 export interface ServerToClientEvents {
   dispatch: (data: SocketData) => void
   onmessage: (data: SocketData) => void
-  send: (data: ServerTicket, callback?: (msg: string) => void) => void
+  send: (data: ServerTicket, callback?: (msg: SocketMessage) => void) => void
 }
 
 export type TicketMessage = IMMessage
 export interface ClientToServerEvents {
-  join: (roomID: string | number, callback?: (msg: string) => void) => void
+  join: (roomID: string | number, callback?: (msg: SocketMessage) => void) => void
   send: (
     roomID: string | number,
     data: TicketMessage,

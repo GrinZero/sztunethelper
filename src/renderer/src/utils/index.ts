@@ -12,3 +12,4 @@ export { debounce }
 export { default as getHostsContent } from './getHostsContent'
 export * from './time'
 export * from './test'
+export * from './json'

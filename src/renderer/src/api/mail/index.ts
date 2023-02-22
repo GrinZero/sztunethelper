@@ -1,12 +1,13 @@
 import apiClient from '../apiClient'
 import type { ApiResult } from '../type'
+import type { SendMailOptions } from 'nodemailer'
 
-export interface SendMailProps {
+export interface SendMailProps extends SendMailOptions {
   sender?: string
   receiver: string
   pass?: string
   subject: string
-  text: string
+  text?: string
   html?: string
 }
 

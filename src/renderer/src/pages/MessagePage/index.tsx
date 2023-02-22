@@ -8,7 +8,8 @@ import {
   Ticket,
   Duty,
   AddTicketParams,
-  addTicket
+  addTicket,
+  readTicket
 } from '@renderer/api'
 import { Message } from '@arco-design/web-react'
 
@@ -42,11 +43,13 @@ const MessagePage = () => {
     addConsultFormRef.current = {
       ...addConsultFormRef.current,
       contactType: duty.contactType,
-      toID: duty.id
+      toID: duty.id,
+      toMail: duty.mail
     }
 
     const result = await addTicket(addConsultFormRef.current as AddTicketParams).catch((err) => {
       Message.error(err.message)
+      console.error(err)
     })
     if (!result) return false
 
@@ -63,12 +66,14 @@ const MessagePage = () => {
         type,
         contactType: duty.contactType
       }
+      setTimeout(() => {
+        setCurrentTicket(mockData)
+      }, 500)
       return [[mockData], ...prev]
     })
 
     return true
   }
-
   const [drawer, setDrawer] = useDrawer({
     title: '发起咨询',
     placement: 'bottom',
@@ -97,32 +102,31 @@ const MessagePage = () => {
   const handleTicketCardClick = (ticket: Ticket) => {
     if (ticket.id === currentTicket?.id) return
     setCurrentTicket(ticket)
-    // resetInfos()
-    // nextInfos()
-    // !ticket.read &&
-    //   readTicket(ticket.id)
-    //     .then((res) => {
-    //       const { data } = res
-    //       if (data.msg === 'ok') {
-    //         setTickList((prev) => {
-    //           const newList = prev.map((page) =>
-    //             page.map((item) => {
-    //               if (item.id === ticket.id) {
-    //                 return {
-    //                   ...item,
-    //                   read: true
-    //                 }
-    //               }
-    //               return item
-    //             })
-    //           )
-    //           return newList
-    //         })
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.error(err)
-    //     })
+
+    !ticket.read &&
+      readTicket(ticket.id)
+        .then((res) => {
+          const { data } = res
+          if (data.msg === 'ok') {
+            setTickList((prev) => {
+              const newList = prev.map((page) =>
+                page.map((item) => {
+                  if (item.id === ticket.id) {
+                    return {
+                      ...item,
+                      read: true
+                    }
+                  }
+                  return item
+                })
+              )
+              return newList
+            })
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+        })
   }
   const handleConsultClick = (duty?: Duty | null) => {
     if (!duty) return
@@ -162,12 +166,11 @@ const MessagePage = () => {
         </SmallScreen>
       </div>
       <div className={`w-full flex flex-col ml-1 flex-1 ${styles['right-box']}`}>
-        <HeaderCard data={duty} onClick={handleConsultClick} />
+        <HeaderCard className={styles['header-card']} data={duty} onClick={handleConsultClick} />
         <MessageModule
-          className={`mt-3`}
+          className={``}
           type="mail"
           currentTicket={currentTicket}
-          // key={currentTicket?.id ?? 'null'}
           sender={mailConfig?.mail ?? null}
         />
       </div>

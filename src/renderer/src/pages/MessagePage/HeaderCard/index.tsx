@@ -4,8 +4,9 @@ import styles from './index.module.scss'
 import { Duty } from '@renderer/api'
 import React from 'react'
 import { Tag } from '@arco-design/web-react'
+import { ComponentProps } from '@renderer/types'
 
-interface HeaderCardProps {
+interface HeaderCardProps extends ComponentProps {
   data: Duty | null
   onClick?: (duty?: Duty | null) => void
 }
@@ -17,9 +18,9 @@ const contactTypeStore = {
   other: ['其他', 'rgb(107 114 128)']
 }
 
-const HeaderCard: React.FC<HeaderCardProps> = ({ data, onClick }) => {
+const HeaderCard: React.FC<HeaderCardProps> = ({ data, className = '', onClick }) => {
   return (
-    <BaseCard title={null} scale="1" border={false}>
+    <BaseCard title={null} scale="1" border={false} className={`${className}`}>
       <div className={`w-full flex flex-row items-center justify-between`}>
         <div className="flex flex-row items-center">
           <div className={`w-8 h-8 rounded-[50%] mr-2 ${styles.img}`}>

@@ -1,10 +1,8 @@
 import React from 'react'
 import { SmallScreen, SmallScreenProps, BaseLoading } from '@renderer/components'
 import { TicketInfo } from '@renderer/api'
-import { formatSendTime } from '@renderer/utils'
 
-import styles from './index.module.scss'
-import { HTMLDivProps } from '@renderer/types'
+import MessageItem from '../MessageItem'
 
 export interface MessageCardProps {
   screenProps?: SmallScreenProps
@@ -14,37 +12,6 @@ export interface MessageCardProps {
 }
 
 const MESSAGE_ID_PREFIX = 'message-'
-
-export interface MessageItemProps extends HTMLDivProps {
-  data: Partial<TicketInfo>
-  sender: string | null
-}
-
-const MessageItem: React.FC<MessageItemProps> = ({ data, sender, className = '', ...rest }) => {
-  const { type, content, sender: dataSender, createTime } = data
-  if (type === 'text') {
-    return (
-      <div
-        className={`w-full mt-2 flex ${
-          dataSender === sender ? styles.sender : styles.receiver
-        } ${className}`}
-        {...rest}
-      >
-        <span className={`select-text ${styles.message}`}>{content}</span>
-      </div>
-    )
-  }
-
-  if (type === 'time') {
-    return (
-      <div className={`w-full my-4 flex justify-center text-xs ${className}`} {...rest}>
-        <span className={`${styles.time}`}>{formatSendTime(createTime!)}</span>
-      </div>
-    )
-  }
-
-  return null
-}
 
 const MessageCard: React.FC<MessageCardProps> = ({
   screenProps = {},

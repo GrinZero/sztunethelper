@@ -19,7 +19,7 @@ export interface TicketState {
 export type TicketSocketHook = (
   props?: TicketSocketHookProps
 ) => [
-  (id: TicketState['id']) => SocketClient | null,
+  (id: TicketState['id']) => Promise<unknown>,
   (message: TicketMessage) => void,
   TicketState['id'],
   SocketClient | null
@@ -49,15 +49,19 @@ export const useTicketSocket: TicketSocketHook = (props = {}) => {
     }
   }, [])
 
-  const join = (id: number | string | null) => {
-    if (!id || !socketRef.current) return null
-    socketRef.current.emit('join', id, (res: string) => {
-      if (res !== 'ok') {
-        onError?.(res)
-      }
-      setState((state) => ({ ...state, id }))
+  const join = async (id: number | string | null) => {
+    return new Promise((resolve, reject) => {
+      if (!id || !socketRef.current) return null
+      socketRef.current.emit('join', id, (res) => {
+        if (res.status !== 'ok') {
+          onError?.(res)
+          reject(res)
+        }
+        setState((state) => ({ ...state, id }))
+        resolve(res)
+      })
+      return socketRef.current
     })
-    return socketRef.current
   }
 
   const send = (message: TicketMessage) => {

@@ -1,0 +1,35 @@
+.message-container {
+  --animate-duration: 0.16s;
+}
+.message {
+  display: flex;
+  background-color: var(--lives-blue);
+  max-width: 60%;
+  padding: 3px 6px;
+  border-radius: 4px;
+  width: max-content;
+}
+
+.sender {
+  flex-direction: row-reverse;
+}
+.receiver {
+  flex-direction: row;
+}
+
+.image {
+  border-radius: 9px;
+}
+.file-item {
+  width: max-content;
+  white-space: pre-wrap;
+  word-break: break-all;
+  flex-wrap: wrap;
+  max-width: 300px;
+  padding: 6px 12px;
+  height: auto;
+  border-radius: 6px;
+  justify-content: left;
+  align-items: start;
+  cursor: pointer;
+}
