@@ -13,6 +13,7 @@ export interface Account {
 }
 
 export type HTMLDivProps = ComponentProps & React.HTMLAttributes<HTMLDivElement>
+export type HTMLSpanProps = ComponentProps & React.HTMLAttributes<HTMLSpanElement>
 export type HTMLAnchorProps = ComponentProps & React.HTMLAttributes<HTMLAnchorElement>
 
 export type HTMLInputProps = ComponentProps & React.InputHTMLAttributes<HTMLInputElement>

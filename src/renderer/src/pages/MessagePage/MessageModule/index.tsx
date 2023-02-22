@@ -59,7 +59,8 @@ const MessageModule: React.FC<MessageModuleProps> = ({
               ticketID: currentTicket?.id,
               sender: sender,
               content: (data as IMMessage).data,
-              type: (data as IMMessage).type
+              type: (data as IMMessage).type,
+              id: (data as IMMessage).id
             }
             return [mockTicket as TicketContent, ...prev]
           })
@@ -83,9 +84,10 @@ const MessageModule: React.FC<MessageModuleProps> = ({
               setTicketInfos((item) => {
                 return item.map((subItem) => {
                   if (subItem.id === localID) {
+                    sendingList.current = sendingList.current.filter((item) => item.id !== localID)
                     return {
                       ...subItem,
-                      id: (data as { id: number }).id
+                      ...(data as TicketContent)
                     }
                   }
                   return subItem
@@ -105,6 +107,11 @@ const MessageModule: React.FC<MessageModuleProps> = ({
     if (!currentTicket) return
     joinRoom(currentTicket.id)
       .then((res) => {
+        // if (ticketInfos.length === 0) {
+        //   setInfoStatus({
+        //     status: 'done'
+        //   })
+        // }
         const result = res as SocketMessage
         const { uploadToken } = result.data
         sessionStorage.setItem('uploadToken', uploadToken as string)
@@ -125,15 +132,11 @@ const MessageModule: React.FC<MessageModuleProps> = ({
       } as IMMessage)
       return
     }
-    const result = await sendTicketAttachments({
-      id: currentTicket!.id,
-      title: currentTicket!.title,
-      type: currentTicket!.type,
-      sender: sender!,
-      attachments: msg.data as UploadItem[],
-      toMail: (currentDuty as Duty)!.mail
-    })
-
+    const { id, title, type } = currentTicket!
+    const toMail = (currentDuty as Duty)!.mail
+    const attachments = msg.data as UploadItem[]
+    const options = { id, title, type, sender: sender!, attachments, toMail }
+    const result = await sendTicketAttachments(options)
     const sendMsgTasks = result.map((item) => {
       const taskLocalID = Date.now() + Math.random()
       return sendMsg({
@@ -145,15 +148,22 @@ const MessageModule: React.FC<MessageModuleProps> = ({
     await Promise.all(sendMsgTasks)
   }
 
+  const screenStatus = (() => {
+    if (ticketInfos?.length === 0) {
+      return 'done'
+    }
+    return infoStatus
+  })()
+
   return (
     <div className={`${styles.container} h-full ${className}`}>
       <MessageCard
         screenProps={{
           h: '51vh',
           w: '100%',
-          status: infoStatus !== 'done' ? (currentTicket ? 'ok' : infoStatus) : infoStatus
+          status: screenStatus
         }}
-        messageList={ticketInfos as Partial<TicketContent>[]}
+        messageList={ticketInfos as Partial<TicketContent>[] | null}
         sender={sender}
         onTop={() => nextInfos(currentTicket?.id)}
       />

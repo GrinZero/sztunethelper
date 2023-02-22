@@ -5,7 +5,7 @@ import { SmallScreen } from '@renderer/components'
 import {
   useTicketList,
   useCurrentDuty,
-  Ticket,
+  TicketListItem,
   Duty,
   AddTicketParams,
   addTicket,
@@ -16,6 +16,7 @@ import { Message } from '@arco-design/web-react'
 import TicketCard from './TicketCard'
 import MailCard from './MailCard'
 import HeaderCard from './HeaderCard'
+import MessageHeader from './MessageHeader'
 import MessageModule from './MessageModule'
 import ConsultForm from './ConsultForm'
 
@@ -27,7 +28,7 @@ const MessagePage = () => {
   const mailConfig = useMailStorage()
   const [list, next, { status }, setTickList] = useTicketList()
 
-  const [currentTicket, setCurrentTicket] = useState<Ticket | null>(null)
+  const [currentTicket, setCurrentTicket] = useState<TicketListItem | null>(null)
 
   const addConsultFormRef = useRef<Partial<AddTicketParams>>({})
   const handleAddConsultSubmit = async () => {
@@ -99,7 +100,7 @@ const MessagePage = () => {
   })
 
   const handleMailCardClick = () => history.push('mail_config')
-  const handleTicketCardClick = (ticket: Ticket) => {
+  const handleTicketCardClick = (ticket: TicketListItem) => {
     if (ticket.id === currentTicket?.id) return
     setCurrentTicket(ticket)
 
@@ -133,12 +134,18 @@ const MessagePage = () => {
     setDrawer(true)
   }
 
+  const headerEle = currentTicket ? (
+    <MessageHeader className={styles['header-card']} ticket={currentTicket} avatar={null} />
+  ) : (
+    <HeaderCard className={styles['header-card']} data={duty} onClick={handleConsultClick} />
+  )
+
   const ele =
-    list.length === 0
+    !list || list.length === 0
       ? null
       : list.map((page, index) => (
           <Fragment key={index}>
-            {(page as Ticket[]).map((ticket) => (
+            {(page as TicketListItem[]).map((ticket) => (
               <TicketCard
                 key={ticket.id}
                 className={`mb-3 whitespace-pre mr-1 ${
@@ -166,9 +173,8 @@ const MessagePage = () => {
         </SmallScreen>
       </div>
       <div className={`w-full flex flex-col ml-1 flex-1 ${styles['right-box']}`}>
-        <HeaderCard className={styles['header-card']} data={duty} onClick={handleConsultClick} />
+        {headerEle}
         <MessageModule
-          className={``}
           type="mail"
           currentTicket={currentTicket}
           sender={mailConfig?.mail ?? null}

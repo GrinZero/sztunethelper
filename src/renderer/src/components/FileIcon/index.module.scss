@@ -4,50 +4,51 @@
   width: 32px;
   font-size: 14px;
   height: 32px;
-  background: #aca49a;
+  --bg-color: #aca49a;
+  background: var(--bg-color);
 }
 .file-type-doc,
 .file-type-DOC,
 .file-type-docx,
 .file-type-DOCX {
-  background: #5f8ed3;
+  --bg-color: #5f8ed3;
 }
 .file-type-ppt,
 .file-type-PPT,
 .file-type-pptx,
 .file-type-PPTX {
-  background: #ed9254;
+  --bg-color: #ed9254;
 }
 .file-type-pdf,
 .file-type-PDF {
-  background: #00a99d;
+  --bg-color: #00a99d;
 }
 .file-type-png,
 .file-type-PNG {
-  background: #7babff;
+  --bg-color: #7babff;
 }
 .file-type-jpg,
 .file-type-JPG,
 .file-type-JPEG,
 .file-type-jpeg {
-  background: #f7931e;
+  --bg-color: #f7931e;
 }
 .file-type-xlsx,
 .file-type-XLSX {
-  background: #62cc65;
+  --bg-color: #62cc65;
 }
 .file-type-xls,
 .file-type-XLS {
-  background: #61ceae;
+  --bg-color: #61ceae;
 }
 .file-type-bmp,
 .file-type-BMP {
-  background: #81abf7;
+  --bg-color: #81abf7;
 }
 
 .file-type-zip,
 .file-type-ZIP,
 .file-type-rar,
 .file-type-RAR {
-  background: #a481f7;
+  --bg-color: #a481f7;
 }

@@ -1,16 +1,16 @@
 import React from 'react'
 import type { ComponentProps } from '@renderer/types'
 import { Tag, Popconfirm } from '@arco-design/web-react'
-import { TicketStatus, Ticket } from '@renderer/api'
+import { TicketStatus, TicketListItem } from '@renderer/api'
 import { formatUsefulTime } from '@renderer/utils'
 import { IconClose } from '@arco-design/web-react/icon'
 
 import styles from './index.module.scss'
 
 export interface TicketCardProps extends ComponentProps {
-  ticket: Ticket
-  onDelete?: (val: Ticket) => void
-  onClick?: (val: Ticket) => void
+  ticket: TicketListItem
+  onDelete?: (val: TicketListItem) => void
+  onClick?: (val: TicketListItem) => void
 }
 
 const tagStore = {
@@ -23,7 +23,7 @@ const statusStore = {
 }
 
 const TicketCard: React.FC<TicketCardProps> = ({ className = '', ticket, onDelete, onClick }) => {
-  const { title, type, to, createTime, status, read, adminName } = ticket
+  const { title, type, other, createTime, status, read, adminName } = ticket
   const nameFirst = (adminName[0] ?? '-').toUpperCase()
   return (
     <div
@@ -36,7 +36,7 @@ const TicketCard: React.FC<TicketCardProps> = ({ className = '', ticket, onDelet
         <div className={`${styles['name']} mr-2 flex-shrink-0`}>{nameFirst}</div>
         <div className={`flex flex-col ${styles['header']}`}>
           <div className={`w-[78%] overflow-hidden text-ellipsis`}>{title}</div>
-          <span>{to}</span>
+          <span>{other}</span>
         </div>
       </div>
       <div className="flex flex-row items-center w-full justify-between font-mono text-xs opacity-85">

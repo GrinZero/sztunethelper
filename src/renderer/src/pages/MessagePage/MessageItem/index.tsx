@@ -66,17 +66,16 @@ const MessageItem: React.FC<MessageItemProps> = ({ data, sender, className = '',
   }
 
   if (type === 'file') {
+    const filename = result?.filename ?? content
+    const url = result?.url ?? content
     return renderContent(
       <FileIcon
         showName={true}
         className={`select-text whitespace-nowrap mr-[3px] ${styles['file-item']}`}
-        fileName={result?.filename ?? content}
+        fileName={filename}
       >
-        <DownLoad
-          url={result?.url ?? content}
-          fileName={result?.filename ?? content}
-          visible={false}
-        />
+        <FileIcon className={`${styles['file-icon']}`} fileName={filename} />
+        <DownLoad url={url} fileName={filename} visible={false} />
       </FileIcon>
     )
   }

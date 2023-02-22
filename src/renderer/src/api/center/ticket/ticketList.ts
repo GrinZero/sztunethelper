@@ -21,11 +21,15 @@ export interface Ticket {
   contactType: 'socket' | 'mail' | 'image' | 'other'
 }
 
+export interface TicketListItem extends Ticket {
+  other: string
+}
+
 export const fetchTicketList = async (page: number) => {
   const url = '/api/fetchTicketList'
-  const result = await axiosClient.post<Ticket[]>(url, { page })
+  const result = await axiosClient.post<TicketListItem[]>(url, { page })
   return result
 }
 export function useTicketList() {
-  return usePageRequest<Ticket>(fetchTicketList)
+  return usePageRequest<TicketListItem>(fetchTicketList)
 }

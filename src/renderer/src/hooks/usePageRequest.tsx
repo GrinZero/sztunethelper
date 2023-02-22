@@ -7,11 +7,12 @@ export interface PageState {
 }
 
 export type PageRequestHookReturn<T> = [
-  T[],
+  T[] | null,
   (...rest: any[]) => Promise<void>,
   PageState,
   React.Dispatch<React.SetStateAction<T[]>>,
-  () => void
+  () => void,
+  React.Dispatch<React.SetStateAction<PageState>>
 ]
 
 export const usePageRequest = <T, P = 'double'>(
@@ -21,11 +22,18 @@ export const usePageRequest = <T, P = 'double'>(
     autoInit?: boolean
     listType?: 'single' | 'double'
     onBeforeSetList?: (prev: (T | T[])[], data: T[]) => T[]
+    defaultList?: (P extends 'double' ? T[] : T)[] | null
   } = {}
 ): PageRequestHookReturn<P extends 'double' ? T[] : T> => {
-  const { pageSize = 10, autoInit = true, listType = 'double', onBeforeSetList } = options
+  const {
+    pageSize = 10,
+    autoInit = true,
+    listType = 'double',
+    defaultList = null,
+    onBeforeSetList
+  } = options
 
-  const [list, setList] = useState<(P extends 'double' ? T[] : T)[]>([])
+  const [list, setList] = useState<(P extends 'double' ? T[] : T)[] | null>(defaultList)
   const [state, setState] = useSetState<PageState>({
     status: 'empty'
   })
@@ -54,6 +62,10 @@ export const usePageRequest = <T, P = 'double'>(
     if (!result) {
       return
     }
+    if ((!list || list.length === 0) && result.data.length === 0) {
+      setState({ status: 'empty' })
+      return
+    }
 
     if (result.data.length < pageSize) {
       setState({ status: 'done' })
@@ -63,6 +75,7 @@ export const usePageRequest = <T, P = 'double'>(
 
     if (listType === 'double') {
       _setList((prevList) => {
+        if (!prevList) prevList = []
         const newList = [...prevList, result.data]
         if (onBeforeSetList) {
           return onBeforeSetList(prevList, result.data)
@@ -71,6 +84,7 @@ export const usePageRequest = <T, P = 'double'>(
       })
     } else {
       _setList((prevList) => {
+        if (!prevList) prevList = []
         const newList = [...prevList, ...result.data]
         if (onBeforeSetList) {
           return onBeforeSetList(prevList, result.data)
@@ -92,5 +106,5 @@ export const usePageRequest = <T, P = 'double'>(
     setList([])
   }
 
-  return [list, next, state, _setList, reset]
+  return [list, next, state, _setList, reset, setState]
 }
