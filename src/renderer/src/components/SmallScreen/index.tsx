@@ -84,7 +84,7 @@ const SmallScreen: React.FC<SmallScreenProps> = ({
   if (status === 'empty' || !children) return renderBaseContaienr(emptyNode, styles['empty'])
 
   return (
-    <div style={style} className={`${styles.container} ${className}`} onScroll={handleScroll}>
+    <div style={style} className={`${className}`} onScroll={handleScroll}>
       {topNode}
       {children}
       {status !== 'done' ? loadNode : nomoreNode}

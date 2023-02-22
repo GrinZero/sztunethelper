@@ -1,7 +1,7 @@
 import { useCurrentDuty } from '@renderer/api'
 import { BaseCard, BaseElement } from '@renderer/components'
 const { Title } = BaseElement
-import { Rate } from '@arco-design/web-react'
+import { Rate, Image } from '@arco-design/web-react'
 
 const DutyCard = () => {
   const currentDuty = useCurrentDuty()
@@ -17,8 +17,8 @@ const DutyCard = () => {
         <div className="flex flex-col items-center justify-evenly max-h-full h-full">
           <p>{currentDuty?.desc}</p>
           <Rate allowHalf readonly value={currentDuty?.rate ?? 0} />
-          <img
-            className="object-cover rounded-[9px] mt-3 select-none"
+          <Image
+            className="object-cover rounded-[9px] mt-3 select-none overflow-hidden"
             width={180}
             height={180}
             src={currentDuty?.avatarUrl ?? ''}

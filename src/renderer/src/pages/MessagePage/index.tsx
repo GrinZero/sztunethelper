@@ -1,7 +1,8 @@
 import { Fragment, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useMailStorage, useDrawer } from '@renderer/hooks'
+import { useMailStorage, useDrawer, useModal } from '@renderer/hooks'
 import { SmallScreen } from '@renderer/components'
+import { Message, Rate } from '@arco-design/web-react'
 import {
   useTicketList,
   useCurrentDuty,
@@ -13,7 +14,6 @@ import {
   deleteTicket,
   TicketStatus
 } from '@renderer/api'
-import { Message } from '@arco-design/web-react'
 
 import TicketCard from './TicketCard'
 import MailCard from './MailCard'
@@ -137,9 +137,14 @@ const MessagePage = () => {
         })
   }
   const handleConsultClick = () => setDrawer(true)
-  const handleCloseTicket = async () => {
-    if (!currentTicket || currentTicket.status === TicketStatus.close) return
-    closeTicket(currentTicket.id)
+
+  const handleRateChange = async (value: number) => {
+    setRateModalVisible(false)
+    const closeInstance = Message.loading({
+      content: '正在提交...',
+      duration: 0
+    })
+    closeTicket(currentTicket!.id, value)
       .then((res) => {
         const { data } = res
         if (data.msg === 'ok') {
@@ -149,7 +154,8 @@ const MessagePage = () => {
                 if (item.id === currentTicket?.id) {
                   return {
                     ...item,
-                    status: TicketStatus.close
+                    status: TicketStatus.close,
+                    rate: value
                   }
                 }
                 return item
@@ -165,6 +171,26 @@ const MessagePage = () => {
       .catch((err) => {
         console.error(err)
       })
+      .finally(() => {
+        closeInstance()
+      })
+  }
+
+  const [rateModal, setRateModalVisible] = useModal({
+    title: '评价',
+    children: (
+      <div className={`w-full py-6 flex justify-center items-center`}>
+        <Rate
+          onChange={handleRateChange}
+          allowHalf
+          tooltips={['差劲', '差', '一般', '不错', '很棒']}
+        ></Rate>
+      </div>
+    )
+  })
+  const handleCloseTicket = () => {
+    if (!currentTicket || currentTicket.status === TicketStatus.close) return
+    setRateModalVisible(true)
   }
   const handleDeleteTicket = async (ticket) => {
     if (!ticket || ticket.status === TicketStatus.delete) return
@@ -245,6 +271,7 @@ const MessagePage = () => {
         />
       </div>
       {drawer}
+      {rateModal}
     </div>
   )
 }

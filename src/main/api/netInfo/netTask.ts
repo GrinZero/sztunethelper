@@ -18,36 +18,42 @@ apiStore.add('getNetTasks', async (): ApiResult<CheckNetTask[]> => {
   }
 })
 
-apiStore.add('runNetTask', async ({ id }: { id: CheckNetTask['id'] }): ApiResult<string> => {
-  const task = CheckNetTaskList.find((item) => item.id === id)
-  if (!task) {
+apiStore.add(
+  'runNetTask',
+  async ({ id, data }: { id: CheckNetTask['id']; data: any }): ApiResult<string> => {
+    const task = CheckNetTaskList.find((item) => item.id === id)
+    if (!task) {
+      return {
+        code: 404,
+        data: '任务不存在'
+      }
+    }
+    const { command, args } = task
+
     return {
-      code: 404,
-      data: '任务不存在'
+      code: 200,
+      data: await (async () => {
+        switch (command) {
+          case 'ping': {
+            if (args[0] === '内网网关') {
+              return await ping(data)
+            }
+            return await ping(args[0])
+          }
+          case 'ifconfig':
+            return await ifconfig()
+          case 'netstat': {
+            const result = await netstat()
+            return result
+          }
+          case 'arp':
+            return await arp()
+          case 'tracert':
+            return await tracert(args[0])
+          default:
+            return '未知命令'
+        }
+      })()
     }
   }
-  const { command, args } = task
-
-  return {
-    code: 200,
-    data: await (async () => {
-      //TODO:内网网关这个是动态args，还没写
-      switch (command) {
-        case 'ping':
-          return await ping(args[0])
-        case 'ifconfig':
-          return await ifconfig()
-        case 'netstat': {
-          const result = await netstat()
-          return result
-        }
-        case 'arp':
-          return await arp()
-        case 'tracert':
-          return await tracert(args[0])
-        default:
-          return '未知命令'
-      }
-    })()
-  }
-})
+)

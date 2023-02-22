@@ -13,6 +13,7 @@ import { login, getNetInfo, fetchPlatformList, offlinePlatform, connect } from '
 import type { Platform } from '@renderer/api'
 import { Account } from '@renderer/types'
 import { setNetInfo } from '@renderer/store'
+import connectSrc from '../../assets/mp4/connecting.mp4'
 
 const offlinePlatfromLine = async (link: string, account: Account) => {
   const res = await login(account)
@@ -219,9 +220,18 @@ const Main = () => {
         case 'offline':
           return status
         case 'logging':
-          return 'login...'
+          return 'loading...'
         case 'connect':
-          return 'connecting...'
+          return (
+            <video
+              autoPlay
+              loop
+              src={connectSrc}
+              width={360}
+              className="mix-blend-color-burn"
+              preload="auto"
+            ></video>
+          )
         default:
           return status
       }

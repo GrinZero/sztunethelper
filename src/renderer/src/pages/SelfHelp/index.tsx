@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useRouteMatch } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { pdf } from '@react-pdf/renderer'
 
 import { BaseElement, BasePopover, BaseButton, BaseCard, SmallScreen } from '@renderer/components'
 const { Title } = BaseElement
 
 import NetTaskList from './NetTaskList'
+import PDFDocument from './PDFDocument'
 
 import { getNetTasks, runNetTask } from '@renderer/api'
 import type { NetTask } from '@renderer/api'
@@ -25,6 +28,7 @@ const SelfHelp = () => {
 
   const [netTaskList, setNetTaskList] = useState<NetTask[]>(initList)
   const [netTaskResult, setNetTaskResult] = useState<NetTaskResult[] | null>(null)
+  const netInfo = useSelector((store: any) => store.netInfo)
 
   useEffect(() => {
     //TODO:该请求必定成功，所以最快写法，忽略了status，但是可以修补
@@ -34,9 +38,6 @@ const SelfHelp = () => {
   }, [])
 
   const handleGo = (item: NetTask) => {
-    if (item.type !== 'success') {
-      return
-    }
     const id = `netTaskResult-${item.id}`
     const ele = document.getElementById(id)
     if (ele) {
@@ -61,29 +62,58 @@ const SelfHelp = () => {
     }
 
     setNetTaskStatus(item.id, 'loading')
-    const result = await runNetTask(item.id).catch((err) => {
+    let result: { data: string; code: number } | void
+
+    const netTaskResult = await runNetTask({
+      id: item.id,
+      data: netInfo?.dns?.value?.[0]
+    }).catch((err) => {
       setNetTaskStatus(item.id, 'fail')
       console.error('runNetTask:error', err, item)
+      result = { data: err?.data as string, code: -1 }
     })
-    if (!result) return
+
+    if (netTaskResult) {
+      result = netTaskResult
+    }
+
     setNetTaskResult((prev) => {
       if (prev === null) {
-        return [{ id: item.id, content: result.data, title: item.title }]
+        return [{ id: item.id, content: result!.data, title: item.title }]
       }
       if (prev.some((task) => task.id === item.id)) {
         return prev.map((task) => {
           if (task.id === item.id) {
-            task.content = result.data
+            task.content = result!.data
           }
           return task
         })
       }
-      return [...prev, { id: item.id, content: result.data, title: item.title }]
+      return [...prev, { id: item.id, content: result!.data, title: item.title }]
     })
-    setNetTaskStatus(item.id, 'success')
+    netTaskResult && setNetTaskStatus(item.id, 'success')
     setTimeout(() => {
-      handleGo({ ...item, type: 'success' })
+      handleGo({ ...item })
     }, 100)
+  }
+
+  const handleDownload = async () => {
+    if (!netTaskResult) return
+    const ele = (
+      <PDFDocument
+        data={netTaskResult?.map((item) => ({
+          title: item.title,
+          content: item.content
+        }))}
+      />
+    )
+    const blob = await pdf(ele).toBlob()
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob as Blob)
+    link.download = `网络诊断报告-${new Date().format('yyyyMMdd_hhmmss')}.pdf`
+    link.target = '_blank'
+    link.rel = 'noopener noreferrer'
+    link.click()
   }
 
   return (
@@ -127,17 +157,17 @@ const SelfHelp = () => {
         <div className="flex flex-col w-full ml-4 overflow-hidden">
           <SmallScreen
             h={450}
-            className={`flex flex-col items-center w-full`}
+            className={`flex flex-col items-center w-full ${styles['small-screen']}`}
             status={'done'}
             nomoreNode={null}
           >
             {netTaskResult &&
-              netTaskResult.map((result) => {
+              netTaskResult.map((result, i) => {
                 return (
                   <BaseCard
                     scale="1"
                     title={result.title}
-                    className={`w-[97.5%] mb-3`}
+                    className={`w-[97.5%] mb-3 ${i === 0 ? 'mt-3' : ''}`}
                     key={result.id}
                     id={`netTaskResult-${result.id}`}
                     itemClassName={`overflow-hidden elipsis`}
@@ -150,7 +180,17 @@ const SelfHelp = () => {
                 )
               })}
           </SmallScreen>
-          <div className="flex flex-row mt-4">1234</div>
+          <div className="flex flex-row mt-4">
+            <BaseButton
+              theme="primary"
+              size="large"
+              className={`w-full`}
+              onClick={handleDownload}
+              disabled={netTaskResult === null}
+            >
+              下载
+            </BaseButton>
+          </div>
         </div>
       </div>
     </div>

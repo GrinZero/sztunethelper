@@ -1,7 +1,7 @@
 import React from 'react'
 import { BaseCard, BaseButton } from '@renderer/components'
 import { IconUser } from '@arco-design/web-react/icon'
-import { Tag } from '@arco-design/web-react'
+import { Rate, Tag } from '@arco-design/web-react'
 import { ComponentProps } from '@renderer/types'
 import type { TicketListItem } from '@renderer/api'
 
@@ -22,7 +22,7 @@ const MessageHeader: React.FC<MessageHeaderProps> = ({
   onClose,
   disabled = false
 }) => {
-  const { contactType, other, title, id } = ticket
+  const { contactType, other, title, id, rate } = ticket
   return (
     <BaseCard title={null} scale="1" border={false} className={`${className}`}>
       <div className={`w-full flex flex-row items-center justify-between`}>
@@ -45,6 +45,11 @@ const MessageHeader: React.FC<MessageHeaderProps> = ({
             <div className={'opacity-60 select-text'}>{`【${id}】${title}`}</div>
           </div>
         </div>
+        {rate !== -1 && (
+          <div className="flex flex-row items-center">
+            <Rate readonly value={rate} />
+          </div>
+        )}
         <div className="flex flex-row items-center">
           <BaseButton disabled={disabled} theme="danger" size="middle" onClick={onClose}>
             关闭工单

@@ -31,6 +31,8 @@ export const MessageEditor: React.FC<MessageEditorProps> = ({
   const [imageList, setImageList] = useState<UploadItem[]>([])
   const [fileList, setFileList] = useState<UploadItem[]>([])
 
+  const [dragging, setDragging] = useState(false)
+
   const imageEle =
     imageList.length === 0 ? null : (
       <div className="flex flex-row h-[72px]">
@@ -131,9 +133,73 @@ export const MessageEditor: React.FC<MessageEditorProps> = ({
     setImageList(newList)
   }
 
-  const handleFileUpload = (e: UploadItem[]) => {
-    setFileList(e)
+  const handleFileUpload = setFileList
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    console.info('drog')
+    e.preventDefault()
+    e.stopPropagation()
+    setDragging(false)
+
+    const df = e.dataTransfer
+    const files = df.files
+    const thisFileList = Array.from(files).map((file) => {
+      return {
+        name: file.name,
+        url: window.URL.createObjectURL(file),
+        originFile: file,
+        uid: `${Date.now()}${Math.random()}`
+      }
+    })
+
+    const imgList = thisFileList.filter((item) => item.originFile.type.startsWith('image/'))
+    const otherList = thisFileList.filter((item) => !item.originFile.type.startsWith('image/'))
+    if (imgList.length + imageList.length <= 3) {
+      setImageList([...imageList, ...imgList])
+    }
+    if (otherList.length + fileList.length <= 3) {
+      setFileList([...fileList, ...otherList])
+    }
   }
+
+  const countRef = useRef(0)
+  const onFileDrop = (e) => {
+    if (e.type === 'dragover') {
+      e.preventDefault()
+      e.stopPropagation()
+      return
+    }
+    if (e.type === 'drop') {
+      handleDrop(e)
+      return
+    }
+    if (e.type === 'dragenter') {
+      countRef.current++
+      if (countRef.current % 2) {
+        console.info('enter'), setDragging(true)
+      }
+      return
+    }
+    if (e.type === 'dragleave') {
+      countRef.current--
+      if (countRef.current % 2) {
+        console.info('level'), setDragging(false)
+        countRef.current = 0
+      }
+      return
+    }
+  }
+
+  const drapEle = dragging ? (
+    <div
+      className="cursor-grab h-full rounded-[14px] w-full inset-0 bg-gray-200 bg-opacity-50 flex items-center justify-center animate__animated animate__fadeIn animate__faster"
+      onDrop={handleDrop}
+    >
+      <div className="flex flex-col items-center justify-center">
+        <div className="text-2xl font-bold">松开鼠标</div>
+        <div className="text-gray-500">将文件拖拽到此处</div>
+      </div>
+    </div>
+  ) : null
 
   return (
     <div
@@ -178,8 +244,14 @@ export const MessageEditor: React.FC<MessageEditorProps> = ({
           </Upload>
         </div>
       </div>
-      <div className={`flex-1 ${styles['center-container']}`}>
-        {imageEle || fileEle || (
+      <div
+        className={`flex-1 relative ${styles['center-container']}`}
+        onDrop={onFileDrop}
+        onDragLeave={onFileDrop}
+        onDragEnter={onFileDrop}
+        onDragOver={onFileDrop}
+      >
+        {drapEle || imageEle || fileEle || (
           <TextArea
             className={`${styles.textarea}`}
             placeholder={enterType === 'ctrlEnter' ? '按Ctrl+Enter发送' : '按Enter发送'}

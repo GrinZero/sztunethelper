@@ -14,7 +14,7 @@ const CheckRow: React.FC<CheckRowProps> = ({ children, className = '', type, onC
   return (
     <div
       className={`flex items-center justify-between relative p-3 w-full cursor-pointer ${
-        type === 'success' ? 'group' : ''
+        ['success', 'fail'].includes(type) ? 'group' : ''
       } ${className}`}
       onClick={() => onClick?.(children)}
     >

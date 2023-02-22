@@ -9,14 +9,15 @@ export interface NetTask {
   args: string[]
   command: string
   type: StatusIconProps['type']
+  isDynamic?: boolean
 }
 
 async function getNetTasks() {
   return apiClient.send<ApiResult<NetTask[]>>('getNetTasks')
 }
 
-async function runNetTask(id: number | string) {
-  return apiClient.send<ApiResult<string>>('runNetTask', { id })
+async function runNetTask({ id, data }: { id: number | string; data: any }) {
+  return apiClient.send<ApiResult<string>>('runNetTask', { id, data })
 }
 
 export { getNetTasks, runNetTask }
