@@ -39,8 +39,11 @@ const MessageModule: React.FC<MessageModuleProps> = ({
     useTicketInfos()
 
   useEffect(() => {
-    if (!currentTicket) return
     resetInfos()
+    if (!currentTicket) {
+      return
+    }
+    setTicketInfos([])
     nextInfos(currentTicket.id)
   }, [currentTicket?.id])
 
@@ -151,6 +154,9 @@ const MessageModule: React.FC<MessageModuleProps> = ({
   const screenStatus = (() => {
     if (ticketInfos?.length === 0) {
       return 'done'
+    }
+    if (infoStatus !== 'done' && currentTicket) {
+      return 'ok'
     }
     return infoStatus
   })()

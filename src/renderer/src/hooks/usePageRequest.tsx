@@ -59,10 +59,13 @@ export const usePageRequest = <T, P = 'double'>(
       console.error('usePageRequest:fetch', err)
       setState({ status: 'error' })
     })
+
     if (!result) {
       return
     }
-    if ((!list || list.length === 0) && result.data.length === 0) {
+
+    if (!list && result.data.length === 0) {
+      _setList([])
       setState({ status: 'empty' })
       return
     }
@@ -103,7 +106,7 @@ export const usePageRequest = <T, P = 'double'>(
     state.status = 'empty'
     setState({ status: 'empty' })
     stateRef.current.page = -1
-    setList([])
+    setList(null)
   }
 
   return [list, next, state, _setList, reset, setState]

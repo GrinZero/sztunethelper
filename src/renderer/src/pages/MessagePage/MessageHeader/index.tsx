@@ -15,7 +15,7 @@ export interface MessageHeaderProps extends ComponentProps {
 }
 
 const MessageHeader: React.FC<MessageHeaderProps> = ({ className = '', ticket }) => {
-  const { contactType, other } = ticket
+  const { contactType, other, title, id } = ticket
   return (
     <BaseCard title={null} scale="1" border={false} className={`${className}`}>
       <div className={`w-full flex flex-row items-center justify-between`}>
@@ -35,7 +35,7 @@ const MessageHeader: React.FC<MessageHeaderProps> = ({ className = '', ticket })
                 {ContactTypeStore[contactType ?? 'other'][0]}
               </Tag>
             </div>
-            <div className={'opacity-60 select-text'}>{'-'}</div>
+            <div className={'opacity-60 select-text'}>{`【${id}】${title}`}</div>
           </div>
         </div>
         <div className="flex flex-row items-center">
