@@ -10,9 +10,10 @@ import { ContactTypeStore } from '../constants'
 interface HeaderCardProps extends ComponentProps {
   data: Duty | null
   onClick?: (duty?: Duty | null) => void
+  disabled?: boolean
 }
 
-const HeaderCard: React.FC<HeaderCardProps> = ({ data, className = '', onClick }) => {
+const HeaderCard: React.FC<HeaderCardProps> = ({ data, className = '', onClick, disabled }) => {
   return (
     <BaseCard title={null} scale="1" border={false} className={`${className}`}>
       <div className={`w-full flex flex-row items-center justify-between`}>
@@ -36,7 +37,12 @@ const HeaderCard: React.FC<HeaderCardProps> = ({ data, className = '', onClick }
           </div>
         </div>
         <div className="flex flex-row items-center">
-          <BaseButton theme="transparent" size="middle" onClick={() => onClick?.(data)}>
+          <BaseButton
+            theme="transparent"
+            size="middle"
+            onClick={() => onClick?.(data)}
+            disabled={disabled}
+          >
             咨询
           </BaseButton>
         </div>

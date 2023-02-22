@@ -11,6 +11,7 @@ export interface BaseButtonProps extends HTMLButtonProps {
   size?: 'small' | 'middle' | 'large'
   round?: 'round' | 'square' | 'circle' | 'none'
   status?: 'normal' | 'loading'
+  color?: string
 }
 
 const BaseButton: React.FC<BaseButtonProps> = ({
@@ -19,12 +20,14 @@ const BaseButton: React.FC<BaseButtonProps> = ({
   size = 'small',
   status = 'normal',
   className = '',
+  color,
   children,
   ...rest
 }) => {
   return (
     <button
       className={`flex base-button ${`base-button__${theme}`} ${`base-button__${round}`} ${`base-button__${size}`} ${className}`}
+      style={{ '--base-color': color } as any}
       {...rest}
     >
       {status === 'loading' ? <BaseLoading size={size} /> : children}

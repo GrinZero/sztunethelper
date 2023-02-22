@@ -12,9 +12,16 @@ import styles from './index.module.scss'
 export interface MessageHeaderProps extends ComponentProps {
   ticket: TicketListItem
   avatar: string | null
+  onClose?: () => void
+  disabled?: boolean
 }
 
-const MessageHeader: React.FC<MessageHeaderProps> = ({ className = '', ticket }) => {
+const MessageHeader: React.FC<MessageHeaderProps> = ({
+  className = '',
+  ticket,
+  onClose,
+  disabled = false
+}) => {
   const { contactType, other, title, id } = ticket
   return (
     <BaseCard title={null} scale="1" border={false} className={`${className}`}>
@@ -39,8 +46,8 @@ const MessageHeader: React.FC<MessageHeaderProps> = ({ className = '', ticket })
           </div>
         </div>
         <div className="flex flex-row items-center">
-          <BaseButton theme="transparent" size="middle">
-            咨询
+          <BaseButton disabled={disabled} theme="danger" size="middle" onClick={onClose}>
+            关闭工单
           </BaseButton>
         </div>
       </div>

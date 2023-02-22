@@ -25,6 +25,7 @@ const statusStore = {
 const TicketCard: React.FC<TicketCardProps> = ({ className = '', ticket, onDelete, onClick }) => {
   const { title, type, other, createTime, status, read, adminName } = ticket
   const nameFirst = (adminName[0] ?? '-').toUpperCase()
+
   return (
     <div
       className={`${styles['container']} ${statusStore[status]} group cursor-pointer ${className}`}
@@ -48,6 +49,7 @@ const TicketCard: React.FC<TicketCardProps> = ({ className = '', ticket, onDelet
         >
           {type}
         </Tag>
+        {status === TicketStatus.close && <span>已关闭</span>}
         <div className="flex flex-row items-center">
           {!read && <span className={`${styles.new}`}>New</span>}
           <span className="ml-2 opacity-70">{formatUsefulTime(createTime)}</span>
@@ -58,9 +60,12 @@ const TicketCard: React.FC<TicketCardProps> = ({ className = '', ticket, onDelet
         onOk={() => {
           onDelete?.(ticket)
         }}
+        position="right"
       >
         <div
-          className={`absolute hidden opacity-70 hover:opacity-100 group-hover:flex items-center justify-center ${styles['icon-close']}`}
+          className={`absolute hidden opacity-70 hover:opacity-100 ${
+            status === TicketStatus.close ? 'group-hover:flex' : ''
+          }  items-center justify-center ${styles['icon-close']}`}
           onClick={(e) => {
             e.stopPropagation()
           }}

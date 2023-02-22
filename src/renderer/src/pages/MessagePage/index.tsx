@@ -6,10 +6,12 @@ import {
   useTicketList,
   useCurrentDuty,
   TicketListItem,
-  Duty,
   AddTicketParams,
   addTicket,
-  readTicket
+  readTicket,
+  closeTicket,
+  deleteTicket,
+  TicketStatus
 } from '@renderer/api'
 import { Message } from '@arco-design/web-react'
 
@@ -126,21 +128,79 @@ const MessagePage = () => {
               )
               return newList
             })
+          } else {
+            Message.error(data?.msg ?? 'unknown: read ticket error')
           }
         })
         .catch((err) => {
           console.error(err)
         })
   }
-  const handleConsultClick = (duty?: Duty | null) => {
-    if (!duty) return
-    setDrawer(true)
+  const handleConsultClick = () => setDrawer(true)
+  const handleCloseTicket = async () => {
+    if (!currentTicket || currentTicket.status === TicketStatus.close) return
+    closeTicket(currentTicket.id)
+      .then((res) => {
+        const { data } = res
+        if (data.msg === 'ok') {
+          setTickList((prev) => {
+            const newList = prev.map((page) =>
+              page.map((item) => {
+                if (item.id === currentTicket?.id) {
+                  return {
+                    ...item,
+                    status: TicketStatus.close
+                  }
+                }
+                return item
+              })
+            )
+            return newList
+          })
+          setCurrentTicket(null)
+        } else if (data.state < 0) {
+          Message.error(data.msg)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+  const handleDeleteTicket = async (ticket) => {
+    if (!ticket || ticket.status === TicketStatus.delete) return
+    deleteTicket(ticket.id)
+      .then((res) => {
+        const { data } = res
+        if (data.msg === 'ok') {
+          setTickList((prev) => {
+            const newList = prev.map((page) => page.filter((item) => item.id !== ticket?.id))
+            return newList
+          })
+          setCurrentTicket(null)
+        } else if (data.state < 0) {
+          Message.error(data.msg)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   const headerEle = currentTicket ? (
-    <MessageHeader className={styles['header-card']} ticket={currentTicket} avatar={null} />
+    <MessageHeader
+      className={styles['header-card']}
+      ticket={currentTicket}
+      avatar={null}
+      onClose={handleCloseTicket}
+      disabled={currentTicket.status === TicketStatus.close}
+    />
   ) : (
-    <HeaderCard className={styles['header-card']} data={duty} onClick={handleConsultClick} />
+    <HeaderCard
+      className={styles['header-card']}
+      data={duty}
+      onClick={handleConsultClick}
+      disabled={!duty}
+    />
   )
 
   const ele =
@@ -156,6 +216,7 @@ const MessagePage = () => {
                 }`}
                 ticket={ticket}
                 onClick={handleTicketCardClick}
+                onDelete={handleDeleteTicket}
               />
             ))}
           </Fragment>

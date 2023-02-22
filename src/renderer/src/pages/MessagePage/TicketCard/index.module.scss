@@ -54,22 +54,6 @@
   .new {
     color: var(--theme-main-color);
   }
-
-  .close {
-    filter: brightness(0.5);
-    &::after {
-      content: '已关闭';
-      position: absolute;
-      right: 12px;
-      top: 12px;
-      padding: 2px 6px;
-      font-size: 12px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color);
-      background: var(--theme-bg-color);
-    }
-  }
-
   .icon-close {
     width: 36px;
     height: 36px;
@@ -79,5 +63,16 @@
     z-index: 1;
     right: 12px;
     top: 12px;
+  }
+}
+
+.close {
+  filter: brightness(0.5);
+  &::after {
+    position: absolute;
+    font-size: 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: var(--theme-bg-color);
   }
 }

@@ -24,6 +24,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
     : messageList.map((item) => {
         return (
           <MessageItem
+            className={`w-[97%]`}
             data={item}
             sender={sender}
             key={item.id}
@@ -34,7 +35,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
 
   return (
     <SmallScreen
-      className={'flex flex-col-reverse'}
+      className={'flex flex-col-reverse items-center'}
       overflow="scroll"
       onTop={onTop}
       nomoreNode={
