@@ -1,12 +1,9 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react'
-import { Input, Upload, Image } from '@arco-design/web-react'
+import { Upload, Image } from '@arco-design/web-react'
 import type { UploadItem } from '@arco-design/web-react/es/Upload/interface'
-import type { RefInputType } from '@arco-design/web-react/es/Input/interface'
 import { IconClose } from '@arco-design/web-react/icon'
 
-const { TextArea } = Input
-
-import { BaseButton, FileIcon } from '@renderer/components'
+import { BaseButton, FileIcon, BaseTextArea } from '@renderer/components'
 import type { ComponentProps } from '@renderer/types'
 import type { IMMessage } from '@renderer/api'
 
@@ -26,7 +23,7 @@ export interface MessageEditorRef {
   focus: () => void
   blur: () => void
   clear: () => void
-  getTextArea: () => RefInputType | null
+  current: HTMLTextAreaElement | null
 }
 
 export const MessageEditor: React.ForwardRefRenderFunction<
@@ -34,7 +31,7 @@ export const MessageEditor: React.ForwardRefRenderFunction<
   MessageEditorProps
 > = ({ className = '', disable = false, onSend, enterType = 'ctrlEnter' }, ref) => {
   const valueRef = useRef('')
-  const textAreaRef = useRef<RefInputType>(null)
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   const [imageList, setImageList] = useState<UploadItem[]>([])
   const [fileList, setFileList] = useState<UploadItem[]>([])
@@ -104,7 +101,7 @@ export const MessageEditor: React.ForwardRefRenderFunction<
       const res = await result
       if (res && msg.type === 'text') {
         valueRef.current = ''
-        textAreaRef.current!.dom.value = ''
+        textAreaRef.current!.value = ''
         textAreaRef.current!.focus()
       }
       return false
@@ -121,7 +118,7 @@ export const MessageEditor: React.ForwardRefRenderFunction<
     const result = await _onSend?.({ type: 'text', data: content })
     if (result) {
       valueRef.current = ''
-      textAreaRef.current!.dom.value = ''
+      textAreaRef.current!.value = ''
       textAreaRef.current!.focus()
     }
   }
@@ -131,7 +128,7 @@ export const MessageEditor: React.ForwardRefRenderFunction<
       const result = await _onSend?.({ type: 'text', data: content })
       if (result) {
         valueRef.current = ''
-        textAreaRef.current!.dom.value = ''
+        textAreaRef.current!.value = ''
         textAreaRef.current!.focus()
       }
       return
@@ -230,7 +227,7 @@ export const MessageEditor: React.ForwardRefRenderFunction<
     clear: () => {
       setImageList([])
       setFileList([])
-      textAreaRef.current!.dom.value = ''
+      textAreaRef.current!.value = ''
     },
     focus: () => {
       textAreaRef.current!.focus()
@@ -238,9 +235,7 @@ export const MessageEditor: React.ForwardRefRenderFunction<
     blur: () => {
       textAreaRef.current!.blur()
     },
-    getTextArea: () => {
-      return textAreaRef.current
-    }
+    current: textAreaRef.current
   }))
 
   return (
@@ -294,13 +289,13 @@ export const MessageEditor: React.ForwardRefRenderFunction<
         onDragOver={onFileDrop}
       >
         {drapEle || imageEle || fileEle || (
-          <TextArea
+          <BaseTextArea
             className={`${styles.textarea}`}
             placeholder={enterType === 'ctrlEnter' ? '按Ctrl+Enter发送' : '按Enter发送'}
             ref={textAreaRef}
             maxLength={1000}
-            onPressEnter={handlePressEnter}
-            onChange={(v) => (valueRef.current = v)}
+            onFinished={handlePressEnter}
+            onChange={(v) => (valueRef.current = v.target.value)}
           />
         )}
       </div>

@@ -17,5 +17,6 @@ export type HTMLSpanProps = ComponentProps & React.HTMLAttributes<HTMLSpanElemen
 export type HTMLAnchorProps = ComponentProps & React.HTMLAttributes<HTMLAnchorElement>
 
 export type HTMLInputProps = ComponentProps & React.InputHTMLAttributes<HTMLInputElement>
+export type HTMLTextAreaProps = ComponentProps & React.TextareaHTMLAttributes<HTMLTextAreaElement>
 
 export type HTMLButtonProps = ComponentProps & React.ButtonHTMLAttributes<HTMLButtonElement>

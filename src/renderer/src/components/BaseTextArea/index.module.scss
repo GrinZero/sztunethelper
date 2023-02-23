@@ -1,0 +1,17 @@
+.base-textarea {
+  outline: none;
+  border: 1px solid;
+  border-color: var(--border-color);
+  background-color: var(--content-bg);
+  transition: 0.32s ease background-color, 0.32s ease border-color;
+  padding: 6px 8px;
+  &::placeholder {
+    color: var(--placeholder-color);
+  }
+  &:hover {
+    background-color: var(--content-bg-2);
+  }
+  &:focus {
+    border-color: var(--lives-blue);
+  }
+}
