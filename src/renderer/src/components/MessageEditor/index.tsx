@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react'
 import { Input, Upload, Image } from '@arco-design/web-react'
 import type { UploadItem } from '@arco-design/web-react/es/Upload/interface'
 import type { RefInputType } from '@arco-design/web-react/es/Input/interface'
@@ -16,15 +16,23 @@ export interface MessageEditorProps extends ComponentProps {
   disable?: boolean
   enterType?: 'ctrlEnter'
   //TODO:'enter'下次再做
-  onSend?: (msg: { type: IMMessage['type']; data: string | UploadItem[] }) => Promise<void> | void
+  onSend?: (msg: {
+    type: IMMessage['type']
+    data: string | UploadItem[]
+  }) => Promise<boolean | void> | void
 }
 
-export const MessageEditor: React.FC<MessageEditorProps> = ({
-  className = '',
-  disable = false,
-  onSend,
-  enterType = 'ctrlEnter'
-}) => {
+export interface MessageEditorRef {
+  focus: () => void
+  blur: () => void
+  clear: () => void
+  getTextArea: () => RefInputType | null
+}
+
+export const MessageEditor: React.ForwardRefRenderFunction<
+  MessageEditorRef | null,
+  MessageEditorProps
+> = ({ className = '', disable = false, onSend, enterType = 'ctrlEnter' }, ref) => {
   const valueRef = useRef('')
   const textAreaRef = useRef<RefInputType>(null)
 
@@ -90,24 +98,42 @@ export const MessageEditor: React.FC<MessageEditorProps> = ({
       </div>
     )
 
-  const handlePressEnter = (e) => {
+  const _onSend = async (msg: { type: IMMessage['type']; data: string | UploadItem[] }) => {
+    const result = onSend?.(msg)
+    if (result?.then) {
+      const res = await result
+      if (res && msg.type === 'text') {
+        valueRef.current = ''
+        textAreaRef.current!.dom.value = ''
+        textAreaRef.current!.focus()
+      }
+      return false
+    }
+    return true
+  }
+
+  const handlePressEnter = async (e) => {
     const content = e.target.value
     valueRef.current = content
     if (!(content && enterType === 'ctrlEnter' && e.ctrlKey)) {
       return
     }
-    onSend?.({ type: 'text', data: content })
-    valueRef.current = ''
-    textAreaRef.current!.dom.value = ''
-    textAreaRef.current!.focus()
-  }
-  const handleButtonClick = () => {
-    const content = valueRef.current
-    if (content) {
-      onSend?.({ type: 'text', data: content })
+    const result = await _onSend?.({ type: 'text', data: content })
+    if (result) {
       valueRef.current = ''
       textAreaRef.current!.dom.value = ''
       textAreaRef.current!.focus()
+    }
+  }
+  const handleButtonClick = async () => {
+    const content = valueRef.current
+    if (content) {
+      const result = await _onSend?.({ type: 'text', data: content })
+      if (result) {
+        valueRef.current = ''
+        textAreaRef.current!.dom.value = ''
+        textAreaRef.current!.focus()
+      }
       return
     }
 
@@ -135,7 +161,6 @@ export const MessageEditor: React.FC<MessageEditorProps> = ({
 
   const handleFileUpload = setFileList
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    console.info('drog')
     e.preventDefault()
     e.stopPropagation()
     setDragging(false)
@@ -200,6 +225,23 @@ export const MessageEditor: React.FC<MessageEditorProps> = ({
       </div>
     </div>
   ) : null
+
+  useImperativeHandle(ref, () => ({
+    clear: () => {
+      setImageList([])
+      setFileList([])
+      textAreaRef.current!.dom.value = ''
+    },
+    focus: () => {
+      textAreaRef.current!.focus()
+    },
+    blur: () => {
+      textAreaRef.current!.blur()
+    },
+    getTextArea: () => {
+      return textAreaRef.current
+    }
+  }))
 
   return (
     <div
@@ -271,4 +313,4 @@ export const MessageEditor: React.FC<MessageEditorProps> = ({
   )
 }
 
-export default MessageEditor
+export default forwardRef(MessageEditor)

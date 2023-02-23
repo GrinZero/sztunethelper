@@ -31,5 +31,6 @@ export const fetchTicketList = async (page: number) => {
   return result
 }
 export function useTicketList() {
-  return usePageRequest<TicketListItem>(fetchTicketList)
+  const data = usePageRequest<TicketListItem>(fetchTicketList)
+  return data
 }

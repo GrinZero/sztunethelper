@@ -37,6 +37,15 @@ export const useTicketSocket: TicketSocketHook = (props = {}) => {
     const socket = createSocket()
     socket.connect()
     socketRef.current = socket
+    return () => {
+      socket.disconnect()
+      if (socketRef.current) socketRef.current.disconnect()
+    }
+  }, [])
+
+  useEffect(() => {
+    const socket = socketRef.current
+    if (!socket) return
     socket.on('send', (data: ServerTicket) => {
       onReceive?.({
         status: 'success',
@@ -44,10 +53,9 @@ export const useTicketSocket: TicketSocketHook = (props = {}) => {
       })
     })
     return () => {
-      socket.disconnect()
-      if (socketRef.current) socketRef.current.disconnect()
+      socket.off('send')
     }
-  }, [])
+  }, [socketRef.current, onReceive])
 
   const join = async (id: number | string | null) => {
     return new Promise((resolve, reject) => {

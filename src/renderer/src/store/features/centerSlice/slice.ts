@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import { fetchCurrentDutyThunk } from './thunk'
 
 const initialState: CenterState = {
-  currentDuty: null
+  currentDuty: null,
+  ticketList: null
 }
 
 export const centerSlice = createSlice<CenterState, CenterReducer, 'center'>({
@@ -12,6 +13,9 @@ export const centerSlice = createSlice<CenterState, CenterReducer, 'center'>({
   reducers: {
     setCurrentDuty: (state, action) => {
       state.currentDuty = action.payload
+    },
+    setTicketList: (state, action) => {
+      state.ticketList = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -28,7 +32,7 @@ export const centerSlice = createSlice<CenterState, CenterReducer, 'center'>({
   }
 })
 
-export const { setCurrentDuty } = centerSlice.actions
+export const { setCurrentDuty, setTicketList } = centerSlice.actions
 
 // 默认导出
 export default centerSlice.reducer

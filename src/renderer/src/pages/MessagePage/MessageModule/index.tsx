@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { Message } from '@arco-design/web-react'
-import { MessageEditor } from '@renderer/components'
+import { MessageEditor, MessageEditorRef } from '@renderer/components'
 import { useSelector } from 'react-redux'
 import { CenterState } from '@renderer/store'
 import {
@@ -11,7 +11,8 @@ import {
   TicketContent,
   sendTicketAttachments,
   Duty,
-  SocketMessage
+  SocketMessage,
+  IMMessageCummunication
 } from '@renderer/api'
 import type { ComponentProps } from '@renderer/types'
 import styles from './index.module.scss'
@@ -35,6 +36,7 @@ const MessageModule: React.FC<MessageModuleProps> = ({
   sender,
   onStartChat
 }) => {
+  const editorRef = useRef<MessageEditorRef>(null)
   const [ticketInfos, nextInfos, { status: infoStatus }, setTicketInfos, resetInfos] =
     useTicketInfos()
 
@@ -48,10 +50,42 @@ const MessageModule: React.FC<MessageModuleProps> = ({
   }, [currentTicket?.id])
 
   const sendingList = useRef<SendingMessage[]>([])
+  const handleReceive = ({ status, data }: IMMessageCummunication) => {
+    switch (status) {
+      case 'success':
+        {
+          const localID = (data as { localID: string | number }).localID
+          const index = sendingList.current.findIndex((item) => item.id === localID)
+          if (index === -1) {
+            setTicketInfos((prev) => {
+              return [data as TicketContent, ...prev]
+            })
+          } else {
+            setTicketInfos((item) => {
+              return item.map((subItem) => {
+                if (subItem.id === localID) {
+                  sendingList.current = sendingList.current.filter((item) => item.id !== localID)
+                  return {
+                    ...subItem,
+                    ...(data as TicketContent)
+                  }
+                }
+                return subItem
+              })
+            })
+          }
+        }
+        break
+      case 'error':
+        Message.error('接收失败')
+        break
+    }
+  }
+
   const [joinRoom, sendMsg] = useTicketSocket({
     onSend: ({ status, data }) => {
       switch (status) {
-        case 'sending':
+        case 'sending': {
           setTicketInfos((prev) => {
             sendingList.current.push({
               ...(data as IMMessage),
@@ -68,53 +102,19 @@ const MessageModule: React.FC<MessageModuleProps> = ({
             return [mockTicket as TicketContent, ...prev]
           })
           break
+        }
         case 'error':
           Message.error('发送失败')
           break
       }
     },
-    onReceive: ({ status, data }) => {
-      switch (status) {
-        case 'success':
-          {
-            const localID = (data as { localID: string | number }).localID
-            const index = sendingList.current.findIndex((item) => item.id === localID)
-            if (index === -1) {
-              setTicketInfos((prev) => {
-                return [data as TicketContent, ...prev]
-              })
-            } else {
-              setTicketInfos((item) => {
-                return item.map((subItem) => {
-                  if (subItem.id === localID) {
-                    sendingList.current = sendingList.current.filter((item) => item.id !== localID)
-                    return {
-                      ...subItem,
-                      ...(data as TicketContent)
-                    }
-                  }
-                  return subItem
-                })
-              })
-            }
-          }
-          break
-        case 'error':
-          Message.error('接收失败')
-          break
-      }
-    }
+    onReceive: handleReceive
   })
 
   useEffect(() => {
     if (!currentTicket) return
     joinRoom(currentTicket.id)
       .then((res) => {
-        // if (ticketInfos.length === 0) {
-        //   setInfoStatus({
-        //     status: 'done'
-        //   })
-        // }
         const result = res as SocketMessage
         const { uploadToken } = result.data
         sessionStorage.setItem('uploadToken', uploadToken as string)
@@ -126,6 +126,17 @@ const MessageModule: React.FC<MessageModuleProps> = ({
   }, [currentTicket])
 
   const { currentDuty } = useSelector((state: any) => state.center) as CenterState
+
+  const screenStatus = (() => {
+    if (ticketInfos?.length === 0) {
+      return 'done'
+    }
+    if (infoStatus !== 'done' && currentTicket) {
+      return 'ok'
+    }
+    return infoStatus
+  })()
+
   const handleSumbit = async (msg: { type: IMMessage['type']; data: string | UploadItem[] }) => {
     const localID = Date.now() + Math.random()
     if (msg.type === 'text') {
@@ -133,7 +144,7 @@ const MessageModule: React.FC<MessageModuleProps> = ({
         ...msg,
         id: localID
       } as IMMessage)
-      return
+      return true
     }
     const { id, title, type } = currentTicket!
     const toMail = (currentDuty as Duty)!.mail
@@ -149,17 +160,16 @@ const MessageModule: React.FC<MessageModuleProps> = ({
       })
     })
     await Promise.all(sendMsgTasks)
+    return true
   }
-
-  const screenStatus = (() => {
-    if (ticketInfos?.length === 0) {
-      return 'done'
-    }
-    if (infoStatus !== 'done' && currentTicket) {
-      return 'ok'
-    }
-    return infoStatus
-  })()
+  const editorEle = (
+    <MessageEditor
+      className={`pt-3 h-[32%]`}
+      onSend={handleSumbit}
+      disable={!currentTicket}
+      ref={editorRef}
+    />
+  )
 
   return (
     <div className={`${styles.container} h-full ${className}`}>
@@ -173,7 +183,7 @@ const MessageModule: React.FC<MessageModuleProps> = ({
         sender={sender}
         onTop={() => nextInfos(currentTicket?.id)}
       />
-      <MessageEditor className={`pt-3 h-[32%]`} onSend={handleSumbit} disable={!currentTicket} />
+      {editorEle}
     </div>
   )
 }

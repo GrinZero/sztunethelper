@@ -1,8 +1,10 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useMailStorage, useDrawer, useModal } from '@renderer/hooks'
+import { useDispatch, useSelector } from 'react-redux'
 import { SmallScreen } from '@renderer/components'
 import { Message, Rate } from '@arco-design/web-react'
+import { setTicketList as setTicketListAction } from '@renderer/store'
 import {
   useTicketList,
   useCurrentDuty,
@@ -26,9 +28,17 @@ import styles from './index.module.scss'
 
 const MessagePage = () => {
   const history = useHistory()
+  const dispatch = useDispatch()
   const duty = useCurrentDuty()
   const mailConfig = useMailStorage()
   const [list, next, { status }, setTickList] = useTicketList()
+  const { ticketList } = useSelector((state: any) => state.center)
+  useEffect(() => {
+    dispatch(setTicketListAction(list))
+  }, [list])
+  useEffect(() => {
+    setTickList(ticketList)
+  }, [ticketList])
 
   const [currentTicket, setCurrentTicket] = useState<TicketListItem | null>(null)
 
@@ -146,6 +156,7 @@ const MessagePage = () => {
     })
     closeTicket(currentTicket!.id, value)
       .then((res) => {
+        closeInstance()
         const { data } = res
         if (data.msg === 'ok') {
           setTickList((prev) => {
@@ -170,8 +181,6 @@ const MessagePage = () => {
       })
       .catch((err) => {
         console.error(err)
-      })
-      .finally(() => {
         closeInstance()
       })
   }
