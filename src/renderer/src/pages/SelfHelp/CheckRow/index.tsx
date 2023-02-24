@@ -21,7 +21,7 @@ const CheckRow: React.FC<CheckRowProps> = ({ children, className = '', type, onC
       <span>{children}</span>
       <StatusIcon type={type} />
       <i
-        className="p-2 absolute right-8 opacity-0 group-hover:opacity-100"
+        className="p-2 absolute right-8 invisible group-hover:visible"
         onClick={(e) => {
           e.stopPropagation()
           onGo?.(children)

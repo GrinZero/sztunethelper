@@ -37,8 +37,14 @@ const MessageModule: React.FC<MessageModuleProps> = ({
   onStartChat
 }) => {
   const editorRef = useRef<MessageEditorRef>(null)
-  const [ticketInfos, nextInfos, { status: infoStatus }, setTicketInfos, resetInfos] =
-    useTicketInfos()
+  const [
+    ticketInfos,
+    nextInfos,
+    { status: infoStatus },
+    setTicketInfos,
+    resetInfos,
+    setInfosStatus
+  ] = useTicketInfos()
 
   useEffect(() => {
     resetInfos()
@@ -56,6 +62,9 @@ const MessageModule: React.FC<MessageModuleProps> = ({
         {
           const localID = (data as { localID: string | number }).localID
           const index = sendingList.current.findIndex((item) => item.id === localID)
+          if ((ticketInfos?.length ?? 0) === 0) {
+            setInfosStatus({ status: 'done' })
+          }
           if (index === -1) {
             setTicketInfos((prev) => {
               return [data as TicketContent, ...prev]

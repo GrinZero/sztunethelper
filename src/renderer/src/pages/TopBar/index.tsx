@@ -53,7 +53,9 @@ const TopBar: React.FC<TopBarProps> = ({ type }) => {
   const handleThemeChange = (newTheme: string) => dispatch(setTheme(newTheme as 'light' | 'dark'))
 
   const [focus, setFocus] = useState(false)
-  const handleSearchBoxFocus = () => setFocus(true)
+  // TODO： 暂未开放
+  // const handleSearchBoxFocus = () => setFocus(true)
+  const handleSearchBoxFocus = () => setFocus(false)
   const handleSearchBoxBlur = () => setFocus(false)
 
   const menuRef = useRef<{ setCurrent: (i: number) => void }>(null)
@@ -108,6 +110,7 @@ const TopBar: React.FC<TopBarProps> = ({ type }) => {
             ? 'w-full max-w-[600px] m-auto transition-[max-width] duration-[.36s]'
             : 'w-full max-w-[375px] transition-none'
         }
+        disabled={true}
         onFocus={handleSearchBoxFocus}
         onBlur={handleSearchBoxBlur}
       />

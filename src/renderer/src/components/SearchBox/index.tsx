@@ -6,13 +6,14 @@ import type { ComponentProps } from '@renderer/types'
 interface SearchBoxProps extends ComponentProps {
   onFinished?: (val: string) => void
   onBlur?: (val: React.FocusEvent) => void
+  disabled?: boolean
   [x: string]: unknown
 }
 
 type SearchBoxRef = HTMLInputElement | null
 
 const SearchBox: React.ForwardRefRenderFunction<SearchBoxRef, SearchBoxProps> = (
-  { className = '', onFinished, onBlur, ...rest },
+  { className = '', onFinished, onBlur, disabled, ...rest },
   ref
 ) => {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -40,7 +41,10 @@ const SearchBox: React.ForwardRefRenderFunction<SearchBoxRef, SearchBoxProps> = 
         onBlur={handleFinished}
         onKeyDown={handleKeyDown}
         ref={inputRef}
-        className={`w-full h-full border-none outline-none rounded transition-shadow duration-[.36s]`}
+        className={`w-full h-full border-none outline-none rounded transition-shadow duration-[.36s] ${
+          disabled ? 'cursor-not-allowed' : ''
+        }`}
+        disabled={disabled}
         {...rest}
       />
     </div>
