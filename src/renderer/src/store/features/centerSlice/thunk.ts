@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { fetchCurrentDuty } from '@renderer/api'
+import { fetchBaseData } from '@renderer/api'
 
-export const fetchCurrentDutyThunk = createAsyncThunk('center/fetchCurrentDuty', async () => {
-  const res = await fetchCurrentDuty()
+export const fetchCurrentBaseDataThunk = createAsyncThunk('center/fetchBaseData', async () => {
+  const res = await fetchBaseData()
   const data = res.data?.data
   if (data) {
     return data

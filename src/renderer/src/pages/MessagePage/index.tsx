@@ -7,7 +7,6 @@ import { Message, Rate } from '@arco-design/web-react'
 import { setTicketList as setTicketListAction } from '@renderer/store'
 import {
   useTicketList,
-  useCurrentDuty,
   TicketListItem,
   AddTicketParams,
   addTicket,
@@ -29,10 +28,9 @@ import styles from './index.module.scss'
 const MessagePage = () => {
   const history = useHistory()
   const dispatch = useDispatch()
-  const duty = useCurrentDuty()
   const mailConfig = useMailStorage()
   const [list, next, { status }, setTickList] = useTicketList()
-  const { ticketList } = useSelector((state: any) => state.center)
+  const { ticketList, currentDuty: duty } = useSelector((state: any) => state.center)
   useEffect(() => {
     dispatch(setTicketListAction(list))
   }, [list])

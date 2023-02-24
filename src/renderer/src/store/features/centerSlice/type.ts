@@ -3,6 +3,12 @@ import type { Duty, TicketListItem } from '@renderer/api'
 export interface CenterState {
   currentDuty: Duty | null | 'loading'
   ticketList: null | TicketListItem[][]
+  bannerList: Array<{ id: number; title: string; url: string }>
+  notice: {
+    content: string
+    title: string
+    overdueTime: number
+  } | null
 }
 
 export interface CenterReducer {

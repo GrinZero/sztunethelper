@@ -1,10 +1,12 @@
 import type { CenterState, CenterReducer } from './type'
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchCurrentDutyThunk } from './thunk'
+import { fetchCurrentBaseDataThunk } from './thunk'
 
 const initialState: CenterState = {
   currentDuty: null,
-  ticketList: null
+  ticketList: null,
+  bannerList: [],
+  notice: null
 }
 
 export const centerSlice = createSlice<CenterState, CenterReducer, 'center'>({
@@ -20,13 +22,15 @@ export const centerSlice = createSlice<CenterState, CenterReducer, 'center'>({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCurrentDutyThunk.pending, (state) => {
+      .addCase(fetchCurrentBaseDataThunk.pending, (state) => {
         state.currentDuty = 'loading'
       })
-      .addCase(fetchCurrentDutyThunk.fulfilled, (state, action) => {
-        state.currentDuty = action.payload
+      .addCase(fetchCurrentBaseDataThunk.fulfilled, (state, action) => {
+        state.currentDuty = action.payload?.duty ?? null
+        state.bannerList = action.payload?.banner ?? []
+        state.notice = action.payload?.notice ?? null
       })
-      .addCase(fetchCurrentDutyThunk.rejected, (state) => {
+      .addCase(fetchCurrentBaseDataThunk.rejected, (state) => {
         state.currentDuty = null
       })
   }

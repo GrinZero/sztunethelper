@@ -14,6 +14,8 @@ import type { Platform } from '@renderer/api'
 import { Account } from '@renderer/types'
 import { setNetInfo } from '@renderer/store'
 import connectSrc from '../../assets/mp4/connecting.mp4'
+import loginSrc from '../../assets/mp4/logging.mp4'
+import offlineSrc from '../../assets/image/no-net.svg'
 
 const offlinePlatfromLine = async (link: string, account: Account) => {
   const res = await login(account)
@@ -218,9 +220,18 @@ const Main = () => {
     const content = (() => {
       switch (status) {
         case 'offline':
-          return status
+          return <img src={offlineSrc} width={270} />
         case 'logging':
-          return 'loading...'
+          return (
+            <video
+              autoPlay
+              loop
+              src={loginSrc}
+              width={360}
+              className="mix-blend-multiply"
+              preload="auto"
+            ></video>
+          )
         case 'connect':
           return (
             <video

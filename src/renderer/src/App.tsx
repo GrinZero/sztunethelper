@@ -13,12 +13,14 @@ import { TopBar, Main, SelfHelp, Login, Setting, AboutUS, MessagePage, MailConfi
 import { useEffect } from 'react'
 import store, { initAccount } from './store'
 import { useConfig } from './hooks'
+import { useBaseData } from './api'
 
 const App = () => {
   useEffect(() => {
     store.dispatch(initAccount())
   }, [])
   useConfig()
+  useBaseData()
 
   return (
     <Router>
