@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Message } from '@arco-design/web-react'
 import { MessageEditor, MessageEditorRef } from '@renderer/components'
 import { useSelector } from 'react-redux'
@@ -91,6 +91,7 @@ const MessageModule: React.FC<MessageModuleProps> = ({
     }
   }
 
+  const [joinStatus, setJoinStatus] = useState<boolean>(false)
   const [joinRoom, sendMsg] = useTicketSocket({
     onSend: ({ status, data }) => {
       switch (status) {
@@ -122,16 +123,25 @@ const MessageModule: React.FC<MessageModuleProps> = ({
 
   useEffect(() => {
     if (!currentTicket) return
+    const id = setTimeout(() => {
+      setJoinStatus(false)
+    }, 200)
     joinRoom(currentTicket.id)
       .then((res) => {
+        clearTimeout(id)
+        setJoinStatus(true)
         const result = res as SocketMessage
         const { uploadToken } = result.data
         sessionStorage.setItem('uploadToken', uploadToken as string)
         onStartChat?.(currentTicket)
       })
       .catch((err) => {
+        setJoinStatus(false)
         console.error(err)
       })
+    return () => {
+      clearTimeout(id)
+    }
   }, [currentTicket])
 
   const { currentDuty } = useSelector((state: any) => state.center) as CenterState
@@ -175,7 +185,7 @@ const MessageModule: React.FC<MessageModuleProps> = ({
     <MessageEditor
       className={`pt-3 h-[32%]`}
       onSend={handleSumbit}
-      disable={!currentTicket}
+      disable={!currentTicket || !joinStatus}
       ref={editorRef}
     />
   )

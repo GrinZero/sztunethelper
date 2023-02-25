@@ -11,7 +11,7 @@ import { HostState, setHost, setHosts } from '@renderer/store'
 import { submitSave } from './helpers'
 
 import { debounce, getHostsContent } from '@renderer/utils'
-import { Message } from '@arco-design/web-react'
+// import { Message } from '@arco-design/web-react'
 
 const Setting = () => {
   const dispatch = useDispatch()
@@ -32,7 +32,7 @@ const Setting = () => {
       return item
     })
 
-    const result = await submitSave(newHosts, () => Message.success('修改成功'))
+    const result = await submitSave(newHosts)
     if (result) {
       dispatch(setHosts(result))
       dispatch(setHost(!host ? null : { ...host, content: val ?? '' }))

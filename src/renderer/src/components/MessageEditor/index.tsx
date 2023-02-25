@@ -294,7 +294,7 @@ export const MessageEditor: React.ForwardRefRenderFunction<
             placeholder={enterType === 'ctrlEnter' ? '按Ctrl+Enter发送' : '按Enter发送'}
             ref={textAreaRef}
             maxLength={1000}
-            onFinished={handlePressEnter}
+            onKeyDown={handlePressEnter}
             onChange={(v) => (valueRef.current = v.target.value)}
           />
         )}

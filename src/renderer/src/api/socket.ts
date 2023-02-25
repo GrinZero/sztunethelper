@@ -45,11 +45,12 @@ export type SocketClient = Socket<ServerToClientEvents, ClientToServerEvents>
 export const createSocket = () => {
   const token = localStorage.getItem('token')
   if (!token) throw new Error('No token found in localStorage')
-  const socket: SocketClient = io('ws://10.161.154.223:3001', {
+  const socket: SocketClient = io('wss://nethelper.sztulives.cn', {
     auth: {
       token: `Bearer ${token}`
     },
-    autoConnect: false
+    autoConnect: false,
+    transports: ['websocket']
   })
   return socket
 }
