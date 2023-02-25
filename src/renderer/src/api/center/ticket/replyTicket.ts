@@ -35,6 +35,7 @@ export const useTicketSocket: TicketSocketHook = (props = {}) => {
   useEffect(() => {
     if (socketRef.current) socketRef.current.disconnect()
     const socket = createSocket()
+    if (!socket) return
     socket.connect()
     socketRef.current = socket
     return () => {
