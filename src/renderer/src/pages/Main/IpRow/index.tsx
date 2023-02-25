@@ -67,7 +67,7 @@ const IpRow: React.FC<IpRowProps> = ({
       </span>
 
       <BaseInput
-        className="w-[120px] mr-[15px] overflow-hidden text-clip"
+        className={`mr-[15px] overflow-hidden text-clip ${styles['ip-row-input']}`}
         defaultValue={name ?? ''}
         placeholder="输入设备名"
         onFinished={(val: string) => onChange?.({ val, id, ip })}

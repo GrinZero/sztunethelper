@@ -183,7 +183,7 @@ const MessageModule: React.FC<MessageModuleProps> = ({
   }
   const editorEle = (
     <MessageEditor
-      className={`pt-3 h-[32%]`}
+      className={`pt-3 ${styles.editor}`}
       onSend={handleSumbit}
       disable={!currentTicket || !joinStatus}
       ref={editorRef}

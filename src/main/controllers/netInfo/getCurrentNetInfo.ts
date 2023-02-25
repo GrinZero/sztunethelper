@@ -1,5 +1,5 @@
 import getWifiName from 'wifi-name'
-import si from 'systeminformation'
+import * as si from 'systeminformation'
 import getDnsServer from './getDnsServer'
 
 export interface IpInfo {
@@ -18,7 +18,7 @@ export interface NetInfoType {
 }
 
 const getCurrentNetInfo = async (): Promise<NetInfoType | null> => {
-  const netInfos = await si.networkInterfaces()
+  const netInfos = (await si.networkInterfaces()) as si.Systeminformation.NetworkInterfacesData[]
   const [wifiInfo] = await si.wifiInterfaces()
   const netInfo = (() => {
     const info = netInfos.find((item) => item.mac === wifiInfo.mac)

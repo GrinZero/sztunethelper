@@ -26,22 +26,19 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          npm install -g pnpm
-          pnpm install
-          pnpm config set strict-peer-dependencies false
-          pnpm config set auto-install-peers true
+          yarn install
 
       - name: Build Electron App for windows
         if: matrix.os == 'windows-latest'
-        run: pnpm run build:win
+        run: yarn run build:win
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Build Electron App for macos
         if: matrix.os == 'macos-latest'
         run: |
-          pnpm run build:mac-x86
-          pnpm run build:mac-arm64
+          yarn run build:mac-x86
+          yarn run build:mac-arm64
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
