@@ -1,0 +1,16 @@
+:root[theme-mode='light'] .video-bg::before {
+  content: ' ';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  z-index: -49;
+  height: 100vh;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.45) 100%);
+  -webkit-backdrop-filter: saturate(3);
+  backdrop-filter: saturate(3);
+}
+
+:root[theme-mode='light'] .back-video {
+  filter: invert(1) hue-rotate(210deg) opacity(0.32);
+}

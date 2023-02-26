@@ -3,7 +3,8 @@
   -webkit-app-region: drag;
   height: 60px;
   border-bottom: 1px solid var(--border-color);
-  -webkit-user-select:none;
+  -webkit-user-select: none;
+  backdrop-filter: blur(20px);
 }
 
 .headerRightBox {
