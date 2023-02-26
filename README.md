@@ -11,4 +11,5 @@
 
 ```bash
 sudo spctl --master-disable
+sudo xattr -r -d com.apple.quarantine /Applications/sztunethelper.app
 ```
