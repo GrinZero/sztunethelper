@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Carousel, Modal } from '@arco-design/web-react'
 import type { CarouselProps } from '@arco-design/web-react'
 import styles from './index.module.scss'
-import { useModal } from '@renderer/hooks'
+import { UseModalProps, useModal } from '@renderer/hooks'
 
 type UseTutorialHanlder = (props: {
   children: React.ReactElement | React.ReactElement[]
@@ -10,6 +10,7 @@ type UseTutorialHanlder = (props: {
   buttonClassName?: string
   className?: string
   carouselProps?: CarouselProps
+  modalProps?: UseModalProps
 }) => [React.ReactElement, (visible: boolean) => void, (index: number) => void]
 
 export const useTutorial: UseTutorialHanlder = ({
@@ -17,7 +18,8 @@ export const useTutorial: UseTutorialHanlder = ({
   position = 'absolute',
   buttonClassName = '',
   className = '',
-  carouselProps = {}
+  carouselProps = {},
+  modalProps = {}
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -48,7 +50,9 @@ export const useTutorial: UseTutorialHanlder = ({
           确定
         </Button>
       </>
-    )
+    ),
+    closable: false,
+    ...modalProps
   })
 
   return [ele, setVisible, setCurrentIndex]

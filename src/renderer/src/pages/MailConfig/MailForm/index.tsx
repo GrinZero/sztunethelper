@@ -21,12 +21,13 @@ export interface MailFormRef {
   pass: HTMLInputElement | null
 }
 
-const imageSrc = [
-  '//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp',
-  '//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/6480dbc69be1b5de95010289787d64f1.png~tplv-uwbnlip3yd-webp.webp',
-  '//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/0265a04fddbd77a19602a15d9d55d797.png~tplv-uwbnlip3yd-webp.webp',
-  '//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/24e0dd27418d2291b65db1b21aa62254.png~tplv-uwbnlip3yd-webp.webp'
-]
+import tut1 from './tut1.png'
+import tut2 from './tut2.png'
+import tut3 from './tut3.png'
+import tut4 from './tut4.png'
+import tut5 from './tut5.png'
+
+const imageSrc = [tut1, tut2, tut3, tut4, tut5]
 
 const MailForm: React.ForwardRefRenderFunction<MailFormRef, MailFormProps> = (
   { className = '', onSubmit, status, defaultUserName, defaultPassword, defaultSelect = 'qq.com' },
@@ -34,8 +35,8 @@ const MailForm: React.ForwardRefRenderFunction<MailFormRef, MailFormProps> = (
 ) => {
   const [tutorial, setTutorialVisible] = useTutorial({
     children: imageSrc.map((src, index) => (
-      <div key={index} style={{ width: '100%' }}>
-        <img src={src} style={{ width: '100%' }} />
+      <div key={index} style={{ width: '100%', height: '210px' }}>
+        <img src={src} style={{ width: '100%', height: '100%' }} className="object-scale-down" />
       </div>
     )),
     buttonClassName: styles['tutorial-button'],

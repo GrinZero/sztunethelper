@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import styles from './index.module.scss'
 import { Modal, ModalProps } from '@arco-design/web-react'
 
-interface UseModalProps extends ModalProps {
+export interface UseModalProps extends ModalProps {
   className?: string
   children: React.ReactElement | React.ReactElement[]
 }
