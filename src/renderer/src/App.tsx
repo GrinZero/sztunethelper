@@ -8,7 +8,7 @@ import './App.css'
 
 import './extension'
 
-import { VideoBg } from './components/VideoBg'
+// import { VideoBg } from './components/VideoBg'
 import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom'
 import { TopBar, Main, SelfHelp, Login, Setting, AboutUS, MessagePage, MailConfig } from './pages'
 import { useEffect } from 'react'
@@ -23,7 +23,7 @@ const App = () => {
   useConfig()
   useBaseData()
 
-  const { platform } = window.navigator
+  // const { platform } = window.navigator
   return (
     <Router>
       <Redirect to="/index" path="/" exact={true} />
@@ -31,7 +31,7 @@ const App = () => {
         <TopBar type="mac" />
         <Main />
         <SelfHelp />
-        {platform.includes('Mac') || platform.includes('mac') ? null : <VideoBg />}
+        {/* {platform.includes('Mac') || platform.includes('mac') ? null : <VideoBg />} */}
       </Route>
       <Switch>
         <Route path="/login" exact={true}>
