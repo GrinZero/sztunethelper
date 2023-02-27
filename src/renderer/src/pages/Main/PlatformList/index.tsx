@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import IpRow, { IpRowOnChangeValue } from '../IpRow'
 import {
   BaseList,
@@ -9,7 +9,7 @@ import {
   MoreInfo
 } from '@renderer/components'
 const { Title } = BaseElement
-import { IconLoading } from '@arco-design/web-react/icon'
+import { IconLoading, IconSync } from '@arco-design/web-react/icon'
 
 import type { Platform } from '@renderer/api'
 import styles from './index.module.scss'
@@ -19,13 +19,15 @@ interface PlatformListProps {
   currentIP: string | null
   onOffline: (platform: Platform) => void
   onNameChange: (value: IpRowOnChangeValue) => unknown
+  onFlush: () => Promise<void>
 }
 
 const PlatformList: React.FC<PlatformListProps> = ({
   platformList,
   currentIP,
   onOffline,
-  onNameChange
+  onNameChange,
+  onFlush
 }) => {
   const platformListCard = useMemo(() => {
     if (platformList === null) {
@@ -66,6 +68,18 @@ const PlatformList: React.FC<PlatformListProps> = ({
       />
     ))
   }, [platformList])
+
+  const [isFlushing, setIsFlushing] = useState(false)
+  const handleFlush = () => {
+    const id = setTimeout(() => {
+      setIsFlushing(true)
+    }, 200)
+    onFlush().finally(() => {
+      clearTimeout(id)
+      setIsFlushing(false)
+    })
+  }
+
   return (
     <>
       <Title className={`mb-2 ml-1 flex flex-row items-center`}>
@@ -80,6 +94,10 @@ const PlatformList: React.FC<PlatformListProps> = ({
           </svg>
         </BasePopover>
         <span>设备列表</span>
+        {/* 刷新按钮 */}
+        <div onClick={handleFlush}>
+          <IconSync className="ml-2 cursor-pointer" spin={isFlushing} />
+        </div>
       </Title>
       <BaseList className={`min-h-[145px] ${styles['platform-list']}`} autoHeight={true}>
         {platformListCard}

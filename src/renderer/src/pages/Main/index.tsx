@@ -288,6 +288,7 @@ const Main = () => {
             currentIP={netInfo.ip.value}
             onOffline={handleOffline}
             onNameChange={handleNameChange}
+            onFlush={init}
           />
           {mainCard}
         </div>
