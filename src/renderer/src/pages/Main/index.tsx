@@ -32,7 +32,11 @@ const Main = () => {
 
   const [platformList, setPlatformList] = useState<Platform[] | null>([])
 
-  const [status, setStatus] = useState('offline')
+  const [status, _setStatus] = useState('offline')
+  const setStatus = (status) => {
+    window.storage.set('netStatus', status)
+    _setStatus(status)
+  }
   const netInfo = useSelector((store: any) => store.netInfo)
 
   const init = async (type?: 'normal' | 'refresh') => {

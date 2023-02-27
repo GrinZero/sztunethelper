@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.lives.nethelper.app
 productName: sztunethelper
 directories:
   buildResources: build
@@ -14,6 +14,7 @@ afterSign: build/notarize.js
 win:
   executableName: sztunethelper
   requestedExecutionLevel: requireAdministrator
+  icon: build/icon.ico
 nsis:
   artifactName: ${name}-${version}-setup-${arch}.${ext}
   shortcutName: ${productName}
@@ -21,6 +22,7 @@ nsis:
   createDesktopShortcut: always
 mac:
   entitlementsInherit: build/entitlements.mac.plist
+  icon: build/icon.icns
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
@@ -28,6 +30,7 @@ mac:
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
 dmg:
   artifactName: ${name}-${version}-${arch}.${ext}
+  icon: build/icon.icns
 linux:
   target:
     - AppImage

@@ -65,4 +65,7 @@ const db = low(adapter)
 
 export default db
 export * from './model'
+
+import './trigger/baseConfig'
+
 export { default as store } from './store'

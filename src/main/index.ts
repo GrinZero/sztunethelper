@@ -1,56 +1,9 @@
-import { app, shell, BrowserWindow } from 'electron'
-import * as path from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { windowStatusController, windowMessageController, taskController } from './controllers'
+import { app, BrowserWindow } from 'electron'
+import { electronApp, optimizer } from '@electron-toolkit/utils'
+import { windowStatusController, taskController, trayController, createWindow } from './controllers'
 
 windowStatusController()
 taskController()
-
-function createWindow(): void {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    minWidth: 1100,
-    minHeight: 700,
-    width: 1100,
-    height: 700,
-    transparent: true,
-    frame: false,
-    skipTaskbar: true,
-    ...(process.platform === 'linux'
-      ? {
-          icon: path.join(__dirname, '../../build/icon.png')
-        }
-      : {}),
-    titleBarStyle: 'default',
-    vibrancy: 'dark',
-    visualEffectState: 'active',
-    webPreferences: {
-      preload: path.join(__dirname, '../preload/index.js'),
-      sandbox: false,
-      nodeIntegration: false,
-      contextIsolation: true,
-      experimentalFeatures: true
-    }
-  })
-
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
-  })
-
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
-    return { action: 'deny' }
-  })
-
-  // HMR for renderer base on electron-vite cli.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-  } else {
-    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
-  }
-  windowMessageController(mainWindow)
-}
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -65,17 +18,26 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  createWindow()
+  const win = createWindow()
+  let tray = trayController(win)
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+      tray?.destroy()
+      tray = trayController(win)
+    }
   })
 })
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
+  console.info('window-all-closed')
+  if (process.platform === 'darwin') {
+    app.dock.hide()
   }
+  // if (process.platform !== 'darwin') {
+  //   app.quit()
+  // }
 })

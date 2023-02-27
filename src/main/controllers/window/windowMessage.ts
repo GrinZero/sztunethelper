@@ -20,9 +20,10 @@ const titleBarOnMessage = () => {
           window.unmaximize()
         }
         break
-      case 'minimize':
+      case 'minimize': {
         window.minimize()
         break
+      }
       default:
         break
     }
@@ -71,5 +72,11 @@ const windowMessageController = (win: BrowserWindow | null) => {
   win.on('unmaximize', () => {
     win.webContents.send('window-maxify', false)
   })
+
+  return () => {
+    ipcMain.removeAllListeners('api')
+    ipcMain.removeAllListeners('titleBar')
+    ipcMain.removeAllListeners('themeChange')
+  }
 }
 export default windowMessageController

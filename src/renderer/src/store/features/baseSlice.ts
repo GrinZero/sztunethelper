@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { setBaseConfig } from '@renderer/api'
 
 export interface BaseConfig {
   autoUpdate: boolean
@@ -53,7 +52,6 @@ export const baseSlice = createSlice<BaseState, BaseReducer, 'base'>({
       }
       console.info('setConfig:base', state.config)
       window.storage.set('baseConfig', state.config)
-      setBaseConfig(state.config)
     }
   },
   extraReducers: (builder) => {
