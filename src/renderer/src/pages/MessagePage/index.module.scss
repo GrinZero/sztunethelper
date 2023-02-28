@@ -19,3 +19,38 @@
   width: calc(100% - 8px);
   margin-bottom: 12px;
 }
+
+.header {
+  .mail-config {
+    width: 255px;
+    max-width: 255px;
+  }
+}
+
+$max-width: calc(100vw - 2rem);
+@media screen and (max-width: 1280px) {
+  .header {
+    height: auto;
+    margin-bottom: 12px;
+    width: $max-width;
+    .mail-config {
+      width: $max-width;
+      max-width: $max-width;
+    }
+  }
+  .container {
+    flex-direction: column;
+  }
+  .ticketlist {
+    height: 200px;
+    width: $max-width !important;
+  }
+  .right-box {
+    width: $max-width;
+  }
+  .space {
+    width: $max-width;
+    padding-top: 72px;
+    display: block;
+  }
+}

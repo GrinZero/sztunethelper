@@ -257,15 +257,19 @@ const MessagePage = () => {
 
   return (
     <div className={`${styles.container} main`}>
-      <div className={`w-[300px] flex flex-col h-full flex-shrink-0`}>
-        <div className="flex-row mb-3">
-          <MailCard
-            className={`w-[255px] max-w-[255px]`}
-            mail={mailConfig?.mail ?? null}
-            onClick={handleMailCardClick}
-          />
-        </div>
-        <SmallScreen w={300} onBottom={next} status={status} overflow="scroll">
+      <div className={`w-[300px] flex flex-col h-full flex-shrink-0 ${styles['header']}`}>
+        <MailCard
+          className={`${styles['mail-config']} mb-3`}
+          mail={mailConfig?.mail ?? '未设置邮箱'}
+          onClick={handleMailCardClick}
+        />
+        <SmallScreen
+          className={`${styles.ticketlist}`}
+          w={300}
+          onBottom={next}
+          status={status}
+          overflow="scroll"
+        >
           {ele}
         </SmallScreen>
       </div>
@@ -277,6 +281,7 @@ const MessagePage = () => {
           sender={mailConfig?.mail ?? null}
         />
       </div>
+      <div className={`${styles['space']}`}></div>
       {drawer}
       {rateModal}
     </div>

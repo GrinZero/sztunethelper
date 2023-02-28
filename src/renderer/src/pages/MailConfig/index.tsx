@@ -84,7 +84,7 @@ const MailConfig = () => {
 
   return (
     <div className={`main flex-col items-center justify-center`}>
-      <MailForm className={`w-[600px] mb-[144px]`} onSubmit={handleSubmit} />
+      <MailForm className={`${styles['mail-form']} mb-[144px]`} onSubmit={handleSubmit} />
       <HistoryCrumb />
       {modalEle}
     </div>

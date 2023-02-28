@@ -14,6 +14,15 @@
   overflow: hidden;
 }
 
+:root[platform='web'] #root {
+  overflow: auto;
+}
+@media screen and (max-width: 768px) {
+  #root {
+    height: auto;
+  }
+}
+
 * {
   user-select: none;
 }

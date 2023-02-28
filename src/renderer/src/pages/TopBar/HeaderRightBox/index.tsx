@@ -24,9 +24,7 @@ const HeaderRightBox: React.FC<HeaderRightBoxProps> = ({
   src
 }) => {
   const history = useHistory()
-  const inWebClassName = window.bridge
-    ? ''
-    : 'cursor-not-allowed filter-grayscale opacity-50 pointer-events-none'
+  const inWebClassName = window.bridge ? '' : 'hidden'
 
   const accountEle = (
     <div

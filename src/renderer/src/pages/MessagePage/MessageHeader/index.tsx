@@ -25,7 +25,7 @@ const MessageHeader: React.FC<MessageHeaderProps> = ({
   const { contactType, other, title, id, rate } = ticket
   return (
     <BaseCard title={null} scale="1" border={false} className={`${className}`}>
-      <div className={`w-full flex flex-row items-center justify-between`}>
+      <div className={`w-full flex items-center justify-between ${styles['container']}`}>
         <div className="flex flex-row items-center">
           <div className={`w-8 h-8 rounded-[50%] mr-2 ${styles.img}`}>
             <IconUser />
@@ -46,12 +46,18 @@ const MessageHeader: React.FC<MessageHeaderProps> = ({
           </div>
         </div>
         {rate !== -1 && (
-          <div className="flex flex-row items-center">
+          <div className={`${styles['rate']}`}>
             <Rate readonly value={rate} />
           </div>
         )}
-        <div className="flex flex-row items-center">
-          <BaseButton disabled={disabled} theme="danger" size="middle" onClick={onClose}>
+        <div className={`flex flex-row items-center ${styles['button-container']}`}>
+          <BaseButton
+            className={`${styles['button']}`}
+            disabled={disabled}
+            theme="danger"
+            size="middle"
+            onClick={onClose}
+          >
             关闭工单
           </BaseButton>
         </div>

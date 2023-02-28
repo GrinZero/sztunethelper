@@ -5,3 +5,29 @@
   align-items: center;
   justify-content: center;
 }
+
+.container {
+  flex-direction: row;
+}
+
+.rate {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+@media screen and (max-width: 1280px) {
+  .rate {
+    display: none;
+  }
+  .container {
+    flex-direction: column;
+  }
+  .button-container {
+    width: 100%;
+    margin-top: 6px;
+    .button {
+      width: 100%;
+    }
+  }
+}

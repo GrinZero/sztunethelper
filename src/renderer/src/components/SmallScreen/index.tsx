@@ -12,6 +12,7 @@ export interface SmallScreenProps extends ComponentProps {
   onBottom?: () => void
   onTop?: () => void
   overflow?: 'auto' | 'scroll'
+  direction?: 'col' | 'row'
 
   baseContainerClassName?: string
   scrollBottomPx?: number
@@ -47,11 +48,13 @@ const SmallScreen: React.FC<SmallScreenProps> = ({
       <span className="text-[12px] text-gray-400">没有更多了</span>
     </div>
   ),
-  overflow = 'auto'
+  overflow = 'auto',
+  direction = 'col'
 }) => {
   const style = { width: w, height: h }
   if (overflow === 'scroll') {
-    style['overflowY'] = 'scroll'
+    if (direction === 'col') style['overflowY'] = 'scroll'
+    if (direction === 'row') style['overflowX'] = 'scroll'
   } else {
     style['overflow'] = 'auto'
   }
@@ -84,7 +87,7 @@ const SmallScreen: React.FC<SmallScreenProps> = ({
   if (status === 'empty' || !children) return renderBaseContaienr(emptyNode, styles['empty'])
 
   return (
-    <div style={style} className={`${className}`} onScroll={handleScroll}>
+    <div style={style} className={`${direction} ${className}`} onScroll={handleScroll}>
       {topNode}
       {children}
       {status !== 'done' ? loadNode : nomoreNode}

@@ -10,6 +10,10 @@
 这行命令可以帮助你关闭这个限制（command+空格，搜索终端，然后回车运行）
 
 ```bash
-sudo spctl --master-disable
-sudo xattr -r -d com.apple.quarantine /Applications/sztunethelper.app
+sudo spctl --master-disable // 关闭限制，安装前运行一次即可
+
+sudo xattr -r -d com.apple.quarantine /Applications/sztunethelper.app // 每次安装后运行一次
 ```
+
+由于网络助手的特殊性，当网络崩溃的时候，你并不能通过 PC 访问网络，所以我准备了一个 web 网站：
+https://grinzero.github.io/sztunethelper/

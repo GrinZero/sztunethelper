@@ -37,9 +37,7 @@ const options = [
 const TopBar: React.FC<TopBarProps> = ({ type }) => {
   const history = useHistory()
   const match = useRouteMatch(options.map((item) => item.value))
-  const inWebClassName = window.bridge
-    ? ''
-    : 'cursor-not-allowed filter-grayscale opacity-50 pointer-events-none'
+  const inWebClassName = window.bridge ? '' : 'hidden'
 
   const dispatch = useDispatch()
   // 监听系统主题变化
@@ -109,9 +107,11 @@ const TopBar: React.FC<TopBarProps> = ({ type }) => {
       )}
       <SearchBox
         className={
-          focus
+          inWebClassName +
+          ' ' +
+          (focus
             ? 'w-full max-w-[600px] m-auto transition-[max-width] duration-[.36s]'
-            : 'w-full max-w-[375px] transition-none'
+            : 'w-full max-w-[375px] transition-none')
         }
         disabled={true}
         onFocus={handleSearchBoxFocus}
@@ -122,7 +122,9 @@ const TopBar: React.FC<TopBarProps> = ({ type }) => {
         <HeaderRightBox
           theme={theme}
           onChange={handleThemeChange}
-          className={`ml-auto flex-shrink-0 pl-[5em] pr-9 ${styles.headerRightBox}`}
+          className={`flex-shrink-0 pl-[5em] pr-9 ${styles.headerRightBox} ${
+            window.bridge ? 'ml-auto' : 'ml-6 pl-0'
+          }`}
           mornInfoProps={{
             infoList: accountStore.map((item) => item.username),
             currentInfo: currentAccount.username,
