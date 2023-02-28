@@ -2,16 +2,12 @@ import { BrowserWindow, Tray, Menu, nativeImage, MenuItem } from 'electron'
 import { createWindow } from '../window/create'
 import { connectClick } from './connectClick'
 
-// import whiteIcon from '../../../../project/icon/white-tran/icon_16x16.png?asset'
-import blackIcon from '../../../../project/icon/black-tran/icon_16x16.png?asset'
-
-import templateIcon from '../../../../project/icon/tray/trayTemplate.png?asset'
+import templateIcon from '../../../../project/public/tray/trayTemplate.png?asset'
 import store from '../../db/store'
 import type { BaseConfig } from 'src/main/config'
 
-export const createTray = (_win: Electron.BrowserWindow | null) => {
-  let win = _win
-  const appIcon = process.platform === 'darwin' ? templateIcon : blackIcon
+export const createTray = () => {
+  const appIcon = templateIcon
   const tray = new Tray(nativeImage.createFromPath(appIcon))
 
   const buildContextMenu = () => {
@@ -20,8 +16,7 @@ export const createTray = (_win: Electron.BrowserWindow | null) => {
         label: '打开',
         click: () => {
           if (BrowserWindow.getAllWindows().length === 0) {
-            win = createWindow()
-            console.info('createWindow', win)
+            createWindow()
           }
         },
         id: 'open'
@@ -71,22 +66,39 @@ export const createTray = (_win: Electron.BrowserWindow | null) => {
   }
 
   const contextMenu = buildContextMenu()
+  tray.setToolTip('nethelper - lives')
+  tray.setTitle('offline', {
+    fontType: 'monospacedDigit'
+  })
+  tray.setContextMenu(contextMenu)
 
-  store.onDidChange('baseConfig', (_newBaseConfig: unknown) => {
-    console.info('baseConfig changed', _newBaseConfig)
-    if (!_newBaseConfig) return
-    const newBaseConfig = _newBaseConfig as BaseConfig
-    const { neverOffline } = newBaseConfig
+  const updateMenuByBaseConfig = (newBaseConfig: BaseConfig) => {
     const menu = buildContextMenu()
 
     const neverOfflineItem = menu.getMenuItemById('neverOffline') as MenuItem
-    neverOfflineItem.checked = neverOffline
+    neverOfflineItem.checked = newBaseConfig.neverOffline
 
     const autoStartItem = menu.getMenuItemById('autoStart') as MenuItem
     autoStartItem.checked = newBaseConfig.autoStart
 
     const autoUpdateItem = menu.getMenuItemById('autoUpdate') as MenuItem
     autoUpdateItem.checked = newBaseConfig.autoUpdate
+    tray.setContextMenu(menu)
+  }
+
+  const baseConfig = store.get('baseConfig') as BaseConfig | null
+  if (baseConfig) {
+    updateMenuByBaseConfig(baseConfig)
+  }
+
+  store.onDidChange('baseConfig', (_newBaseConfig: unknown) => {
+    if (!_newBaseConfig) return
+    const newBaseConfig = _newBaseConfig as BaseConfig
+    updateMenuByBaseConfig(newBaseConfig)
+    const winList = BrowserWindow.getAllWindows()
+    winList.forEach((w) => {
+      w.webContents.send('baseConfigChange', newBaseConfig)
+    })
   })
   store.onDidChange('netStatus', (newNetStatus: unknown) => {
     console.info('netStatus changed', newNetStatus)
@@ -98,27 +110,11 @@ export const createTray = (_win: Electron.BrowserWindow | null) => {
     tray.setTitle(newNetStatus as string)
   })
 
-  tray.setToolTip('nethelper - lives')
-  tray.setTitle('offline', {
-    fontType: 'monospacedDigit'
-  })
-  tray.setContextMenu(contextMenu)
-
-  // nativeTheme.on('updated', () => {
-  //   if (process.platform === 'darwin') return
-  //   const appIcon = nativeTheme.shouldUseDarkColors ? whiteIcon : blackIcon
-  //   tray.setImage(nativeImage.createFromPath(appIcon))
-  // })
-
   return tray
 }
 
-export const trayController = (win: BrowserWindow | null) => {
-  if (!win) {
-    console.warn('trayController: without window')
-    return null
-  }
-  const tray = createTray(win)
+export const trayController = () => {
+  const tray = createTray()
   return tray
 }
 export default trayController

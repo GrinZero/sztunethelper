@@ -1,3 +1,6 @@
-provider: generic
-url: https://github.com/GrinZero/sztunethelper/releases/latest
+provider: github
+owner: grinzero
+repo: sztunethelper
+private: false
+releaseType: release
 updaterCacheDirName: sztunethelper-updater

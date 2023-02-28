@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { history } from '@renderer/utils'
 
 let token = localStorage.getItem('token')
 const axiosClient = axios.create({
@@ -16,12 +17,22 @@ axiosClient.interceptors.request.use((config) => {
   return config
 })
 
-axiosClient.interceptors.response.use((config) => {
-  if (config.data?.token) {
-    localStorage.setItem('token', config.data.token)
-    token = config.data.token
+axiosClient.interceptors.response.use(
+  (config) => {
+    if (config.data?.token) {
+      localStorage.setItem('token', config.data.token)
+      token = config.data.token
+    }
+    return config
+  },
+  (err) => {
+    if (err.response.status === 401) {
+      localStorage.removeItem('token')
+      token = ''
+      history.push('/mail_config')
+    }
+    return Promise.reject(err)
   }
-  return config
-})
+)
 
 export default axiosClient

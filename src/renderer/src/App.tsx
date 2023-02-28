@@ -9,12 +9,14 @@ import './App.css'
 import './extension'
 
 // import { VideoBg } from './components/VideoBg'
-import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom'
+import { Switch, Route, Router, Redirect } from 'react-router-dom'
 import { TopBar, Main, SelfHelp, Login, Setting, AboutUS, MessagePage, MailConfig } from './pages'
 import { useEffect } from 'react'
 import store, { initAccount } from './store'
 import { useConfig } from './hooks'
 import { useBaseData } from './api'
+
+import { history } from '@renderer/utils'
 
 const App = () => {
   useEffect(() => {
@@ -25,7 +27,7 @@ const App = () => {
 
   // const { platform } = window.navigator
   return (
-    <Router>
+    <Router history={history}>
       <Redirect to="/index" path="/" exact={true} />
       <Route path="/">
         <TopBar type="mac" />

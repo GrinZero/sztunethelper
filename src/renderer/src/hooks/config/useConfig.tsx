@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchConfig } from '@renderer/store'
+import { fetchConfig, setConfig } from '@renderer/store'
 
 const useConfig = () => {
   const dispatch = useDispatch()
@@ -10,6 +10,14 @@ const useConfig = () => {
       dispatch(fetchConfig())
     }
   }, [config])
+
+  //监听Config变化
+  useEffect(() => {
+    if (!window.bridge) return
+    window.bridge.on('baseConfigChange', (data) => {
+      dispatch(setConfig(data))
+    })
+  }, [])
 
   useEffect(() => {
     window?.bridge?.sendMessage?.('themeChange', theme)

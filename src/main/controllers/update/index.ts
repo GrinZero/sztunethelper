@@ -1,9 +1,10 @@
 import { dialog } from 'electron'
 import { autoUpdater } from 'electron-updater'
-import path from 'path'
+
+import updateYml from '../../../../dev-app-update.yml?asset'
 
 export const checkUpdate = async () => {
-  autoUpdater.updateConfigPath = path.resolve(__dirname, '../../../../dev-app-update.yml')
+  autoUpdater.updateConfigPath = updateYml
   autoUpdater.checkForUpdates()
   autoUpdater.autoDownload = false
   autoUpdater.on('error', (error) => {
