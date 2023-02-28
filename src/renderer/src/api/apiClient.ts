@@ -1,4 +1,4 @@
-const { sendMessage } = window.bridge
+import { jsonParse } from '@renderer/utils'
 
 function uuid() {
   let d = new Date().getTime()
@@ -23,6 +23,9 @@ export class ApiClient<SResult> {
   requestStore: { [x: string]: StoreRequest<SResult> } = {}
 
   constructor() {
+    if (!window.bridge) {
+      return
+    }
     window.bridge.on('api', ({ result, id }: { id: string; result: SResult }) => {
       const request = this.requestStore[id]
       if (!request) {
@@ -59,7 +62,11 @@ export class ApiClient<SResult> {
         timeID = setTimeout(() => {
           this.requestStore[id].reject('request timeout')
         }, timeout)
-        sendMessage('api', { name, payload, id })
+        if (!window.bridge) {
+          console.warn('window.bridge is undefined: ', name)
+          return
+        }
+        window.bridge.sendMessage('api', { name, payload, id })
       }),
       resolve: (...rest) => {
         clearTimeout(timeID)
@@ -77,10 +84,25 @@ const apiClient = new ApiClient<ApiResult<unknown>>()
 
 window.storage = {
   async set(key: string | Record<string, unknown>, value?: unknown) {
-    return apiClient.send('storage.set', { key, value })
+    if (window.bridge) {
+      return apiClient.send('storage.set', { key, value })
+    } else {
+      return new Promise((resolve) => {
+        localStorage.setItem(key as string, JSON.stringify(value))
+        resolve()
+      })
+    }
   },
   async get<T>(key: string, defaultValue?: T) {
-    return apiClient.send<T>('storage.get', { key, value: defaultValue })
+    if (window.bridge) {
+      return apiClient.send<T>('storage.get', { key, value: defaultValue })
+    } else {
+      const value = localStorage.getItem(key)
+      if (value === null) {
+        return defaultValue
+      }
+      return jsonParse(value)
+    }
   },
   async has(key: string) {
     return apiClient.send('storage.has', { key })

@@ -17,6 +17,9 @@ const sendMail = async (props: SendMailProps) => {
 }
 
 const verifyMail = async (sender: string, pass: string) => {
+  if (!window.bridge) {
+    return true
+  }
   const props = {
     sender,
     receiver: sender,

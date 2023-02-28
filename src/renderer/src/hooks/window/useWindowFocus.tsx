@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 const useWindowFocus = () => {
   const [focus, setFocus] = useState(true)
   useEffect(() => {
+    if (!window.bridge) return
     const focusListener = window.bridge.on('window-focus', () => setFocus(true))
     const blurListener = window.bridge.on('window-blur', () => setFocus(false))
     return () => {

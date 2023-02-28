@@ -2,8 +2,6 @@ import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchConfig } from '@renderer/store'
 
-const { sendMessage } = window.bridge
-
 const useConfig = () => {
   const dispatch = useDispatch()
   const { theme, config } = useSelector((store: any) => store.base)
@@ -14,13 +12,17 @@ const useConfig = () => {
   }, [config])
 
   useEffect(() => {
-    sendMessage('themeChange', theme)
+    window?.bridge?.sendMessage?.('themeChange', theme)
     document.documentElement.setAttribute('theme-mode', theme)
     document.body.setAttribute('arco-theme', theme)
   }, [theme])
 
   useEffect(() => {
     if (config === null) {
+      return
+    }
+    if (!window.bridge) {
+      document.documentElement.setAttribute('platform', 'web')
       return
     }
     const { platform } = window.navigator

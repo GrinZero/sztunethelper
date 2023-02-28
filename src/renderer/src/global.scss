@@ -69,6 +69,18 @@
 :root[platform='windows'][theme-mode='light'] {
   --global-bg-color: rgba(230, 230, 230, 0.98);
 }
+:root[platform='mac'][theme-mode='dark'] {
+  --global-bg-color: rgba(16 18 27 / 80%);
+}
+:root[platform='mac'][theme-mode='light'] {
+  --global-bg-color: rgb(255 255 255 / 80%);
+}
+:root[platform='web'][theme-mode='dark'] {
+  --global-bg-color: rgba(16, 18, 27, 0.98);
+}
+:root[platform='web'][theme-mode='light'] {
+  --global-bg-color: rgba(230, 230, 230, 0.98);
+}
 
 * ::-webkit-scrollbar {
   width: 8px;

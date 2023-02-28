@@ -5,11 +5,11 @@ import styles from './index.module.scss'
 import type { ComponentProps } from '@renderer/types'
 import { useWindowFocus, useWindowMaxify } from '@renderer/hooks'
 
-const { sendMessage } = window.bridge
-
 const MacButtonGroup: React.FC<ComponentProps> = ({ className = '' }) => {
   const [isFocused] = useWindowFocus()
   const [isMaxify] = useWindowMaxify()
+
+  const sendMessage = window?.bridge?.sendMessage ?? (() => {})
 
   const handleClose = () => sendMessage('titleBar', { type: 'close' })
   const handleMinify = () => sendMessage('titleBar', { type: 'minimize' })

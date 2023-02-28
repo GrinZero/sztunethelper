@@ -49,6 +49,10 @@ const MailConfig = () => {
       return
     }
 
+    if (result === true) {
+      Message.info('当前处于Web环境，不验证SMTP')
+    }
+
     const instance = Modal.confirm({
       title: '提示',
       content: `已向您的邮箱${mail}发送了一封验证邮件，请前往邮箱查看。如您确认收到，点击继续`,

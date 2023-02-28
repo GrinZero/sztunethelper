@@ -37,6 +37,9 @@ const options = [
 const TopBar: React.FC<TopBarProps> = ({ type }) => {
   const history = useHistory()
   const match = useRouteMatch(options.map((item) => item.value))
+  const inWebClassName = window.bridge
+    ? ''
+    : 'cursor-not-allowed filter-grayscale opacity-50 pointer-events-none'
 
   const dispatch = useDispatch()
   // 监听系统主题变化
@@ -95,10 +98,10 @@ const TopBar: React.FC<TopBarProps> = ({ type }) => {
     <div
       className={`${styles.container} flex items-center w-full flex-row shrink-0 sticky top-0 left-0 z-50`}
     >
-      {type === 'mac' && <MacTitleLight className="ml-6" />}
+      {type === 'mac' && <MacTitleLight className={`ml-6 ${inWebClassName}`} />}
       {!focus && (
         <HeaderMenu
-          className="ml-36 flex-shrink-0"
+          className={`ml-36 flex-shrink-0 ${inWebClassName}`}
           options={options}
           onChange={(route: string) => history.push(route)}
           ref={menuRef}

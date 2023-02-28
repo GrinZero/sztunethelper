@@ -21,7 +21,10 @@
     "build:linux-x86": "npm run build && electron-builder --linux --config",
     "build:linux-arm64": "npm run build && electron-builder --arm64 --linux --config",
     "prepare": "husky install",
-    "test": "vitest"
+    "test": "vitest",
+    "dev:web": "vite dev",
+    "build:web": "vite build --mode=production",
+    "preview:web": "vite preview"
   },
   "dependencies": {
     "@arco-design/web-react": "^2.45.0",
