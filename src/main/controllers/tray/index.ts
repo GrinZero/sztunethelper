@@ -1,15 +1,17 @@
-import { BrowserWindow, Tray, Menu, nativeImage, nativeTheme, MenuItem } from 'electron'
+import { BrowserWindow, Tray, Menu, nativeImage, MenuItem } from 'electron'
 import { createWindow } from '../window/create'
 import { connectClick } from './connectClick'
 
-import whiteIcon from '../../../../project/icon/white-tran/icon_16x16.png?asset'
+// import whiteIcon from '../../../../project/icon/white-tran/icon_16x16.png?asset'
 import blackIcon from '../../../../project/icon/black-tran/icon_16x16.png?asset'
+
+import templateIcon from '../../../../project/icon/tray/trayTemplate.png?asset'
 import store from '../../db/store'
 import type { BaseConfig } from 'src/main/config'
 
 export const createTray = (_win: Electron.BrowserWindow | null) => {
   let win = _win
-  const appIcon = nativeTheme.shouldUseDarkColors ? whiteIcon : blackIcon
+  const appIcon = process.platform === 'darwin' ? templateIcon : blackIcon
   const tray = new Tray(nativeImage.createFromPath(appIcon))
 
   const buildContextMenu = () => {
@@ -102,10 +104,11 @@ export const createTray = (_win: Electron.BrowserWindow | null) => {
   })
   tray.setContextMenu(contextMenu)
 
-  nativeTheme.on('updated', () => {
-    const appIcon = nativeTheme.shouldUseDarkColors ? whiteIcon : blackIcon
-    tray.setImage(nativeImage.createFromPath(appIcon))
-  })
+  // nativeTheme.on('updated', () => {
+  //   if (process.platform === 'darwin') return
+  //   const appIcon = nativeTheme.shouldUseDarkColors ? whiteIcon : blackIcon
+  //   tray.setImage(nativeImage.createFromPath(appIcon))
+  // })
 
   return tray
 }
