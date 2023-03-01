@@ -3,11 +3,12 @@ import { createWindow } from '../window/create'
 import { connectClick } from './connectClick'
 
 import templateIcon from '../../../../project/public/tray/trayTemplate.png?asset'
+import baseIcon from '../../../../build/icons/icon_16x16.png?asset'
 import store from '../../db/store'
 import type { BaseConfig } from 'src/main/config'
 
 export const createTray = () => {
-  const appIcon = templateIcon
+  const appIcon = process.platform === 'darwin' ? templateIcon : baseIcon
   const tray = new Tray(nativeImage.createFromPath(appIcon))
 
   const buildContextMenu = () => {
@@ -15,8 +16,13 @@ export const createTray = () => {
       {
         label: '打开',
         click: () => {
-          if (BrowserWindow.getAllWindows().length === 0) {
+          const winList = BrowserWindow.getAllWindows()
+          if (winList.length === 0) {
             createWindow()
+          } else {
+            winList.forEach((w) => {
+              w.show()
+            })
           }
         },
         id: 'open'
@@ -71,6 +77,17 @@ export const createTray = () => {
     fontType: 'monospacedDigit'
   })
   tray.setContextMenu(contextMenu)
+  tray.on('double-click', () => {
+    console.info('double click')
+    const winList = BrowserWindow.getAllWindows()
+    if (winList.length === 0) {
+      createWindow()
+    } else {
+      winList.forEach((w) => {
+        w.show()
+      })
+    }
+  })
 
   const updateMenuByBaseConfig = (newBaseConfig: BaseConfig) => {
     const menu = buildContextMenu()
