@@ -22,7 +22,7 @@
     "build:linux-arm64": "npm run build && electron-builder --arm64 --linux --config",
     "prepare": "husky install",
     "test": "vitest",
-    "dev:web": "vite dev",
+    "dev:web": "vite dev --mode=development",
     "build:web": "vite build --mode=production",
     "preview:web": "vite preview"
   },

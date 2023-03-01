@@ -40,7 +40,7 @@ export const sendTicketAttachments = async ({
     })
   )
 
-  await sendMail(mailOptions)
+  window.bridge && (await sendMail(mailOptions))
   const uploadResults = (await Promise.all(uploadTasks)).map((item, i) => {
     const res = item as UploadFileResult
     return {

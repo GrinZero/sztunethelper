@@ -14,7 +14,7 @@ export const addTicket = async (form: AddTicketParams) => {
   const url = '/api/addTicket'
   const result = await axiosClient.post(url, form)
   const { data: req } = result
-  if (req.msg === 'ok') {
+  if (req.msg === 'ok' && window.bridge) {
     await sendMail({
       receiver: form.toMail,
       subject: `sztunethelper(新工单):【${req.data.id}】【${form.type}】${form.title}`,

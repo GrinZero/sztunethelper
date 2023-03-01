@@ -8,21 +8,19 @@ import './App.css'
 
 import './extension'
 
-import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom'
+import { Switch, Route, Router, Redirect } from 'react-router-dom'
 import { MessagePage, MailConfig } from './pages'
 import { useBaseData } from './api'
 import { TopBar } from '@renderer/pages'
 import { useConfig } from './hooks'
+import { history } from '@renderer/utils'
 
 export const WebApp = () => {
   useBaseData()
   useConfig()
   return (
-    <Router>
-      <Redirect from="/" to="/message" exact={true} />
-      <Route path="/">
-        <TopBar type="mac" />
-      </Route>
+    <Router history={history}>
+      <TopBar type="mac" />
       <Switch>
         <Route path="/message" exact={true}>
           <MessagePage />
@@ -30,6 +28,7 @@ export const WebApp = () => {
         <Route path="/mail_config" exact={true}>
           <MailConfig />
         </Route>
+        <Redirect from="/*" to="/message" exact={true} />
       </Switch>
     </Router>
   )
