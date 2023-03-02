@@ -12,16 +12,15 @@ const USER_DATA_PATH = app?.getPath('userData') ?? '../../../tests/db/data/'
 
 type DBData = {
   hosts: Host[]
-  config: {
-    autoUpdate: boolean
-    foreverConnect: boolean
-    autoLaunch: boolean
-    autoTheme: boolean
-  }
 }
 
 const adapter = new FileSync<DBData>(path.join(USER_DATA_PATH, 'db.json'))
 const db = low(adapter)
+
+const defaultDNS = `
+10.1.20.133 gym.sztu.edu.cn
+10.1.12.148 nbw.sztu.edu.cn
+`
 
 ;(async () => {
   const sysHosts = await getSysHosts()
@@ -38,7 +37,7 @@ const db = low(adapter)
         type: 'local',
         mode: 'edit',
         name: '内网',
-        content: `10.1.20.133 gym.sztu.edu.cn`,
+        content: defaultDNS,
         open: true
       },
       {
@@ -50,13 +49,7 @@ const db = low(adapter)
         autoUpdate: 'never',
         url: 'https://gitlab.com/ineo6/hosts/-/raw/master/next-hosts'
       }
-    ],
-    config: {
-      autoUpdate: true,
-      foreverConnect: false,
-      autoLaunch: false,
-      autoTheme: true
-    }
+    ]
   }
   db.defaults(defaultState).write()
   // 打开下边这句话会重置数据库db

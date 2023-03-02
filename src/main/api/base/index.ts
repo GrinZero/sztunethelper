@@ -5,7 +5,7 @@ import type { ApiResult } from '../type'
 import type { BaseConfig } from 'src/main/config'
 
 apiStore.add('setBaseConfig', async (props: BaseConfig): ApiResult<unknown> => {
-  console.info('setBaseConfig', props)
+  console.info('setBaseConfig: api', props)
   if (!props) {
     return {
       code: 400,

@@ -19,6 +19,12 @@ export const taskController = async () => {
     const checkUpdate = await import('../update/index')
     checkUpdate.default()
   }
+
+  /* Connect: NoticeService */
+  if (baseConfig && baseConfig.noticeService) {
+    const noticeService = await import('./noticeService')
+    noticeService.default()
+  }
 }
 
 export { updateRemote }

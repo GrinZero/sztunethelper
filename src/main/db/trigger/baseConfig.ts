@@ -33,4 +33,9 @@ store.onDidChange('baseConfig', async (_props: unknown, _oldProps: unknown) => {
     const checkUpdate = await import('../../controllers/update/index')
     checkUpdate.default()
   }
+
+  if (changeProps.noticeService) {
+    const noticeService = await import('../../controllers/tasks/noticeService')
+    noticeService.default()
+  }
 })

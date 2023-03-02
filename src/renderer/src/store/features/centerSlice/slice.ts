@@ -4,9 +4,7 @@ import { fetchCurrentBaseDataThunk } from './thunk'
 
 const initialState: CenterState = {
   currentDuty: null,
-  ticketList: null,
-  bannerList: [],
-  notice: null
+  ticketList: null
 }
 
 export const centerSlice = createSlice<CenterState, CenterReducer, 'center'>({
@@ -27,8 +25,8 @@ export const centerSlice = createSlice<CenterState, CenterReducer, 'center'>({
       })
       .addCase(fetchCurrentBaseDataThunk.fulfilled, (state, action) => {
         state.currentDuty = action.payload?.duty ?? null
-        state.bannerList = action.payload?.banner ?? []
-        state.notice = action.payload?.notice ?? null
+        // state.bannerList = action.payload?.banner ?? []
+        // state.notice = action.payload?.notice ?? null
       })
       .addCase(fetchCurrentBaseDataThunk.rejected, (state) => {
         state.currentDuty = null

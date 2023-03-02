@@ -32,14 +32,12 @@ export const fetchBaseData = async () => {
 
 export const useBaseData = () => {
   const dispatch = useDispatch()
-  const { currentDuty, bannerList, notice } = useSelector(
-    (state: any) => state.center
-  ) as CenterState
+  const { currentDuty } = useSelector((state: any) => state.center) as CenterState
   useEffect(() => {
     if (currentDuty === null) {
       console.info('fetchBaseData:useBaseData')
       dispatch(fetchCurrentBaseDataThunk())
     }
   }, [])
-  return [currentDuty as Duty | null, bannerList, notice]
+  return [currentDuty as Duty | null]
 }

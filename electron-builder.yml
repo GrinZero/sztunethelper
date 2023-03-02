@@ -1,5 +1,5 @@
-appId: com.lives.nethelper.app
-productName: sztunethelper
+appId: com.lives.nethelper.app # 应用程序的唯一标识符
+productName: sztunethelper # 产品名称
 directories:
   buildResources: build
 files:
@@ -10,19 +10,19 @@ files:
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 asarUnpack:
   - '**/*.{node,dll}'
-afterSign: build/notarize.js
+afterSign: build/notarize.js # macOS的签名
 win:
   executableName: sztunethelper
   requestedExecutionLevel: requireAdministrator
-  icon: build/icon.ico
+  icon: build/icon.ico # windows的图标
 nsis:
-  artifactName: ${name}-${version}-setup-${arch}.${ext}
-  shortcutName: ${productName}
-  uninstallDisplayName: ${productName}
-  createDesktopShortcut: always
+  artifactName: ${name}-${version}-setup-${arch}.${ext} # 基于nsid的windows安装程序的名称
+  shortcutName: ${productName} # windows的快捷方式名称
+  uninstallDisplayName: ${productName} # windows的卸载程序名称
+  createDesktopShortcut: always # 是否创建桌面快捷方式
 mac:
   entitlementsInherit: build/entitlements.mac.plist
-  icon: build/icon.icns
+  icon: build/icon.icns # macOS的图标
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
@@ -30,7 +30,7 @@ mac:
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
 dmg:
   artifactName: ${name}-${version}-${arch}.${ext}
-  icon: build/icon.icns
+  icon: build/icon.icns # dmg安装程序的图标
 linux:
   target:
     - AppImage

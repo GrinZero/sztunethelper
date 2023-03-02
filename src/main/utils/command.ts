@@ -23,17 +23,21 @@ export const exec = (cmd: string): Promise<{ stdout: string; stderr: string }> =
   })
 }
 
-export const spawn = (cmd: string, timeout = 6666, commandLine = false) => {
+export const spawn = (cmd: string, timeout = 6666) => {
   const [command, ...args] = cmd.split(' ')
   const spawnInstance = _spawn(command, args, {
-    stdio: 'pipe'
+    stdio: 'pipe',
+    cwd: process.cwd(),
+    ...process.env
   })
-  if (commandLine) {
-    spawnInstance.stdout.pipe(process.stdout)
-    spawnInstance.stderr.pipe(process.stderr)
-  }
+
+  spawnInstance.stdout.pipe(process.stdout)
+  spawnInstance.stderr.pipe(process.stderr)
   const result: string[] = []
   spawnInstance.stdout.on('data', (data) => {
+    result.push(process.platform === 'win32' ? iconv.decode(data, 'gbk') : data.toString())
+  })
+  spawnInstance.stderr.on('data', (data) => {
     result.push(process.platform === 'win32' ? iconv.decode(data, 'gbk') : data.toString())
   })
   return new Promise<string>((resolve) => {
@@ -41,6 +45,11 @@ export const spawn = (cmd: string, timeout = 6666, commandLine = false) => {
       spawnInstance.kill()
       resolve(result.join(''))
     }, timeout)
+    spawnInstance.on('error', () => {
+      resolve(result.join(''))
+      clearTimeout(timeID)
+    })
+
     spawnInstance.on('close', () => {
       resolve(result.join(''))
       clearTimeout(timeID)

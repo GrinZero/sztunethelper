@@ -5,6 +5,7 @@ export interface BaseConfig {
   autoStart: boolean
   autoTheme: boolean
   neverOffline: boolean
+  noticeService: boolean
 }
 export interface BaseState {
   theme: 'dark' | 'light'
@@ -26,7 +27,8 @@ const defaultBaseConfig: BaseConfig = {
   autoUpdate: true,
   autoStart: false,
   autoTheme: true,
-  neverOffline: false
+  neverOffline: false,
+  noticeService: true
 }
 const fetchConfig = createAsyncThunk('base/fetchBaseConfig', async () => {
   const baseConfig = await window.storage.get<BaseConfig>('baseConfig', defaultBaseConfig)

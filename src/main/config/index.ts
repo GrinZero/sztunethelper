@@ -11,6 +11,7 @@ export interface BaseConfig {
   autoStart: boolean
   autoTheme: boolean
   neverOffline: boolean
+  noticeService: boolean
 }
 
 export const CheckNetTaskList: CheckNetTask[] = [

@@ -9,6 +9,7 @@ import PlatformList from './PlatformList'
 import NetInfoCard from './NetInfoCard'
 import DutyCard from './DutyCard'
 
+import { useNetSpeed } from '@renderer/hooks'
 import { login, getNetInfo, fetchPlatformList, offlinePlatform, connect } from '@renderer/api'
 import type { Platform } from '@renderer/api'
 import { Account } from '@renderer/types'
@@ -38,6 +39,7 @@ const Main = () => {
     _setStatus(status)
   }
   const netInfo = useSelector((store: any) => store.netInfo)
+  const [ping, jit] = useNetSpeed(status === 'success')
 
   const init = async (type?: 'normal' | 'refresh') => {
     const username = await window.storage.get<string>('username')
@@ -248,7 +250,12 @@ const Main = () => {
             ></video>
           )
         default:
-          return status
+          return (
+            <div className="text-3xl">
+              <div>延迟：{ping}ms</div>
+              <div>抖动：{jit}ms</div>
+            </div>
+          )
       }
     })()
 
@@ -264,7 +271,7 @@ const Main = () => {
         </div>
       </div>
     )
-  }, [status, handleMainCardClick])
+  }, [status, handleMainCardClick, ping, jit])
 
   useEffect(() => {
     init()

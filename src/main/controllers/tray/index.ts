@@ -64,6 +64,14 @@ export const createTray = () => {
             click: (menuitem) => {
               store.set('baseConfig.autoUpdate', menuitem.checked)
             }
+          },
+          {
+            label: '通知服务',
+            type: 'checkbox',
+            id: 'noticeService',
+            click: (menuitem) => {
+              store.set('baseConfig.noticeService', menuitem.checked)
+            }
           }
         ]
       },
@@ -100,6 +108,10 @@ export const createTray = () => {
 
     const autoUpdateItem = menu.getMenuItemById('autoUpdate') as MenuItem
     autoUpdateItem.checked = newBaseConfig.autoUpdate
+
+    const noticeServiceItem = menu.getMenuItemById('noticeService') as MenuItem
+    noticeServiceItem.checked = newBaseConfig.noticeService
+
     tray.setContextMenu(menu)
   }
 

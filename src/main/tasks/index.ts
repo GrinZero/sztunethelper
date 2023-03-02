@@ -5,11 +5,13 @@ interface TaskStore {
     [key: string]: Job
   }
   connect: Job | null
+  notice: Job | null
 }
 
 const taskStore: TaskStore = {
   hosts: {},
-  connect: null
+  connect: null,
+  notice: null
 }
 
 export default taskStore
@@ -17,3 +19,4 @@ export default taskStore
 export * from './updateRemoteHost'
 export { default as updateRemoteHostTask } from './updateRemoteHost'
 export { default as neverOffline } from './neverOffline'
+export { default as noticeService } from './noticeService'

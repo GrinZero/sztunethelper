@@ -25,6 +25,10 @@ const defaultOptions: {
   {
     name: '自动主题',
     field: 'autoTheme'
+  },
+  {
+    name: '通知服务',
+    field: 'noticeService'
   }
 ]
 
