@@ -1,4 +1,5 @@
 import { io } from 'socket.io-client'
+import { history } from '@renderer/utils'
 import type { Socket } from 'socket.io-client'
 import type { IMMessage } from './type'
 
@@ -46,6 +47,7 @@ export const createSocket = () => {
   const token = localStorage.getItem('token')
   if (!token) {
     console.error('No token found in localStorage')
+    history.push('mail_config')
     return null
   }
   const socket: SocketClient = io('wss://nethelper.sztulives.cn', {
