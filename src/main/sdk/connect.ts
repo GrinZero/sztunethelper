@@ -1,10 +1,9 @@
 import got from 'got'
 import iconv from 'iconv-lite'
-// import { baseGot } from './base';
 
-import type { Account } from './type'
+import type { ConnectFunction } from './type'
 
-const connect = async ({ username, password }: Account) => {
+const connect: ConnectFunction = async ({ username, password }) => {
   let fetchQQHome
   try {
     fetchQQHome = await got.get(`http://www.qq.com/?time=${Date.now()}`, {

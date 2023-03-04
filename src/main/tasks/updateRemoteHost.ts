@@ -1,5 +1,5 @@
 import { getRemoteHosts } from '../controllers/hosts'
-import db from '../db'
+import { store } from '../db'
 import type { Host } from '../db/model'
 import { scheduleJob, RecurrenceRule, Range } from 'node-schedule'
 
@@ -8,12 +8,12 @@ export const updateRemoteHost = async (host: Host) => {
     throw new Error('url is required')
   }
   const content = await getRemoteHosts(host.url)
-  const hosts = db.get('hosts').value()
+  const hosts = store.get('hosts', [])
   const index = hosts.findIndex((item) => item.name === host.name)
   if (index > -1) {
     hosts[index].content = content
     hosts[index].updateTime = new Date().getTime()
-    db.set('hosts', hosts).write()
+    store.set('hosts', hosts)
   }
 }
 

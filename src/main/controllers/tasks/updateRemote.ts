@@ -1,9 +1,9 @@
-import db from '../../db'
+import { store } from '../../db'
 
 import taskStore, { updateRemoteHostTask } from '../../tasks'
 
 const updateRemote = async () => {
-  const hosts = db.get('hosts').value()
+  const hosts = store.get('hosts', [])
 
   if (!hosts) return
 

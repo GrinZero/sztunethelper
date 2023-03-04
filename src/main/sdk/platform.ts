@@ -1,19 +1,8 @@
 import iconv from 'iconv-lite'
 import { baseGot } from './base'
+import type { FetchPlatformListFunction, OfflinePlatformFunction, Platform } from './type'
 
-export interface Platform {
-  name?: string
-  id: string
-  nasIP: string
-  user: string
-  ip: string
-  startTime: string
-  endTime: string | null
-  flow: string
-  link: string
-}
-
-async function getPlatformList(cookie: string) {
+const getPlatformList: FetchPlatformListFunction = async (cookie) => {
   const res = await baseGot.get('lfradius/home.php/user/online', {
     headers: {
       Cookie: cookie
@@ -66,7 +55,7 @@ async function getPlatformList(cookie: string) {
   return results.filter((item) => item.endTime === null)
 }
 
-async function offlinePlatform(link: string, cookie: string) {
+const offlinePlatform: OfflinePlatformFunction = async (link: string, cookie: string) => {
   const res = await baseGot.get(link, {
     headers: {
       Cookie: cookie

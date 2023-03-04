@@ -1,5 +1,5 @@
 import apiStore from '../apiStore'
-import db from '../../db'
+import { store } from '../../db'
 
 import type { Host } from '../../db/model'
 import type { ApiResult } from '../type'
@@ -20,7 +20,7 @@ apiStore.add('updateRemoteHost', async (host: Host): Promise<ApiResult<Host[]>> 
     taskStore.hosts[name] = instance
   }
 
-  const hosts = db.get('hosts').value()
+  const hosts = store.get('hosts') ?? []
   return {
     code: 200,
     data: hosts

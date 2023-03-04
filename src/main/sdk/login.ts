@@ -2,16 +2,9 @@ import iconv from 'iconv-lite'
 
 import { baseGot } from './base'
 
-import type { Account } from './type'
+import type { LoginFunction } from './type'
 
-export interface LoginResult {
-  code: number
-  error?: unknown
-  cookies?: string | null
-  data?: string
-}
-
-const login = async ({ username, password }: Account, Cookie?: string): Promise<LoginResult> => {
+const login: LoginFunction = async ({ username, password }, Cookie) => {
   const getCookie = async () => {
     const postResponse = await baseGot.post('lfradius/home.php?a=userlogin&c=login', {
       body: `username=${username}&password=${password}`

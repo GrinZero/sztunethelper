@@ -1,13 +1,12 @@
 import apiStore, { RequestResult } from '../apiStore'
-import db from '../../db'
-import store from '../../db/store'
+import { store } from '../../db'
 import type { Host } from '../../db'
 
 import { checkAccess, getHostsContent, setSysHosts, updateRemote } from '../../controllers'
 
 apiStore.add('saveHosts', async (list: Host[]): RequestResult => {
   const access = await checkAccess()
-  const sudo = await store.get('sudo')
+  const sudo = store.get('sudo')
   if (!access && !sudo) {
     return {
       code: 403,
@@ -17,8 +16,8 @@ apiStore.add('saveHosts', async (list: Host[]): RequestResult => {
   const content = getHostsContent(list)
 
   try {
-    await setSysHosts(content, sudo as string)
-    db.set('hosts', list).write()
+    await setSysHosts(content, sudo!)
+    store.set('hosts', list)
     updateRemote()
   } catch (error) {
     return {

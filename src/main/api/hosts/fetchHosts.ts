@@ -1,8 +1,8 @@
 import apiStore, { RequestResult } from '../apiStore'
-import db from '../../db'
+import { store } from '../../db'
 
 apiStore.add('fetchHosts', async (): RequestResult => {
-  const data = db.get('hosts').value()
+  const data = store.get('hosts')
   return {
     code: 200,
     data: data ?? []
