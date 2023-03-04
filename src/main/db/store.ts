@@ -14,7 +14,7 @@ export interface StoreType {
   password?: string
   baseConfig?: BaseConfig
   netStatus?: string
-  lastNoticeID?: string
+  lastNoticeID?: string | number | null
   currentPlatform?: {
     link: string
     user: string

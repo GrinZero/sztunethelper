@@ -2,7 +2,7 @@ import apiStore from '../apiStore'
 
 import { sendMail } from '../../controllers/mail'
 import type { SendMailProps } from '../../controllers/mail'
-import store from '../../db/store'
+import { store } from '../../db'
 
 import type { ApiResult } from '../type'
 
@@ -11,7 +11,7 @@ type SendMailApi = SendMailProps
 apiStore.add('sendMail', async (props: SendMailApi): ApiResult<unknown> => {
   const options = { ...props }
   if (props.sender === undefined || props.pass === undefined) {
-    const mail = store.get('local-mail', null) as { mail: string; pass: string } | null
+    const mail = store.get('local-mail')
     if (!mail) {
       throw new Error('未设置本地邮箱')
     }

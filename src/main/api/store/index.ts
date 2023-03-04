@@ -21,7 +21,7 @@ apiStore.add('storage.has', async ({ key }: { key: string }) => {
   return store.has(key)
 })
 
-apiStore.add('storage.delete', async ({ key }: { key: string }) => {
+apiStore.add('storage.delete', async ({ key }: { key: any }) => {
   return store.delete(key)
 })
 
