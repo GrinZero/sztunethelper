@@ -47,7 +47,7 @@ export const createSocket = () => {
   const token = localStorage.getItem('token')
   if (!token) {
     console.error('No token found in localStorage')
-    history.push('mail_config')
+    history!.push('mail_config')
     return null
   }
   const socket: SocketClient = io('wss://nethelper.sztulives.cn', {
