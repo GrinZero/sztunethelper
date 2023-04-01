@@ -1,7 +1,7 @@
 import { exec, spawn } from '../../utils'
 
 export const ping = async (ip: string) => {
-  const cmd = `ping -c 1 ${ip}`
+  const cmd = `ping -c 10 ${ip}`
   return (await exec(cmd)).stdout
 }
 

@@ -39,7 +39,6 @@
     "electron-updater": "^4.6.5",
     "execa": "npm:@esm2cjs/execa@6.1.1-cjs.1",
     "got": "^11.8.3",
-    "hosts-so-easy": "^1.2.9",
     "iconv-lite": "^0.6.3",
     "lodash-es": "^4.17.21",
     "magic-design-react": "^0.0.20",
@@ -61,6 +60,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^17.2.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
+    "@testing-library/react": "^14.0.0",
     "@types/lodash-es": "^4.17.6",
     "@types/node": "16.11.22",
     "@types/node-schedule": "^2.1.0",

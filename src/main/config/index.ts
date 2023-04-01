@@ -1,3 +1,6 @@
+import * as path from 'path'
+import type { BrowserWindowConstructorOptions } from 'electron'
+
 export interface CheckNetTask {
   id: number | string
   title: string
@@ -26,3 +29,24 @@ export const CheckNetTaskList: CheckNetTask[] = [
   { id: 9, title: '获取ARP缓存表', command: 'arp', args: ['-a'] },
   { id: 10, title: '校园网络认证网路探测', command: 'tracert', args: ['47.98.217.39'] }
 ]
+
+export const WindowConfig: BrowserWindowConstructorOptions = {
+  minWidth: 1100,
+  minHeight: 700,
+  width: 1100,
+  height: 700,
+  transparent: true,
+  frame: false,
+  skipTaskbar: true,
+  icon: path.join(__dirname, '../build/icon.png'),
+  titleBarStyle: 'default',
+  vibrancy: 'dark',
+  visualEffectState: 'active',
+  webPreferences: {
+    preload: path.join(__dirname, '../preload/index.js'),
+    sandbox: false,
+    nodeIntegration: false,
+    contextIsolation: true,
+    experimentalFeatures: true
+  }
+}

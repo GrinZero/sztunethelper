@@ -32,7 +32,7 @@ axiosClient.interceptors.response.use(
       localStorage.removeItem('token')
       token = ''
       console.warn('token expired, redirect to login page')
-      history.push('/mail_config')
+      history!.push('/mail_config')
     }
     return Promise.reject(err)
   }

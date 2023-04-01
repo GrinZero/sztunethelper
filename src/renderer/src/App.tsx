@@ -27,7 +27,7 @@ const App = () => {
 
   // const { platform } = window.navigator
   return (
-    <Router history={history}>
+    <Router history={history!}>
       <Redirect to="/index" path="/" exact={true} />
       <Route path="/">
         <TopBar type="mac" />

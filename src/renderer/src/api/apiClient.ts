@@ -21,7 +21,6 @@ export interface StoreRequest<SResult> {
 
 export class ApiClient<SResult> {
   requestStore: { [x: string]: StoreRequest<SResult> } = {}
-
   constructor() {
     if (!window.bridge) {
       return
@@ -49,7 +48,6 @@ export class ApiClient<SResult> {
       request.resolve(result)
     })
   }
-
   send<T = SResult>(name: string, payload?: unknown, timeout = 30000) {
     const id = `${name}-${uuid()}`
     let resolveOut = null as unknown as StoreRequest<SResult>['resolve']

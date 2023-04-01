@@ -19,7 +19,7 @@ export const WebApp = () => {
   useBaseData()
   useConfig()
   return (
-    <Router history={history}>
+    <Router history={history!}>
       <TopBar type="mac" />
       <Switch>
         <Route path="/message" exact={true}>

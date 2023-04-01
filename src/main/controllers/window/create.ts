@@ -2,29 +2,11 @@ import { app, shell, BrowserWindow } from 'electron'
 import * as path from 'path'
 import { is } from '@electron-toolkit/utils'
 import { windowMessageController } from './index'
+import { WindowConfig } from '../../config'
 
 export function createWindow() {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    minWidth: 1100,
-    minHeight: 700,
-    width: 1100,
-    height: 700,
-    transparent: true,
-    frame: false,
-    skipTaskbar: true,
-    icon: path.join(__dirname, '../../build/icon.png'),
-    titleBarStyle: 'default',
-    vibrancy: 'dark',
-    visualEffectState: 'active',
-    webPreferences: {
-      preload: path.join(__dirname, '../preload/index.js'),
-      sandbox: false,
-      nodeIntegration: false,
-      contextIsolation: true,
-      experimentalFeatures: true
-    }
-  })
+  const mainWindow = new BrowserWindow(WindowConfig)
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

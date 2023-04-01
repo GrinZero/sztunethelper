@@ -8,5 +8,6 @@ export default defineConfig({
       '@controllers': 'src/main/controllers',
       '@db': 'src/main/db'
     }
+    // environment: 'jsdom'
   }
 })
