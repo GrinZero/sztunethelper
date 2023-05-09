@@ -16,6 +16,7 @@ const submitSave = async (
       resolve(res.data)
       return
     } catch (error: any) {
+      console.error('submitSave', error)
       if (error?.code === 403) {
         Message.error('没有写入Hosts文件的权限')
         const handleFinish = async (modalInstance: any) => {
@@ -36,7 +37,6 @@ const submitSave = async (
               inputClassName={'py-2'}
               autoFocus={true}
               type="password"
-              onFinished={() => handleFinish(modalInstance)}
             />
           ),
           onOk: () => handleFinish(modalInstance)

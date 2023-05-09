@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { CodeEditor, BaseLine } from '@renderer/components'
 
@@ -18,11 +17,8 @@ const Setting = () => {
   const { theme } = useSelector((store: any) => store.base)
   const { hosts, host } = useSelector<any, HostState>((store: any) => store.host)
 
-  const firstRef = useRef<boolean>()
-
   const handleHostChange = (val?: Host) => {
     dispatch(setHost(val ?? null))
-    firstRef.current = true
   }
   const onEditorChange = debounce(async (val?: string) => {
     const newHosts = hosts.map((item) => {
@@ -40,10 +36,6 @@ const Setting = () => {
   }, 500)
 
   const handleEditorSave = async (val?: string) => {
-    if (firstRef.current) {
-      firstRef.current = false
-      return
-    }
     if (host?.type === 'system') {
       return
     }
@@ -65,9 +57,10 @@ const Setting = () => {
         }`}
       >
         <CodeEditor
+          key={host?.name}
           height={'100%'}
           theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
-          value={String(content)}
+          defaultValue={String(content)}
           onChange={handleEditorSave}
         />
       </div>

@@ -10,13 +10,28 @@ import './extension'
 
 // import { VideoBg } from './components/VideoBg'
 import { Switch, Route, Router, Redirect } from 'react-router-dom'
-import { TopBar, Main, SelfHelp, Login, Setting, AboutUS, MessagePage, MailConfig } from './pages'
-import { useEffect } from 'react'
+import { TopBar } from './pages'
+import { useEffect, lazy, Suspense } from 'react'
 import store, { initAccount } from './store'
 import { useConfig } from './hooks'
 import { useBaseData } from './api'
+import { BaseLoading } from './components'
 
 import { history } from '@renderer/utils'
+
+const Lazy = ({ children: Children }: { children: any }) => {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex-row flex w-full h-full items-center justify-center">
+          <BaseLoading size="large" />
+        </div>
+      }
+    >
+      <Children />
+    </Suspense>
+  )
+}
 
 const App = () => {
   useEffect(() => {
@@ -31,25 +46,25 @@ const App = () => {
       <Redirect to="/index" path="/" exact={true} />
       <Route path="/">
         <TopBar type="mac" />
-        <Main />
-        <SelfHelp />
+        <Lazy>{lazy(() => import('./pages/Main'))}</Lazy>
+        <Lazy>{lazy(() => import('./pages/SelfHelp'))}</Lazy>
         {/* {platform.includes('Mac') || platform.includes('mac') ? null : <VideoBg />} */}
       </Route>
       <Switch>
         <Route path="/login" exact={true}>
-          <Login />
+          <Lazy>{lazy(() => import('./pages/Login'))}</Lazy>
         </Route>
         <Route path="/setting" exact={true}>
-          <Setting />
+          <Lazy>{lazy(() => import('./pages/Setting'))}</Lazy>
         </Route>
         <Route path="/about_us" exact={true}>
-          <AboutUS />
+          <Lazy>{lazy(() => import('./pages/AboutUS'))}</Lazy>
         </Route>
         <Route path="/message" exact={true}>
-          <MessagePage />
+          <Lazy>{lazy(() => import('./pages/MessagePage'))}</Lazy>
         </Route>
         <Route path="/mail_config" exact={true}>
-          <MailConfig />
+          <Lazy>{lazy(() => import('./pages/MailConfig'))}</Lazy>
         </Route>
       </Switch>
     </Router>

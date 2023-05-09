@@ -4,7 +4,7 @@ import type { ComponentProps } from '@renderer/types'
 import { IconLeft } from '@arco-design/web-react/icon'
 import styles from './index.module.scss'
 
-interface HistoryCrumbProps extends ComponentProps {
+export interface HistoryCrumbProps extends ComponentProps {
   position?: 'fixed' | 'relative'
   type?: 'button' | 'link'
 }

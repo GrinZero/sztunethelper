@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import type { ApiResult } from '../type'
 import { useEffect } from 'react'
 import { CenterState, fetchCurrentBaseDataThunk } from '@renderer/store'
+import { useNetwork } from '@renderer/hooks'
 
 export interface Duty {
   id: number
@@ -33,11 +34,14 @@ export const fetchBaseData = async () => {
 export const useBaseData = () => {
   const dispatch = useDispatch()
   const { currentDuty } = useSelector((state: any) => state.center) as CenterState
+
+  const online = useNetwork().online
   useEffect(() => {
+    if (!online) return
     if (currentDuty === null) {
       console.info('fetchBaseData:useBaseData')
       dispatch(fetchCurrentBaseDataThunk())
     }
-  }, [])
+  }, [online])
   return [currentDuty as Duty | null]
 }

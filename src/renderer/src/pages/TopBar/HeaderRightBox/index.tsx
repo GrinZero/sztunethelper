@@ -6,6 +6,7 @@ import { IconUser } from '@arco-design/web-react/icon'
 import styles from './index.module.scss'
 import { MoreInfo } from '@renderer/components'
 import type { MoreInfoProps } from '@renderer/components'
+import { useMailStorage } from '@renderer/hooks'
 
 import type { ComponentProps } from '@renderer/types'
 
@@ -24,6 +25,9 @@ const HeaderRightBox: React.FC<HeaderRightBoxProps> = ({
   src
 }) => {
   const history = useHistory()
+  const mailConfig = useMailStorage()
+  const mailToken = localStorage.getItem('token')
+
   const inWebClassName = window.bridge ? '' : 'hidden'
 
   const accountEle = (
@@ -44,7 +48,10 @@ const HeaderRightBox: React.FC<HeaderRightBoxProps> = ({
   return (
     <div className={`min-w-[120px] flex flex-row items-center ${className}`}>
       <ThemeSwitch defaultTheme={'dark'} onChange={onChange} theme={theme} />
-      <div className="p-[9px] cursor-pointer app-no-drag" onClick={() => history.push('/message')}>
+      <div
+        className="p-[9px] cursor-pointer app-no-drag"
+        onClick={() => history.push(!mailConfig || !mailToken ? '/mail_config' : '/message')}
+      >
         <svg
           viewBox="0 0 24 24"
           fill="currentColor"
