@@ -29,6 +29,9 @@ const initialState: NetInfoModal = {
   wifiName: {
     value: '-',
     type: 'fail'
+  },
+  proxy: {
+    value: false
   }
 }
 
