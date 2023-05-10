@@ -8,7 +8,7 @@ const DutyCard = () => {
 
   return (
     <div className="flex flex-col mt-4">
-      {!currentDuty ? (
+      {!currentDuty || currentDuty === 'loading' ? (
         <div className="w-full flex flex-col items-center h-[200px] justify-center">
           <BaseLoading size="large" />
         </div>

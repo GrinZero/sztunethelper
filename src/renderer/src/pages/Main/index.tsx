@@ -138,6 +138,19 @@ const Main = () => {
       if (netInfomation?.wifiName?.type === 'fail') {
         throw new Error('未连接指定WIFI')
       }
+      if (netInfomation?.proxy?.value) {
+        Modal.confirm({
+          title: '检测到您开启了代理',
+          content: (
+            <div>
+              <p>如您当前打开网页提示【代理服务器可能有问题】</p>
+              <p className="mt-3">该问题的原因是您的代理服务器不正常，请关闭代理后重试</p>
+            </div>
+          ),
+          hideCancel: true
+        })
+      }
+
       await getCookie()
       const cookie = sessionStorage.getItem('cookie')
       await getPlatformList(cookie, netInfomation?.ip?.value)
@@ -151,7 +164,6 @@ const Main = () => {
         setStatus('offline')
         return
       }
-
       if (error?.code === 502 && error?.data?.code === -1 && error?.data?.cookies === null) {
         Message.error({
           content: '登录失败，请检查账号密码是否正确'

@@ -1,6 +1,7 @@
 import getWifiName from 'wifi-name'
 import * as si from 'systeminformation'
 import getDnsServer from './getDnsServer'
+import { checkProxy } from './checkProxy'
 
 export interface IpInfo {
   address: string | null
@@ -15,6 +16,7 @@ export interface NetInfoType {
   dhcp: boolean
   speed: number | null
   wifiName: string | null
+  isProxy: boolean
 }
 
 const getCurrentNetInfo = async (): Promise<NetInfoType | null> => {
@@ -38,6 +40,8 @@ const getCurrentNetInfo = async (): Promise<NetInfoType | null> => {
 
   const dnsServer = getDnsServer()
 
+  const isProxy = await checkProxy()
+
   const result = {
     mac: wifiInfo.mac,
     ipv4: {
@@ -51,7 +55,8 @@ const getCurrentNetInfo = async (): Promise<NetInfoType | null> => {
     dnsServer,
     dhcp: netInfo.dhcp,
     speed: netInfo.speed,
-    wifiName
+    wifiName,
+    isProxy
   }
 
   return result

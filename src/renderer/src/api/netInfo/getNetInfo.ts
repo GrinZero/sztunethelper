@@ -25,6 +25,9 @@ export interface NetInfoModal {
   speed: {
     value: number | null
   }
+  proxy: {
+    value: boolean
+  }
 }
 async function getNetInfo() {
   return apiClient.send<ApiResult<NetInfoModal>>('getNetInfo')

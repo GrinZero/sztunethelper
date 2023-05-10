@@ -28,6 +28,9 @@ export interface NetInfoModal {
   speed: {
     value: number | null
   }
+  proxy: {
+    value: boolean
+  }
 }
 
 apiStore.add('getNetInfo', async (): ApiResult<NetInfoModal> => {
@@ -71,6 +74,9 @@ apiStore.add('getNetInfo', async (): ApiResult<NetInfoModal> => {
       },
       speed: {
         value: netInfo?.speed ?? null
+      },
+      proxy: {
+        value: netInfo?.isProxy ?? false
       }
     }
   }
