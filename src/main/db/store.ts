@@ -47,11 +47,13 @@ const defaultDNS = `
       open: true
     },
     {
-      type: 'local',
+      type: 'remote',
       mode: 'edit',
       name: '内网',
       content: defaultDNS,
-      open: true
+      open: true,
+      autoUpdate: '1h',
+      url: 'https://jihublab.com/GrinZero/sztunethelper/-/raw/master/data/hosts'
     },
     {
       type: 'remote',
