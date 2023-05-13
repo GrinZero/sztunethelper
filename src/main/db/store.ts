@@ -53,7 +53,7 @@ const defaultDNS = `
       content: defaultDNS,
       open: true,
       autoUpdate: '1h',
-      url: 'https://jihublab.com/GrinZero/sztunethelper/-/raw/master/data/hosts'
+      url: 'https://jihulab.com/GrinZero/sztunethelper/-/raw/master/data/hosts'
     },
     {
       type: 'remote',

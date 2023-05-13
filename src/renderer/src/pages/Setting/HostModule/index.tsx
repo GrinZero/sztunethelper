@@ -15,10 +15,16 @@ import type { HostState } from '@renderer/store'
 
 interface HostModuleProps extends ComponentProps {
   onChange?: (host: Host | undefined) => void
+  onHostsChange?: (hosts: Host[]) => void
   current: string | null
 }
 
-const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChange }) => {
+const HostModule: React.FC<HostModuleProps> = ({
+  className = '',
+  current,
+  onChange,
+  onHostsChange
+}) => {
   const dispatch = useDispatch()
   const [visible, setVisible] = useState(false)
   const [remoteLoading, setRemoteLoading] = useState(false)
@@ -37,10 +43,12 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
     const result = await submitSave(newHosts, () => Message.success('操作成功'))
     if (result) {
       dispatch(setHosts(result))
+      onHostsChange?.(result)
     }
   }
   const handleHostEdit = async (host: Host) => {
     dispatch(setHost(host))
+    onChange?.(host)
     setVisible(true)
   }
   const handleUpdateRemote = async (host: Host) => {
@@ -50,9 +58,11 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
       const result = await submitSave(data, () => Message.success('操作成功'))
       if (result) {
         dispatch(setHosts(result))
+        onHostsChange?.(result)
         const newHost = result.find((item) => item.name === host.name)
         if (newHost) {
           dispatch(setHost(newHost))
+          onChange?.(newHost)
         }
       }
     } catch (error: any) {
@@ -83,6 +93,8 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
       if (result) {
         dispatch(setHost(newHost))
         dispatch(setHosts(result))
+        onHostsChange?.(result)
+        onChange?.(newHost)
       }
     })
   }
@@ -92,6 +104,7 @@ const HostModule: React.FC<HostModuleProps> = ({ className = '', current, onChan
       const result = await fetchHosts()
       if (result.code === 200) {
         dispatch(setHosts(result.data))
+        // onHostsChange?.(result.data)
         onChange?.(result.data[0])
       }
     }

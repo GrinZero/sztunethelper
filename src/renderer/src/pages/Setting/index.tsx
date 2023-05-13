@@ -10,15 +10,21 @@ import { HostState, setHost, setHosts } from '@renderer/store'
 import { submitSave } from './helpers'
 
 import { debounce, getHostsContent } from '@renderer/utils'
+import { useUpdateKey } from '@renderer/hooks'
 // import { Message } from '@arco-design/web-react'
 
 const Setting = () => {
   const dispatch = useDispatch()
   const { theme } = useSelector((store: any) => store.base)
   const { hosts, host } = useSelector<any, HostState>((store: any) => store.host)
+  const [key, update] = useUpdateKey()
 
   const handleHostChange = (val?: Host) => {
+    if (val === host) {
+      return
+    }
     dispatch(setHost(val ?? null))
+    update()
   }
   const onEditorChange = debounce(async (val?: string) => {
     const newHosts = hosts.map((item) => {
@@ -47,7 +53,16 @@ const Setting = () => {
   return (
     <div className={`main ${styles.container}`}>
       <div className={`w-[240px] flex flex-col pr-4 ${styles.left}`}>
-        <HostModule className={'mb-4'} onChange={handleHostChange} current={host?.name ?? null} />
+        <HostModule
+          className={'mb-4'}
+          onChange={handleHostChange}
+          onHostsChange={() => {
+            if (host?.type === 'system') {
+              update()
+            }
+          }}
+          current={host?.name ?? null}
+        />
         <BaseLine className={'mb-4 mt-2'} />
         <SettingModule className={'w-[240px]'} />
       </div>
@@ -57,7 +72,7 @@ const Setting = () => {
         }`}
       >
         <CodeEditor
-          key={host?.name}
+          key={`${host?.name}-${key}`}
           height={'100%'}
           theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
           defaultValue={String(content)}
