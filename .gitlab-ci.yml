@@ -1,0 +1,50 @@
+ 
+stages:
+  - build
+  - deploy
+
+build-job:
+  stage: build
+  script:
+    - apt-get update -y
+    - apt-get install -y curl
+    - curl -sL https://deb.nodesource.com/setup_16.x | bash -
+    - apt-get install -y nodejs
+    - npm install -g yarn
+    - yarn install
+    - yarn run build:win
+    - yarn run build:mac-x86
+    - yarn run build:mac-arm64
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - tags
+  except:
+    - branches
+  tags:
+    - v*
+
+deploy-job:
+  stage: deploy
+  image: node:16
+  script:
+    - yarn install
+    - yarn build:web
+    - apt-get update -y
+    - apt-get install -y git
+    - git config --global user.email "gitlab-ci@example.com"
+    - git config --global user.name "GitLab CI"
+    - git clone -b gh-pages --single-branch https://jihulab.com/GrinZero/sztunethelper.git gh-pages
+    - rm -rf gh-pages/*
+    - cp -r out/* gh-pages/
+    - cd gh-pages
+    - git add .
+    - git commit -m "Deploy to GitLab Pages"
+    - git push origin gh-pages
+  only:
+    - master
+  except:
+    - tags
+  tags:
+    - v*
