@@ -48,6 +48,7 @@
     "postcss": "^8.4.18",
     "process": "^0.11.10",
     "qiniu-js": "^3.4.1",
+    "react-activation": "^0.12.4",
     "react-redux": "^8.0.4",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",

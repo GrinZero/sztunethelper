@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useRouteMatch } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { pdf } from '@react-pdf/renderer'
 
@@ -23,9 +22,6 @@ interface NetTaskResult {
 }
 
 const SelfHelp = () => {
-  const match = useRouteMatch(['/self_help'])
-  const hidden = match === null
-
   const [netTaskList, setNetTaskList] = useState<NetTask[]>(initList)
   const [netTaskResult, setNetTaskResult] = useState<NetTaskResult[] | null>(null)
   const netInfo = useSelector((store: any) => store.netInfo)
@@ -117,7 +113,7 @@ const SelfHelp = () => {
   }
 
   return (
-    <div className={`${styles.container} main ${hidden ? 'main-hidden' : ''}`}>
+    <div className={`${styles.container} main`}>
       <div className="flex flex-row w-full flex-1">
         <div className={`w-[270px] min-w-[270px] flex flex-col flex-none`}>
           <Title className={`mb-2 ml-1 flex flex-row items-center justify-between`}>

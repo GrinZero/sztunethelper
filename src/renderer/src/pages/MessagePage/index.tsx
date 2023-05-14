@@ -109,7 +109,9 @@ const MessagePage = () => {
     onOk: handleAddConsultSubmit
   })
 
-  const handleMailCardClick = () => history.push('mail_config')
+  const handleMailCardClick = () => {
+    history.push('mail_config')
+  }
   const handleTicketCardClick = (ticket: TicketListItem) => {
     if (ticket.id === currentTicket?.id) {
       setCurrentTicket(null)

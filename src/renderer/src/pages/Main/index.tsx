@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState, useEffect } from 'react'
-import { useRouteMatch, useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { Modal, Message } from '@arco-design/web-react'
 
@@ -27,9 +27,7 @@ const Main = () => {
   const dispatch = useDispatch()
 
   const history = useHistory()
-  const match = useRouteMatch(['/index'])
   const location = useLocation()
-  const hidden = match === null
 
   const [platformList, setPlatformList] = useState<Platform[] | null>([])
 
@@ -295,7 +293,7 @@ const Main = () => {
   }, [location])
 
   return (
-    <div className={`main ${hidden ? 'main-hidden' : ''}`}>
+    <div className={`main`}>
       <div className="flex flex-grow-0 flex-shrink-0 w-full h-full">
         <div className="flex flex-col h-full max-w-[220px]">
           <NetInfoCard className="min-w-[220px]" netInfo={netInfo} />
