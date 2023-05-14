@@ -1,10 +1,23 @@
 import { BaseCard, BaseElement, BaseLoading } from '@renderer/components'
 import { useSelector } from 'react-redux'
 const { Title } = BaseElement
-import { Rate } from '@arco-design/web-react'
+import { Rate, Result } from '@arco-design/web-react'
 
 const DutyCard = () => {
   const { currentDuty } = useSelector((state: any) => state.center)
+  const onLine = navigator.onLine
+
+  if (!onLine) {
+    return (
+      <div className="w-full flex flex-col items-center h-[200px] justify-center">
+        <Result
+          status="error"
+          title="网络连接失败"
+          subTitle={<span className="text-xs">检查网络信息各项是否为绿色</span>}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col mt-4">

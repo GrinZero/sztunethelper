@@ -12,6 +12,11 @@ export interface PDFDocumentProps {
     title: string
     content: string
   }[]
+  netInfoData: {
+    title: string
+    content: string
+  }[]
+  name: string
 }
 
 const styles = StyleSheet.create({
@@ -38,10 +43,17 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 14,
     color: '#cdcfd1'
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+    fontFamily: 'alibaba'
   }
 })
 
-const PDFDocument: React.FC<PDFDocumentProps> = ({ data }) => {
+const PDFDocument: React.FC<PDFDocumentProps> = ({ data, netInfoData, name }) => {
   const ele = data.map((item, index) => {
     return (
       <View style={styles.section} key={index}>
@@ -51,9 +63,23 @@ const PDFDocument: React.FC<PDFDocumentProps> = ({ data }) => {
     )
   })
 
+  const netInfoEle = netInfoData.map((item, index) => {
+    return (
+      <View style={styles.row} key={index}>
+        <Text style={styles.content}>
+          {item.title}：{item.content}
+        </Text>
+      </View>
+    )
+  })
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
+        <View style={styles.section}>
+          <Text style={styles.title}>{name}</Text>
+          {netInfoEle}
+        </View>
         {ele}
       </Page>
     </Document>

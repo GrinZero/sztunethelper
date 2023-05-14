@@ -136,6 +136,10 @@ const Main = () => {
       if (netInfomation?.wifiName?.type === 'fail') {
         throw new Error('未连接指定WIFI')
       }
+      if (netInfomation?.dhcp.type === 'fail') {
+        throw new Error('DHCP')
+      }
+
       if (netInfomation?.proxy?.value) {
         Modal.confirm({
           title: '检测到您开启了代理',
@@ -155,6 +159,24 @@ const Main = () => {
       connectToNet(cookie as string, netInfomation?.ip?.value)
     } catch (error: any) {
       console.error('error:init', error)
+      if (error.message === 'DHCP') {
+        Modal.confirm({
+          title: '检测到您开启了DHCP',
+          content: (
+            <div>
+              <p>校园网服务需要开启DHCP实现自动IP地址分配</p>
+              <p className="mt-3">请在WIFI设置中关闭DHCP后点击确认重试</p>
+            </div>
+          ),
+          onOk: () => {
+            history.push('/index?refresh')
+          },
+          hideCancel: true
+        })
+        setStatus('offline')
+        return
+      }
+
       if (error.message === '未连接指定WIFI') {
         Message.error({
           content: '未连接指定WIFI'

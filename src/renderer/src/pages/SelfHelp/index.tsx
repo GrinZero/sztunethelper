@@ -95,14 +95,25 @@ const SelfHelp = () => {
 
   const handleDownload = async () => {
     if (!netTaskResult) return
-    const ele = (
-      <PDFDocument
-        data={netTaskResult?.map((item) => ({
-          title: item.title,
-          content: item.content
-        }))}
-      />
-    )
+
+    const nettaskData = netTaskResult?.map((item) => ({
+      title: item.title,
+      content: item.content
+    }))
+
+    const username = await window.storage.get<string>('username')
+
+    const netInfoData =
+      netInfo &&
+      Object.keys(netInfo).map((key) => ({
+        title: key,
+        content:
+          typeof netInfo[key].value !== 'object'
+            ? String(netInfo[key].value)
+            : netInfo[key].value.join('、')
+      }))
+
+    const ele = <PDFDocument data={nettaskData} netInfoData={netInfoData} name={username} />
     const blob = await pdf(ele).toBlob()
     const link = document.createElement('a')
     link.href = URL.createObjectURL(blob as Blob)
