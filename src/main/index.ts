@@ -33,7 +33,9 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
   console.info('window-all-closed')
   if (process.platform === 'darwin') {
-    // macOS
     app.dock.hide()
   }
+  // if (process.platform !== 'darwin') {
+  //   app.quit()
+  // }
 })

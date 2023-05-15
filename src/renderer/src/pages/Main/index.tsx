@@ -194,7 +194,7 @@ const Main = () => {
       }
       if (
         error?.code === -1 &&
-        error?.data?.message?.includes?.('connect ENETUNREACH 47.98.217.40')
+        error?.data?.message?.includes?.('connect ENETUNREACH 47.98.217.39')
       ) {
         confirmRefresh()
         return
