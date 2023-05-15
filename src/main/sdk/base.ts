@@ -3,7 +3,7 @@ import got from 'got'
 const baseGot = {
   get: got.extend({
     method: 'GET',
-    prefixUrl: 'http://47.98.217.39/',
+    prefixUrl: 'http://47.98.217.40/',
     https: {
       rejectUnauthorized: false
     },
@@ -15,7 +15,7 @@ const baseGot = {
   }),
   post: got.extend({
     method: 'POST',
-    prefixUrl: 'http://47.98.217.39/',
+    prefixUrl: 'http://47.98.217.40/',
     https: {
       rejectUnauthorized: false
     },

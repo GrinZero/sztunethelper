@@ -30,10 +30,10 @@ it('ping 114.114.114.114: 检测外网网络', async () => {
 
 describe('net command', () => {
   it.concurrent(
-    'tracert 47.98.217.39',
+    'tracert 47.98.217.40',
     async () => {
-      const result = await tracert('47.98.217.39')
-      expect(result).toContain('47.98.217.39')
+      const result = await tracert('47.98.217.40')
+      expect(result).toContain('47.98.217.40')
     },
     7000
   )
