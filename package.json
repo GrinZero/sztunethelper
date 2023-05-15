@@ -1,6 +1,6 @@
 {
   "name": "sztunethelper",
-  "version": "0.9.9-beta",
+  "version": "0.9.9-alpha",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
   "author": "example.com",
